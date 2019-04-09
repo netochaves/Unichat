@@ -1,11 +1,11 @@
-import Reactotron from 'reactotron-react-native';
+import Reactotron from "reactotron-react-native"
 
 if (__DEV__) {
   const tron = Reactotron.configure()
     .useReactNative()
-    .connect();
+    .connect()
 
-  tron.clear();
+  tron.clear()
 
-  console.tron = tron;
+  console.tron = tron
 }

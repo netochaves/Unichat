@@ -30,7 +30,8 @@
     "react-native/sort-styles": "off",
     "global-require": "off",
     "quotes": [2, "double", { "avoidEscape": true }],
-    "semi": [1, "never"]
+    "semi": [1, "never"],
+    "comma-dangle": [1, "only-multiline"]
   },
   "settings": {
     "import/resolver": {
