@@ -5,6 +5,7 @@
     "jest": true
   },
   "extends": ["airbnb", "plugin:react-native/all"],
+  "plugins": ["prettier"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly",
@@ -31,7 +32,9 @@
     "global-require": "off",
     "quotes": [2, "double", { "avoidEscape": true }],
     "semi": [1, "never"],
-    "comma-dangle": [1, "only-multiline"]
+    "comma-dangle": [1, "only-multiline"],
+    "no-use-before-define": ["error", { "variables": false }],
+    "react/prop-types": 0
   },
   "settings": {
     "import/resolver": {
