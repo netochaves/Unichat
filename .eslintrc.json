@@ -31,7 +31,8 @@
     "global-require": "off",
     "quotes": [2, "double", { "avoidEscape": true }],
     "semi": [1, "never"],
-    "comma-dangle": [1, "only-multiline"]
+    "comma-dangle": [1, "only-multiline"],
+    "react/prop-types": 0
   },
   "settings": {
     "import/resolver": {
