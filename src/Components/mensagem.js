@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 
 const styles = StyleSheet.create({
-  // Estilo para parte do remetente
+  // Estilo para a mensagem do remetente
   remet: {
     marginTop: 5,
     flexDirection: "row",
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
 
-  // Estilo para parte do destinatario
+  // Estilo para a mensagem do destinatario
   dest: {
     flexDirection: "row",
     alignSelf: "flex-start",
