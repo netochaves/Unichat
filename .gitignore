@@ -2,6 +2,10 @@
 #
 .DS_Store
 
+# Cocoa Pods folder
+#
+Pods/
+
 # Xcode
 #
 build/
