@@ -20,6 +20,7 @@
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.6.1",
     "reactotron-react-native": "^3.2.1",
+    "shortid": "^2.2.14",
     "styled-components": "^4.2.0"
   },
   "devDependencies": {

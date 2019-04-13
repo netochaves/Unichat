@@ -11,22 +11,25 @@ import Icon from "react-native-vector-icons/Feather"
 
 const { width: WIDTH } = Dimensions.get("window")
 
-const MessageInput = () => (
-  <View style={styles.container}>
-    <TextInput
-      style={styles.input}
-      onChange={}
-      placeholder="Escreva uma mensagem"
-      autoComplete="off"
-      multiline
-    />
-    <TouchableOpacity>
-      <View style={styles.CircleShapeView}>
-        <Icon style={styles.icon} name="send" size={22} color="#fff" />
-      </View>
-    </TouchableOpacity>
-  </View>
-)
+const MessageInput = props => {
+  const { onChangeHandler, onPress } = props
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        onChangeText={onChangeHandler}
+        placeholder="Escreva uma mensagem"
+        autoComplete="off"
+        multiline
+      />
+      <TouchableOpacity onPress={onPress}>
+        <View style={styles.CircleShapeView}>
+          <Icon style={styles.icon} name="send" size={22} color="#fff" />
+        </View>
+      </TouchableOpacity>
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {

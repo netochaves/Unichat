@@ -1,10 +1,11 @@
 /* eslint-disable object-curly-newline */
-/* eslint-disable arrow-parens */
 import React, { Component } from "react"
 
 import { View, StyleSheet, Dimensions, StatusBar, Text } from "react-native"
 import { Avatar, Icon } from "react-native-elements"
 import { ScrollView } from "react-native-gesture-handler"
+import shortid from "shortid"
+
 import MessageInput from "../../Components/MessageInput"
 import Message from "../../Components/mensagem"
 
@@ -14,11 +15,55 @@ export default class Conversas extends Component {
   constructor() {
     super()
     this.scrollView = null
+    this.state = {
+      messageText: "",
+      messages: []
+    }
   }
 
-  state = {}
+  onChangeHandler = text => {
+    this.setState({ messageText: text })
+  }
+
+  getTime = () => {
+    const date = new Date()
+    let TimeType
+    let hour
+    let minutes
+
+    hour = date.getHours()
+    if (hour <= 11) {
+      TimeType = "AM"
+    } else {
+      TimeType = "PM"
+    }
+    if (hour > 12) {
+      hour -= 12
+    }
+    if (hour === 0) {
+      hour = 12
+    }
+    minutes = date.getMinutes()
+    if (minutes < 10) {
+      minutes = 0 + minutes.toString()
+    }
+    return `${hour.toString()} : ${minutes.toString()} ${TimeType.toString()}`
+  }
+
+  sendMessage = () => {
+    const { messageText, messages } = this.state
+    const hour = this.getTime()
+
+    const newMessage = {
+      content: messageText,
+      date: hour,
+      source: "1"
+    }
+    this.setState({ messages: [...messages, newMessage] })
+  }
 
   render() {
+    const { messages } = this.state
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
@@ -45,11 +90,21 @@ export default class Conversas extends Component {
               this.scrollView.scrollToEnd({ animated: true })
             }}
           >
-            <Message content="Soso is a bitch" source="2" date="8:45pm" />
+            {messages.map(message => (
+              <Message
+                key={shortid.generate()}
+                content={message.content}
+                date={message.date}
+                source={message.source}
+              />
+            ))}
           </ScrollView>
         </View>
         <View style={styles.input}>
-          <MessageInput onPress={text => this.sendMessage(text)} />
+          <MessageInput
+            onPress={this.sendMessage}
+            onChangeHandler={text => this.onChangeHandler(text)}
+          />
         </View>
       </View>
     )

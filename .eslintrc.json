@@ -34,7 +34,8 @@
     "semi": [1, "never"],
     "comma-dangle": [1, "only-multiline"],
     "no-use-before-define": ["error", { "variables": false }],
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "arrow-parens": ["error", "as-needed"]
   },
   "settings": {
     "import/resolver": {
