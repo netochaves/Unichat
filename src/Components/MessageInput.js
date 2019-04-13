@@ -12,11 +12,12 @@ import Icon from "react-native-vector-icons/Feather"
 const { width: WIDTH } = Dimensions.get("window")
 
 const MessageInput = props => {
-  const { onChangeHandler, onPress } = props
+  const { onChangeHandler, onPress, value } = props
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
+        value={value}
         onChangeText={onChangeHandler}
         placeholder="Escreva uma mensagem"
         autoComplete="off"

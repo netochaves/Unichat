@@ -60,10 +60,11 @@ export default class Conversas extends Component {
       source: "1"
     }
     this.setState({ messages: [...messages, newMessage] })
+    this.setState({ messageText: "" })
   }
 
   render() {
-    const { messages } = this.state
+    const { messages, messageText } = this.state
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
@@ -102,6 +103,7 @@ export default class Conversas extends Component {
         </View>
         <View style={styles.input}>
           <MessageInput
+            value={messageText}
             onPress={this.sendMessage}
             onChangeHandler={text => this.onChangeHandler(text)}
           />
