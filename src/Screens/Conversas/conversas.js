@@ -24,7 +24,7 @@ export default class Conversas extends Component {
     this.ref = firebase.firestore().collection("Messages")
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.unsubscribe = this.ref.onSnapshot(querySnapshot => {
       const messages = []
       querySnapshot.forEach(doc => {
