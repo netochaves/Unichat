@@ -24,6 +24,22 @@ export default class Conversas extends Component {
     this.ref = firebase.firestore().collection("Messages")
   }
 
+  componentDidMount() {
+    this.unsubscribe = this.ref.onSnapshot(querySnapshot => {
+      const messages = []
+      querySnapshot.forEach(doc => {
+        const { content, date, source } = doc.data()
+        messages.push({
+          key: doc.id,
+          content,
+          date,
+          source
+        })
+      })
+      this.setState({ messages })
+    })
+  }
+
   onChangeHandler = text => {
     this.setState({ messageText: text })
   }
@@ -63,11 +79,14 @@ export default class Conversas extends Component {
       source: "1"
     }
 
-    this.ref.add({
-      content: newMessage.content,
-      date: newMessage.date,
-      source: newMessage.source
-    }).then(() => true).catch(error => error)
+    this.ref
+      .add({
+        content: newMessage.content,
+        date: newMessage.date,
+        source: newMessage.source
+      })
+      .then(() => true)
+      .catch(error => error)
 
     this.setState({ messages: [...messages, newMessage] })
     this.setState({ messageText: "" })
