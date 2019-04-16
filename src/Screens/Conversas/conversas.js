@@ -5,6 +5,7 @@ import { View, StyleSheet, Dimensions, StatusBar, Text } from "react-native"
 import { Avatar, Icon } from "react-native-elements"
 import { ScrollView } from "react-native-gesture-handler"
 import shortid from "shortid"
+import firebase from "react-native-firebase"
 
 import MessageInput from "../../Components/MessageInput"
 import Message from "../../Components/mensagem"
@@ -19,6 +20,8 @@ export default class Conversas extends Component {
       messageText: "",
       messages: []
     }
+    // This line right here needs to be changed later
+    this.ref = firebase.firestore().collection("Messages")
   }
 
   onChangeHandler = text => {
@@ -59,6 +62,13 @@ export default class Conversas extends Component {
       date: hour,
       source: "1"
     }
+
+    this.ref.add({
+      content: newMessage.content,
+      date: newMessage.date,
+      source: newMessage.source
+    }).then(() => true).catch(error => error)
+
     this.setState({ messages: [...messages, newMessage] })
     this.setState({ messageText: "" })
   }
