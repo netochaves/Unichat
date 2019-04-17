@@ -9,6 +9,8 @@ target 'Unichat' do
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   target 'UnichatTests' do
     inherit! :search_paths
     # Pods for testing
