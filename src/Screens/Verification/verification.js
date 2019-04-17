@@ -1,5 +1,4 @@
 /* eslint-disable object-curly-newline */
-/* eslint-disable react-native/no-inline-styles */
 import React, { Component } from "react"
 
 import { View, Text, StyleSheet, Linking } from "react-native"
@@ -43,6 +42,11 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginBottom: 30,
     alignSelf: "center"
+  },
+  text3: {
+    alignSelf: "center",
+    fontSize: 25,
+    color: "white"
   }
 })
 
@@ -75,11 +79,7 @@ export default class Verificacao extends Component {
         <View style={styles}>
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
             <Text
-              style={{
-                alignSelf: "center",
-                fontSize: 25,
-                color: "white"
-              }}
+              style={styles.text3}
             >
               Verificar
             </Text>
