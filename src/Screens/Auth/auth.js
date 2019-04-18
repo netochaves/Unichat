@@ -5,10 +5,9 @@ import {
   Text,
   StyleSheet,
   Picker,
-  TextInput,
-  Alert
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
+import TextInputMask from "react-native-text-input-mask"
 
 export default class Auth extends Component {
   constructor() {
@@ -18,25 +17,19 @@ export default class Auth extends Component {
     }
   }
 
-  sendNumber = () => {
-    const { countryCode } = this.state
-    if (countryCode === "") {
-      Alert.alert("sendNumber()", "Selecione um ID no picker.")
-    } else {
-      Alert.alert("sendNumber()", countryCode)
-    }
-  }
+  sendNumber = () => {}
 
   render() {
+    const { countryCode } = this.state
     return (
       <View style={styles.container}>
         <View>
-          <Text style={styles.textBig}>Verifique seu número de telefone</Text>
+          <Text style={styles.textBig}>Insira seu número de telefone</Text>
         </View>
         <View>
           <Text style={styles.textSmall}>Digite o número do seu telefone junto com o DDD</Text>
           <Picker
-            selectedValue={this.state.countryCode}
+            selectedValue={countryCode}
             onValueChange={itemValue => this.setState({ countryCode: itemValue })}
           >
             <Picker.Item label="Selecione um ID do País" value="" />
@@ -45,15 +38,19 @@ export default class Auth extends Component {
           </Picker>
         </View>
         <View>
-          <TextInput
-            placeholder={this.state.countryCode}
-            underlineColorAndroid="transparent"
-            keyboardType="number-pad"
-            maxLength={9}
+          <TextInputMask
             style={styles.textInputStyle}
+            placeholder={countryCode}
+            refInput={ref => { this.input = ref }}
+            onSubmitEditing={(formatted, extracted) => {
+              // Formatted = Vai entregar no formato designado
+              // Extracted = Vai entregar todos juntos
+            }}
+            mask={`${countryCode} ([00]) [00000]-[0000]`}
+            keyboardType="number-pad"
           />
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-            <Text style={styles.textButton} onPress={this.sendNumber}>
+            <Text style={styles.textButton} onPress={() => {}}>
               Verificar
             </Text>
           </LinearGradient>
@@ -74,11 +71,11 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   textBig: {
-    fontSize: 18,
+    fontSize: 24,
     color: "black",
     fontWeight: "bold",
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 30,
   },
   textSmall: {
     fontSize: 12,
@@ -92,8 +89,9 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     textAlign: "center",
-    width: 260,
-    height: 40,
+    fontSize: 20,
+    width: 280,
+    height: 50,
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "#6AC3FB",
@@ -102,7 +100,7 @@ const styles = StyleSheet.create({
   },
   textButton: {
     alignSelf: "center",
-    fontSize: 18,
+    fontSize: 20,
     color: "white"
   },
   button: {
