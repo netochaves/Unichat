@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import React, { Component } from "react"
 
 import { View, Text, StyleSheet, Linking } from "react-native"
@@ -78,11 +77,7 @@ export default class Verificacao extends Component {
         </View>
         <View style={styles}>
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-            <Text
-              style={styles.text3}
-            >
-              Verificar
-            </Text>
+            <Text style={styles.text3}>Verificar</Text>
           </LinearGradient>
         </View>
         <View style={styles.containerText2}>
