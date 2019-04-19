@@ -6,8 +6,12 @@ import {
 import LinearGradient from "react-native-linear-gradient"
 import TextInputMask from "react-native-text-input-mask"
 import firebase from "react-native-firebase"
+import { StackActions, NavigationActions } from "react-navigation"
 
 export default class Auth extends Component {
+  static navigationOptions = {
+  }
+
   constructor() {
     super()
     this.state = {
@@ -70,7 +74,18 @@ export default class Auth extends Component {
             keyboardType="number-pad"
           />
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-            <Text style={styles.textButton} onPress={() => this.signIn()}>
+            <Text
+              style={styles.textButton}
+              onPress={() => {
+                this.signIn()
+                this.props.navigation.dispatch(StackActions.reset({
+                  index: 0,
+                  actions: [
+                    NavigationActions.navigate({ routeName: "VerificationScreen" })
+                  ],
+                }))
+              }}
+            >
               Verificar
             </Text>
           </LinearGradient>

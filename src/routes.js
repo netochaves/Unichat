@@ -1,8 +1,23 @@
-import { createAppContainer, createSwitchNavigator } from "react-navigation"
+import { createAppContainer, createStackNavigator } from "react-navigation"
 
-// import Conversas from "~/Screens/Conversas/conversas"
 import Auth from "~/Screens/Auth/auth"
+import Verification from "~/Screens/Verification/verification"
+import Conversas from "~/Screens/Conversas/conversas"
 
-const Routes = createAppContainer(createSwitchNavigator({ Auth }))
+const appStackNavigator = createStackNavigator({
+  AuthScreen: {
+    screen: Auth
+  },
+  VerificationScreen: {
+    screen: Verification
+  },
+  ChatScreen: {
+    screen: Conversas
+  }
+}, {
+  initialRouteName: "AuthScreen"
+})
+
+const Routes = createAppContainer(appStackNavigator)
 
 export default Routes
