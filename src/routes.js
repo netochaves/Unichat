@@ -11,7 +11,7 @@ const appStackNavigator = createStackNavigator({
   VerificationScreen: {
     screen: Verification
   },
-  ChatScreen: {
+  ConversationScreen: {
     screen: Conversas
   }
 }, {

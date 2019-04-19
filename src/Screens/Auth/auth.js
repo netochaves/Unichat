@@ -10,7 +10,6 @@ import {
 import LinearGradient from "react-native-linear-gradient"
 import TextInputMask from "react-native-text-input-mask"
 import firebase from "react-native-firebase"
-import { StackActions, NavigationActions } from "react-navigation"
 
 export default class Auth extends Component {
   static navigationOptions = {
@@ -36,12 +35,9 @@ export default class Auth extends Component {
         message = `Código de confirmação enviado para o número ${phoneNumber}`
 
         const { navigation } = this.props
-        navigation.dispatch(StackActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({ routeName: "VerificationScreen" })
-          ]
-        }))
+        navigation.navigate("VerificationScreen", {
+          confirmResultFirebase: _confirmResult,
+        })
       })
       .catch(error => {
         // eslint-disable-next-line max-len
