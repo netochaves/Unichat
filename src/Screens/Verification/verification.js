@@ -56,7 +56,18 @@ export default class Verificacao extends Component {
     this.state = {}
   }
 
-  confirmChoice = () => {}
+  confirmChoice = code => {
+    const { confirmResult } = this.props
+
+    if (confirmResult && code.length) {
+      confirmResult
+        .confirm(code)
+        // Continuar as rotas se a confirmação ocorrer com sucesso aqui
+        .then(() => {})
+        // Caso dê algum erro, o tratamento é feito aqui
+        .catch(() => {})
+    }
+  }
 
   render() {
     return (
@@ -73,16 +84,12 @@ export default class Verificacao extends Component {
             inactiveColor="gray"
             activeColor="gray"
             inputPosition="left"
-            onFulfill={codigo => this.confirmChoice(codigo)}
+            onFulfill={code => this.confirmChoice(code)}
           />
         </View>
         <View style={styles}>
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-            <Text
-              style={styles.text3}
-            >
-              Verificar
-            </Text>
+            <Text style={styles.text3}>Verificar</Text>
           </LinearGradient>
         </View>
         <View style={styles.containerText2}>

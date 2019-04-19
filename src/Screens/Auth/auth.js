@@ -1,23 +1,39 @@
 import React, { Component } from "react"
 
 import {
-  View,
-  Text,
-  StyleSheet,
-  Picker,
+  View, Text, StyleSheet, Picker, Alert
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import TextInputMask from "react-native-text-input-mask"
+import firebase from "react-native-firebase"
 
 export default class Auth extends Component {
   constructor() {
     super()
     this.state = {
-      countryCode: ""
+      countryCode: "",
+      phoneNumber: null
     }
   }
 
-  sendNumber = () => {}
+  signIn = () => {
+    const { phoneNumber } = this.state
+    // eslint-disable-next-line no-unused-vars
+    let message = ""
+
+    firebase
+      .auth()
+      .signInWithPhoneNumber(phoneNumber)
+      .then(_confirmResult => {
+        message = `Código de confirmação enviado para o número ${phoneNumber}`
+        // Encaminhar a variável message e o confirmResult como prop para o componente Verification
+      })
+      .catch(error => {
+        // eslint-disable-next-line max-len
+        // message = "Ocorreu algum erro ao enviar o código para o número digitado! Verifique o número e tente novamente!"
+        Alert.alert("Erro na verificação", error.message)
+      })
+  }
 
   render() {
     const { countryCode } = this.state
@@ -27,10 +43,13 @@ export default class Auth extends Component {
           <Text style={styles.textBig}>Insira seu número de telefone</Text>
         </View>
         <View>
-          <Text style={styles.textSmall}>Digite o número do seu telefone junto com o DDD</Text>
+          <Text style={styles.textSmall}>
+            Digite o número do seu telefone junto com o DDD
+          </Text>
           <Picker
             selectedValue={countryCode}
-            onValueChange={itemValue => this.setState({ countryCode: itemValue })}
+            onValueChange={itemValue => this.setState({ countryCode: itemValue })
+            }
           >
             <Picker.Item label="Selecione um ID do País" value="" />
             <Picker.Item label="+55 - Brasil" value="+55" />
@@ -41,22 +60,24 @@ export default class Auth extends Component {
           <TextInputMask
             style={styles.textInputStyle}
             placeholder={countryCode}
-            refInput={ref => { this.input = ref }}
-            onSubmitEditing={(formatted, extracted) => {
-              // Formatted = Vai entregar no formato designado
-              // Extracted = Vai entregar todos juntos
+            refInput={ref => {
+              this.input = ref
+            }}
+            onChangeText={extracted => {
+              this.setState({ phoneNumber: extracted })
             }}
             mask={`${countryCode} ([00]) [00000]-[0000]`}
             keyboardType="number-pad"
           />
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-            <Text style={styles.textButton} onPress={() => {}}>
+            <Text style={styles.textButton} onPress={() => this.signIn()}>
               Verificar
             </Text>
           </LinearGradient>
-
         </View>
-        <Text style={styles.textEnd}>Custos de SMS talvez possam ser aplicados</Text>
+        <Text style={styles.textEnd}>
+          Custos de SMS talvez possam ser aplicados
+        </Text>
       </View>
     )
   }
@@ -68,24 +89,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
-    padding: 5,
+    padding: 5
   },
   textBig: {
     fontSize: 24,
     color: "black",
     fontWeight: "bold",
     marginTop: 10,
-    marginBottom: 30,
+    marginBottom: 30
   },
   textSmall: {
     fontSize: 12,
     color: "gray",
-    marginBottom: 10,
+    marginBottom: 10
   },
   textEnd: {
     fontSize: 12,
     color: "gray",
-    marginTop: 50,
+    marginTop: 50
   },
   textInputStyle: {
     textAlign: "center",
@@ -96,7 +117,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#6AC3FB",
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   textButton: {
     alignSelf: "center",
@@ -110,6 +131,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 20
   }
 })
