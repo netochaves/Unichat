@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 
-import { View, Text, StyleSheet, Picker, Alert } from "react-native"
+import {
+  View, Text, StyleSheet, Picker, Alert
+} from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import TextInputMask from "react-native-text-input-mask"
 import firebase from "react-native-firebase"
@@ -16,6 +18,7 @@ export default class Auth extends Component {
 
   signIn = () => {
     const { phoneNumber } = this.state
+    // eslint-disable-next-line no-unused-vars
     let message = ""
 
     firebase
