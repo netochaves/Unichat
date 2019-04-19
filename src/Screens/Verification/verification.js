@@ -1,7 +1,12 @@
 /* eslint-disable object-curly-newline */
 import React, { Component } from "react"
 
-import { View, Text, StyleSheet, Linking } from "react-native"
+import {
+  View,
+  Text,
+  StyleSheet,
+  Linking
+} from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import CodeInput from "react-native-confirmation-code-input"
 
@@ -57,13 +62,16 @@ export default class Verificacao extends Component {
   }
 
   confirmChoice = code => {
-    const { confirmResult } = this.props
+    const { navigation } = this.props
+    const confirmResult = navigation.getParam("confirmResultFirebase")
 
     if (confirmResult && code.length) {
       confirmResult
         .confirm(code)
         // Continuar as rotas se a confirmação ocorrer com sucesso aqui
-        .then(() => {})
+        .then(() => {
+          navigation.navigate("ConversationScreen")
+        })
         // Caso dê algum erro, o tratamento é feito aqui
         .catch(() => {})
     }
@@ -77,13 +85,14 @@ export default class Verificacao extends Component {
         </View>
         <View style={styles.code}>
           <CodeInput
-            codeLength={4}
+            codeLength={6}
             className="border-b"
             space={20}
-            size={50}
+            size={40}
             inactiveColor="gray"
             activeColor="gray"
             inputPosition="left"
+            keyboardType="number-pad"
             onFulfill={code => this.confirmChoice(code)}
           />
         </View>
