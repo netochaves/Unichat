@@ -89,7 +89,7 @@ export default class Auth extends Component {
               style={styles.textButton}
               onPress={() => this.signIn()}
             >
-              Verificar
+              Enviar
             </Text>
           </LinearGradient>
         </View>
