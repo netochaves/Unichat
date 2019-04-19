@@ -1,9 +1,15 @@
 /* eslint-disable object-curly-newline */
 import React, { Component } from "react"
 
-import { View, Text, StyleSheet, Linking } from "react-native"
+import {
+  View,
+  Text,
+  StyleSheet,
+  Linking
+} from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import CodeInput from "react-native-confirmation-code-input"
+import { StackActions, NavigationActions } from "react-navigation"
 
 const styles = StyleSheet.create({
   principal: {

@@ -1,7 +1,11 @@
 import React, { Component } from "react"
 
 import {
-  View, Text, StyleSheet, Picker, Alert
+  View,
+  Text,
+  StyleSheet,
+  Picker,
+  Alert
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import TextInputMask from "react-native-text-input-mask"
@@ -30,7 +34,14 @@ export default class Auth extends Component {
       .signInWithPhoneNumber(phoneNumber)
       .then(_confirmResult => {
         message = `Código de confirmação enviado para o número ${phoneNumber}`
-        // Encaminhar a variável message e o confirmResult como prop para o componente Verification
+
+        const { navigation } = this.props
+        navigation.dispatch(StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: "VerificationScreen" })
+          ]
+        }))
       })
       .catch(error => {
         // eslint-disable-next-line max-len
@@ -76,15 +87,7 @@ export default class Auth extends Component {
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
             <Text
               style={styles.textButton}
-              onPress={() => {
-                this.signIn()
-                this.props.navigation.dispatch(StackActions.reset({
-                  index: 0,
-                  actions: [
-                    NavigationActions.navigate({ routeName: "VerificationScreen" })
-                  ],
-                }))
-              }}
+              onPress={() => this.signIn()}
             >
               Verificar
             </Text>
