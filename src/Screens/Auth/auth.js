@@ -10,6 +10,7 @@ import {
 import LinearGradient from "react-native-linear-gradient"
 import TextInputMask from "react-native-text-input-mask"
 import firebase from "react-native-firebase"
+import Conversas from "~/Screens/Conversas/conversas"
 
 export default class Auth extends Component {
   static navigationOptions = {
@@ -19,8 +20,20 @@ export default class Auth extends Component {
     super()
     this.state = {
       countryCode: "",
-      phoneNumber: null
+      phoneNumber: null,
+      loading: true,
+      authenticated: false,
     }
+  }
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({ loading: false, authenticated: true })
+      } else {
+        this.setState({ loading: false, authenticated: false })
+      }
+    })
   }
 
   signIn = () => {
@@ -47,53 +60,57 @@ export default class Auth extends Component {
   }
 
   render() {
-    const { countryCode } = this.state
-    return (
-      <View style={styles.container}>
-        <View>
-          <Text style={styles.textBig}>Insira seu número de telefone</Text>
-        </View>
-        <View>
-          <Text style={styles.textSmall}>
-            Digite o número do seu telefone junto com o DDD
-          </Text>
-          <Picker
-            selectedValue={countryCode}
-            onValueChange={itemValue => this.setState({ countryCode: itemValue })
-            }
-          >
-            <Picker.Item label="Selecione um ID do País" value="" />
-            <Picker.Item label="+55 - Brasil" value="+55" />
-            <Picker.Item label="+1 - Country" value="+1" />
-          </Picker>
-        </View>
-        <View>
-          <TextInputMask
-            style={styles.textInputStyle}
-            placeholder={countryCode}
-            refInput={ref => {
-              this.input = ref
-            }}
-            onChangeText={extracted => {
-              this.setState({ phoneNumber: extracted })
-            }}
-            mask={`${countryCode} ([00]) [00000]-[0000]`}
-            keyboardType="number-pad"
-          />
-          <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-            <Text
-              style={styles.textButton}
-              onPress={() => this.signIn()}
-            >
-              Enviar
+    const { countryCode, loading, authenticated } = this.state
+    if (loading) return null
+    if (!authenticated) {
+      return (
+        <View style={styles.container}>
+          <View>
+            <Text style={styles.textBig}>Insira seu número de telefone</Text>
+          </View>
+          <View>
+            <Text style={styles.textSmall}>
+              Digite o número do seu telefone junto com o DDD
             </Text>
-          </LinearGradient>
+            <Picker
+              selectedValue={countryCode}
+              onValueChange={itemValue => this.setState({ countryCode: itemValue })
+              }
+            >
+              <Picker.Item label="Selecione um ID do País" value="" />
+              <Picker.Item label="+55 - Brasil" value="+55" />
+              <Picker.Item label="+1 - Country" value="+1" />
+            </Picker>
+          </View>
+          <View>
+            <TextInputMask
+              style={styles.textInputStyle}
+              placeholder={countryCode}
+              refInput={ref => {
+                this.input = ref
+              }}
+              onChangeText={extracted => {
+                this.setState({ phoneNumber: extracted })
+              }}
+              mask={`${countryCode} ([00]) [00000]-[0000]`}
+              keyboardType="number-pad"
+            />
+            <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
+              <Text
+                style={styles.textButton}
+                onPress={() => this.signIn()}
+              >
+                Enviar
+              </Text>
+            </LinearGradient>
+          </View>
+          <Text style={styles.textEnd}>
+            Custos de SMS talvez possam ser aplicados
+          </Text>
         </View>
-        <Text style={styles.textEnd}>
-          Custos de SMS talvez possam ser aplicados
-        </Text>
-      </View>
-    )
+      )
+    }
+    return <Conversas />
   }
 }
 
