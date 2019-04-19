@@ -92,6 +92,7 @@ export default class Verificacao extends Component {
             inactiveColor="gray"
             activeColor="gray"
             inputPosition="left"
+            keyboardType="number-pad"
             onFulfill={code => this.confirmChoice(code)}
           />
         </View>
