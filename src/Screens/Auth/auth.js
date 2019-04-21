@@ -1,20 +1,14 @@
 import React, { Component } from "react"
 
-import {
-  View,
-  Text,
-  StyleSheet,
-  Picker,
-  Alert
-} from "react-native"
+// eslint-disable-next-line object-curly-newline
+import { View, Text, StyleSheet, Picker, Alert } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import TextInputMask from "react-native-text-input-mask"
 import firebase from "react-native-firebase"
 import Conversas from "~/Screens/Conversas/conversas"
 
 export default class Auth extends Component {
-  static navigationOptions = {
-  }
+  static navigationOptions = {}
 
   constructor() {
     super()
@@ -22,7 +16,7 @@ export default class Auth extends Component {
       countryCode: "",
       phoneNumber: null,
       loading: true,
-      authenticated: false,
+      authenticated: false
     }
   }
 
@@ -38,6 +32,7 @@ export default class Auth extends Component {
 
   signIn = () => {
     const { phoneNumber } = this.state
+
     // eslint-disable-next-line no-unused-vars
     let message = ""
 
@@ -50,6 +45,7 @@ export default class Auth extends Component {
         const { navigation } = this.props
         navigation.navigate("VerificationScreen", {
           confirmResultFirebase: _confirmResult,
+          phoneNumber
         })
       })
       .catch(error => {
@@ -60,6 +56,7 @@ export default class Auth extends Component {
   }
 
   render() {
+    // eslint-disable-next-line object-curly-newline
     const { countryCode, loading, authenticated } = this.state
     if (loading) return null
     if (!authenticated) {
@@ -74,7 +71,9 @@ export default class Auth extends Component {
             </Text>
             <Picker
               selectedValue={countryCode}
-              onValueChange={itemValue => this.setState({ countryCode: itemValue })
+              onValueChange={itemValue =>
+                // eslint-disable-next-line implicit-arrow-linebreak
+                this.setState({ countryCode: itemValue })
               }
             >
               <Picker.Item label="Selecione um ID do País" value="" />
@@ -95,11 +94,11 @@ export default class Auth extends Component {
               mask={`${countryCode} ([00]) [00000]-[0000]`}
               keyboardType="number-pad"
             />
-            <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-              <Text
-                style={styles.textButton}
-                onPress={() => this.signIn()}
-              >
+            <LinearGradient
+              colors={["#547BF0", "#6AC3FB"]}
+              style={styles.button}
+            >
+              <Text style={styles.textButton} onPress={() => this.signIn()}>
                 Enviar
               </Text>
             </LinearGradient>
