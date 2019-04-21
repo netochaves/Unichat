@@ -3,6 +3,7 @@ import React, { Component } from "react"
 import { View, Text, StyleSheet, Linking } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import CodeInput from "react-native-confirmation-code-input"
+import firebase from "react-native-firebase"
 
 const styles = StyleSheet.create({
   principal: {
@@ -55,7 +56,29 @@ export default class Verificacao extends Component {
     this.state = {}
   }
 
-  confirmChoice = () => {}
+  confirmChoice = code => {
+    const { navigation } = this.props
+    const confirmResult = navigation.getParam("confirmResultFirebase")
+    const phoneNumber = navigation.getParam("phoneNumber")
+
+    if (confirmResult && code.length) {
+      confirmResult
+        .confirm(code)
+        // Continuar as rotas se a confirmação ocorrer com sucesso aqui
+        .then(user => {
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(user.uid)
+            .set({
+              phone: phoneNumber
+            })
+          navigation.navigate("ConversationScreen")
+        })
+        // Caso dê algum erro, o tratamento é feito aqui
+        .catch(() => {})
+    }
+  }
 
   render() {
     return (
@@ -65,14 +88,15 @@ export default class Verificacao extends Component {
         </View>
         <View style={styles.code}>
           <CodeInput
-            codeLength={4}
+            codeLength={6}
             className="border-b"
             space={20}
-            size={50}
+            size={40}
             inactiveColor="gray"
             activeColor="gray"
             inputPosition="left"
-            onFulfill={codigo => this.confirmChoice(codigo)}
+            keyboardType="number-pad"
+            onFulfill={code => this.confirmChoice(code)}
           />
         </View>
         <View style={styles}>

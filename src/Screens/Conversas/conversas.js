@@ -13,39 +13,92 @@ import Message from "../../Components/mensagem"
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window")
 
 export default class Conversas extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.scrollView = null
     this.state = {
       messageText: "",
-      messages: []
+      messages: [],
+      user: firebase.auth().currentUser.uid
     }
+    const { user } = this.state
+
+    // Trecho de código apenas para auxiliar na seleção de pra quem vou enviar a msg
+    // Deve ser retirado após a implementação de contatos
+    if (user === "E6PMM9JOGYRBDKbDDdFWKiR2LVa2") {
+      this.refDest = firebase
+        .firestore()
+        .collection("users")
+        .doc("AC3Z5tAq29PBqaU6ax49jMhy1Kl1")
+        .collection("Messages")
+    } else if (user === "AC3Z5tAq29PBqaU6ax49jMhy1Kl1") {
+      this.refDest = firebase
+        .firestore()
+        .collection("users")
+        .doc("E6PMM9JOGYRBDKbDDdFWKiR2LVa2")
+        .collection("Messages")
+    }
+    // Trecho termina aqui
+
     // This line right here needs to be changed later
-    this.ref = firebase.firestore().collection("Messages")
+    this.ref = firebase
+      .firestore()
+      .collection("users")
+      .doc(user)
+      .collection("Messages")
   }
 
   componentDidMount() {
-    this.unsubscribe = this.ref.onSnapshot(querySnapshot => {
-      const messages = []
-      querySnapshot.forEach(doc => {
-        const { content, date, source } = doc.data()
-        messages.push({
-          key: doc.id,
-          content,
-          date,
-          source
+    this.unsubscribe = this.ref
+      .orderBy("date", "asc")
+      .onSnapshot(querySnapshot => {
+        const messages = []
+        querySnapshot.forEach(doc => {
+          const { content, date, source } = doc.data()
+          messages.push({
+            key: doc.id,
+            content,
+            date: date.toDate(),
+            source
+          })
         })
+        this.setState({ messages })
       })
-      this.setState({ messages })
-    })
   }
 
   onChangeHandler = text => {
     this.setState({ messageText: text })
   }
 
-  getTime = () => {
-    const date = new Date()
+  sendMessage = () => {
+    const { messageText, messages } = this.state
+    const newMessage = {
+      content: messageText,
+      date: new Date(),
+      source: "1"
+    }
+    this.ref
+      .add({
+        content: newMessage.content,
+        date: newMessage.date,
+        source: newMessage.source
+      })
+      .then(() => true)
+      .catch(error => error)
+
+    this.refDest
+      .add({
+        content: newMessage.content,
+        date: newMessage.date,
+        source: "2"
+      })
+      .then(() => true)
+      .catch(error => error)
+    this.setState({ messages: [...messages, newMessage] })
+    this.setState({ messageText: "" })
+  }
+
+  getTime = date => {
     let TimeType
     let hour
     let minutes
@@ -69,30 +122,9 @@ export default class Conversas extends Component {
     return `${hour.toString()} : ${minutes.toString()} ${TimeType.toString()}`
   }
 
-  sendMessage = () => {
-    const { messageText, messages } = this.state
-    const hour = this.getTime()
-
-    const newMessage = {
-      content: messageText,
-      date: hour,
-      source: "1"
-    }
-
-    this.ref
-      .add({
-        content: newMessage.content,
-        date: newMessage.date,
-        source: newMessage.source
-      })
-      .then(() => true)
-      .catch(error => error)
-
-    this.setState({ messages: [...messages, newMessage] })
-    this.setState({ messageText: "" })
-  }
-
   render() {
+    // Serve para deslogar do app
+    // firebase.auth().signOut()
     const { messages, messageText } = this.state
     return (
       <View style={styles.container}>
@@ -124,7 +156,7 @@ export default class Conversas extends Component {
               <Message
                 key={shortid.generate()}
                 content={message.content}
-                date={message.date}
+                date={this.getTime(message.date)}
                 source={message.source}
               />
             ))}
