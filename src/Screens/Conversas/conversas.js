@@ -13,15 +13,39 @@ import Message from "../../Components/mensagem"
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window")
 
 export default class Conversas extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.scrollView = null
     this.state = {
       messageText: "",
-      messages: []
+      messages: [],
+      user: firebase.auth().currentUser.uid
     }
+    const { user } = this.state
+
+    // Trecho de código apenas para auxiliar na seleção de pra quem vou enviar a msg
+    // Deve ser retirado após a implementação de contatos
+    if (user === "E6PMM9JOGYRBDKbDDdFWKiR2LVa2") {
+      this.refDest = firebase
+        .firestore()
+        .collection("users")
+        .doc("AC3Z5tAq29PBqaU6ax49jMhy1Kl1")
+        .collection("Messages")
+    } else if (user === "AC3Z5tAq29PBqaU6ax49jMhy1Kl1") {
+      this.refDest = firebase
+        .firestore()
+        .collection("users")
+        .doc("E6PMM9JOGYRBDKbDDdFWKiR2LVa2")
+        .collection("Messages")
+    }
+    // Trecho termina aqui
+
     // This line right here needs to be changed later
-    this.ref = firebase.firestore().collection("Messages")
+    this.ref = firebase
+      .firestore()
+      .collection("users")
+      .doc(user)
+      .collection("Messages")
   }
 
   componentDidMount() {
@@ -34,7 +58,7 @@ export default class Conversas extends Component {
           messages.push({
             key: doc.id,
             content,
-            date,
+            date: date.toDate(),
             source
           })
         })
@@ -50,10 +74,9 @@ export default class Conversas extends Component {
     const { messageText, messages } = this.state
     const newMessage = {
       content: messageText,
-      date: firebase.firestore.FieldValue.serverTimestamp(),
+      date: new Date(),
       source: "1"
     }
-
     this.ref
       .add({
         content: newMessage.content,
@@ -63,6 +86,14 @@ export default class Conversas extends Component {
       .then(() => true)
       .catch(error => error)
 
+    this.refDest
+      .add({
+        content: newMessage.content,
+        date: newMessage.date,
+        source: "2"
+      })
+      .then(() => true)
+      .catch(error => error)
     this.setState({ messages: [...messages, newMessage] })
     this.setState({ messageText: "" })
   }
@@ -92,6 +123,8 @@ export default class Conversas extends Component {
   }
 
   render() {
+    // Serve para deslogar do app
+    // firebase.auth().signOut()
     const { messages, messageText } = this.state
     return (
       <View style={styles.container}>
@@ -123,7 +156,7 @@ export default class Conversas extends Component {
               <Message
                 key={shortid.generate()}
                 content={message.content}
-                date={this.getTime(message.date.toDate())}
+                date={this.getTime(message.date)}
                 source={message.source}
               />
             ))}
