@@ -1,8 +1,13 @@
 import React, { Component } from "react"
 
 import { View, StyleSheet, StatusBar } from "react-native"
-import firebase from "react-native-firebase"
+import {
+  ProviderTypes,
+  TranslatorConfiguration,
+  TranslatorFactory
+} from "react-native-power-translator"
 
+import firebase from "react-native-firebase"
 import ChatInput from "../../Components/Chat/chatInput"
 import ChatHeader from "../../Components/Chat/chatHeader"
 import ChatContainer from "../../Components/Chat/chatContainer"
@@ -44,6 +49,12 @@ export default class Conversas extends Component {
       .collection("users")
       .doc(user)
       .collection("Messages")
+
+    TranslatorConfiguration.setConfig(
+      ProviderTypes.Google,
+      "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
+      "en"
+    )
   }
 
   componentDidMount() {
@@ -52,10 +63,11 @@ export default class Conversas extends Component {
       .onSnapshot(querySnapshot => {
         const messages = []
         querySnapshot.forEach(doc => {
-          const { content, date, source } = doc.data()
+          const { content, contentTranslated, date, source } = doc.data()
           messages.push({
             key: doc.id,
             content,
+            contentTranslated,
             date: date.toDate(),
             source
           })
@@ -69,12 +81,13 @@ export default class Conversas extends Component {
   }
 
   sendMessage = () => {
-    const { messageText, messages } = this.state
+    const { messageText } = this.state
     const newMessage = {
       content: messageText,
       date: new Date(),
       source: "1"
     }
+
     this.ref
       .add({
         content: newMessage.content,
@@ -84,15 +97,19 @@ export default class Conversas extends Component {
       .then(() => true)
       .catch(error => error)
 
-    this.refDest
-      .add({
-        content: newMessage.content,
-        date: newMessage.date,
-        source: "2"
-      })
-      .then(() => true)
-      .catch(error => error)
-    this.setState({ messages: [...messages, newMessage] })
+    const translator = TranslatorFactory.createTranslator()
+    translator.translate(messageText, "en").then(translated => {
+      this.refDest
+        .add({
+          content: newMessage.content,
+          date: newMessage.date,
+          contentTranslated: translated,
+          source: "2"
+        })
+        .then(() => true)
+        .catch(error => error)
+    })
+
     this.setState({ messageText: "" })
   }
 
