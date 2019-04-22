@@ -49,7 +49,6 @@ export default class Auth extends Component {
         })
       })
       .catch(error => {
-        // eslint-disable-next-line max-len
         // message = "Ocorreu algum erro ao enviar o código para o número digitado! Verifique o número e tente novamente!"
         Alert.alert("Erro na verificação", error.message)
       })
@@ -72,7 +71,6 @@ export default class Auth extends Component {
             <Picker
               selectedValue={countryCode}
               onValueChange={itemValue =>
-                // eslint-disable-next-line implicit-arrow-linebreak
                 this.setState({ countryCode: itemValue })
               }
             >

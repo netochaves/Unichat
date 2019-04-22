@@ -1,7 +1,7 @@
 /* eslint-disable object-curly-newline */
 import React, { Component } from "react"
 
-import { View, StyleSheet, Dimensions, StatusBar, Text } from "react-native"
+import { View, StyleSheet, StatusBar, Text } from "react-native"
 import { Avatar, Icon } from "react-native-elements"
 import { ScrollView } from "react-native-gesture-handler"
 import shortid from "shortid"
@@ -10,9 +10,11 @@ import firebase from "react-native-firebase"
 import MessageInput from "../../Components/MessageInput"
 import Message from "../../Components/mensagem"
 
-const { width: WIDTH, height: HEIGHT } = Dimensions.get("window")
-
 export default class Conversas extends Component {
+  static navigationOptions = {
+    header: null
+  }
+
   constructor(props) {
     super(props)
     this.scrollView = null
@@ -123,8 +125,6 @@ export default class Conversas extends Component {
   }
 
   render() {
-    // Serve para deslogar do app
-    // firebase.auth().signOut()
     const { messages, messageText } = this.state
     return (
       <View style={styles.container}>
@@ -180,8 +180,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#E8E3E3"
   },
   header: {
-    width: WIDTH,
-    height: HEIGHT - 600,
     backgroundColor: "#fff",
     elevation: 5
   },
@@ -192,12 +190,16 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   headerContent: {
-    flex: 1,
-    left: 40,
-    top: 20,
+    justifyContent: "space-between",
+    alignContent: "center",
+    marginBottom: 10,
+    marginLeft: 10,
+    marginTop: 10,
+    marginRight: 10,
     flexDirection: "row"
   },
   userInfo: {
+    flex: 1,
     marginLeft: 10
   },
   userName: {
@@ -207,9 +209,8 @@ const styles = StyleSheet.create({
     fontSize: 10
   },
   moreInfo: {
-    flex: 1,
-    top: 5,
-    left: 60
+    marginTop: 10,
+    right: 0
   },
   messageContainer: {
     flex: 1
