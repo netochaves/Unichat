@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import React, { Component } from "react"
 
 import { View, StyleSheet, StatusBar } from "react-native"
@@ -40,7 +39,6 @@ export default class Conversas extends Component {
     }
     // Trecho termina aqui
 
-    // This line right here needs to be changed later
     this.ref = firebase
       .firestore()
       .collection("users")
