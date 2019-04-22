@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 
 import {
   View,
@@ -11,17 +11,39 @@ import Icon from "react-native-vector-icons/Feather"
 
 const { width: WIDTH } = Dimensions.get("window")
 
-const MessageInput = props => {
-  const { onChangeHandler, onPress, value } = props
-  return (
-    <View style={styles.container}>
+export default class MessageInput extends Component  {
+  constructor (props) {
+    super(props);
+    this.state = {
+      newValue: '',
+      height: 40
+    }
+  }  
+
+  updtSize = (height) => {
+    this.setState({
+      height
+    });
+  }
+
+
+  render (){
+   
+   
+   const {onPress} = this.props;
+  const {newValue, height} = this.state;
+
+   
+    return (
+       <View style={styles.container}>
       <TextInput
         style={styles.input}
-        value={value}
-        onChangeText={onChangeHandler}
+        value={newValue}
+        onChangeText={(value) => this.setState({value})}
         placeholder="Escreva uma mensagem"
         autoComplete="off"
         multiline
+        onContentSizeChange={(e) => this.updtSize(e.nativeEvent.contentSize.height)}
       />
       <TouchableOpacity onPress={onPress}>
         <View style={styles.CircleShapeView}>
@@ -30,6 +52,7 @@ const MessageInput = props => {
       </TouchableOpacity>
     </View>
   )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -65,4 +88,3 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MessageInput
