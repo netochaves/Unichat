@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import React, { Component } from "react"
 
 import { View, Text, StyleSheet, Linking } from "react-native"
@@ -74,7 +73,7 @@ export default class Verificacao extends Component {
             .set({
               phone: phoneNumber
             })
-          navigation.navigate("ConversationScreen")
+          navigation.navigate("ChatScreen")
         })
         // Caso dê algum erro, o tratamento é feito aqui
         .catch(() => {})

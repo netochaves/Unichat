@@ -1,11 +1,9 @@
 import React, { Component } from "react"
-
-// eslint-disable-next-line object-curly-newline
 import { View, Text, StyleSheet, Picker, Alert } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import TextInputMask from "react-native-text-input-mask"
 import firebase from "react-native-firebase"
-import Conversas from "~/Screens/Conversas/conversas"
+import Chat from "../Chat/chat"
 
 export default class Auth extends Component {
   static navigationOptions = {}
@@ -33,15 +31,10 @@ export default class Auth extends Component {
   signIn = () => {
     const { phoneNumber } = this.state
 
-    // eslint-disable-next-line no-unused-vars
-    let message = ""
-
     firebase
       .auth()
       .signInWithPhoneNumber(phoneNumber)
       .then(_confirmResult => {
-        message = `Código de confirmação enviado para o número ${phoneNumber}`
-
         const { navigation } = this.props
         navigation.navigate("VerificationScreen", {
           confirmResultFirebase: _confirmResult,
@@ -49,14 +42,11 @@ export default class Auth extends Component {
         })
       })
       .catch(error => {
-        // eslint-disable-next-line max-len
-        // message = "Ocorreu algum erro ao enviar o código para o número digitado! Verifique o número e tente novamente!"
         Alert.alert("Erro na verificação", error.message)
       })
   }
 
   render() {
-    // eslint-disable-next-line object-curly-newline
     const { countryCode, loading, authenticated } = this.state
     if (loading) return null
     if (!authenticated) {
@@ -72,7 +62,6 @@ export default class Auth extends Component {
             <Picker
               selectedValue={countryCode}
               onValueChange={itemValue =>
-                // eslint-disable-next-line implicit-arrow-linebreak
                 this.setState({ countryCode: itemValue })
               }
             >
@@ -109,7 +98,7 @@ export default class Auth extends Component {
         </View>
       )
     }
-    return <Conversas />
+    return <Chat />
   }
 }
 
