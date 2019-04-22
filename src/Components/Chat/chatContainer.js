@@ -47,7 +47,11 @@ const Chat = props => {
           return (
             <Message
               key={shortid.generate()}
-              content={message.content}
+              content={
+                message.source === "1"
+                  ? message.content
+                  : message.contentTranslated
+              }
               date={getTime(message.date)}
               source={message.source}
             />

@@ -63,10 +63,11 @@ export default class Conversas extends Component {
       .onSnapshot(querySnapshot => {
         const messages = []
         querySnapshot.forEach(doc => {
-          const { content, date, source } = doc.data()
+          const { content, contentTranslated, date, source } = doc.data()
           messages.push({
             key: doc.id,
             content,
+            contentTranslated,
             date: date.toDate(),
             source
           })
