@@ -1,14 +1,12 @@
 /* eslint-disable object-curly-newline */
 import React, { Component } from "react"
 
-import { View, StyleSheet, StatusBar, Text } from "react-native"
-import { Avatar, Icon } from "react-native-elements"
-import { ScrollView } from "react-native-gesture-handler"
-import shortid from "shortid"
+import { View, StyleSheet, StatusBar } from "react-native"
 import firebase from "react-native-firebase"
 
-import MessageInput from "../../Components/MessageInput"
-import Message from "../../Components/mensagem"
+import ChatInput from "../../Components/Chat/chatInput"
+import ChatHeader from "../../Components/Chat/chatHeader"
+import ChatContainer from "../../Components/Chat/chatContainer"
 
 export default class Conversas extends Component {
   static navigationOptions = {
@@ -100,70 +98,17 @@ export default class Conversas extends Component {
     this.setState({ messageText: "" })
   }
 
-  getTime = date => {
-    let TimeType
-    let hour
-    let minutes
-
-    hour = date.getHours()
-    if (hour <= 11) {
-      TimeType = "AM"
-    } else {
-      TimeType = "PM"
-    }
-    if (hour > 12) {
-      hour -= 12
-    }
-    if (hour === 0) {
-      hour = 12
-    }
-    minutes = date.getMinutes()
-    if (minutes < 10) {
-      minutes = 0 + minutes.toString()
-    }
-    return `${hour.toString()} : ${minutes.toString()} ${TimeType.toString()}`
-  }
-
   render() {
     const { messages, messageText } = this.state
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <Avatar rounded title="NC" size={40} />
-            <View style={styles.userInfo}>
-              <Text style={styles.userName}>Neto Chaves</Text>
-              <Text style={styles.lastSeen}>Visto por ultimos às 8:10pm</Text>
-            </View>
-            <Icon
-              containerStyle={styles.moreInfo}
-              name="dots-vertical"
-              type="material-community"
-            />
-          </View>
-        </View>
-        <View style={styles.messageContainer}>
-          <ScrollView
-            ref={ref => {
-              this.scrollView = ref
-            }}
-            onContentSizeChange={() => {
-              this.scrollView.scrollToEnd({ animated: true })
-            }}
-          >
-            {messages.map(message => (
-              <Message
-                key={shortid.generate()}
-                content={message.content}
-                date={this.getTime(message.date)}
-                source={message.source}
-              />
-            ))}
-          </ScrollView>
+        <ChatHeader />
+        <View style={styles.chatContainer}>
+          <ChatContainer messages={messages} />
         </View>
         <View style={styles.input}>
-          <MessageInput
+          <ChatInput
             value={messageText}
             onPress={this.sendMessage}
             onChangeHandler={text => this.onChangeHandler(text)}
@@ -179,40 +124,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#E8E3E3"
   },
-  header: {
-    backgroundColor: "#fff",
-    elevation: 5
-  },
+
   input: {
     alignContent: "center",
     flex: 0,
     justifyContent: "flex-end",
     marginBottom: 10
   },
-  headerContent: {
-    justifyContent: "space-between",
-    alignContent: "center",
-    marginBottom: 10,
-    marginLeft: 10,
-    marginTop: 10,
-    marginRight: 10,
-    flexDirection: "row"
-  },
-  userInfo: {
-    flex: 1,
-    marginLeft: 10
-  },
-  userName: {
-    fontSize: 18
-  },
-  lastSeen: {
-    fontSize: 10
-  },
-  moreInfo: {
-    marginTop: 10,
-    right: 0
-  },
-  messageContainer: {
+  chatContainer: {
     flex: 1
   }
 })

@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, Picker, Alert } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import TextInputMask from "react-native-text-input-mask"
 import firebase from "react-native-firebase"
-import Conversas from "~/Screens/Conversas/conversas"
+import Chat from "~/Screens/Chat/chat"
 
 export default class Auth extends Component {
   static navigationOptions = {}
@@ -107,7 +107,7 @@ export default class Auth extends Component {
         </View>
       )
     }
-    return <Conversas />
+    return <Chat />
   }
 }
 

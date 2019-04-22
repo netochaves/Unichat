@@ -2,7 +2,7 @@ import { createAppContainer, createStackNavigator } from "react-navigation"
 
 import Auth from "~/Screens/Auth/auth"
 import Verification from "~/Screens/Verification/verification"
-import Conversas from "~/Screens/Conversas/conversas"
+import Chat from "~/Screens/Chat/chat"
 
 const appStackNavigator = createStackNavigator(
   {
@@ -18,8 +18,8 @@ const appStackNavigator = createStackNavigator(
         header: null
       }
     },
-    ConversationScreen: {
-      screen: Conversas,
+    ChatScreen: {
+      screen: Chat,
       navigationOptions: {
         header: null
       }
