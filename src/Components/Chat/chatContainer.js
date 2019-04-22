@@ -5,7 +5,6 @@ import shortid from "shortid"
 import { ScrollView } from "react-native-gesture-handler"
 
 import Message from "../mensagem"
-// import { Container } from './styles';
 
 const getTime = date => {
   let TimeType
@@ -44,14 +43,16 @@ const Chat = props => {
           scrollView.scrollToEnd({ animated: true })
         }}
       >
-        {messages.map(message => (
-          <Message
-            key={shortid.generate()}
-            content={message.content}
-            date={getTime(message.date)}
-            source={message.source}
-          />
-        ))}
+        {messages.map(message => {
+          return (
+            <Message
+              key={shortid.generate()}
+              content={message.content}
+              date={getTime(message.date)}
+              source={message.source}
+            />
+          )
+        })}
       </ScrollView>
     </View>
   )
