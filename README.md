@@ -17,10 +17,10 @@ Unichat é feito em React Native uma tecnologia voltada para o desenvolvimento m
 
 
 
-##########################################################################################################################################
+
 ## Unichat 1.0 - 22/04/2019                                                                                                                                                                                                                                                  
 ## NEW
   Tela de registro de número criada que permite o cadastro dos usuários através do seu número de telefone;
    Tela de autenticação do número registrado nessa tela é enviado um código de verificação para o número informado e aguarda o usuário         informar o código para garantir a autenticidade daquele cadastro;
    Tela de envio de mensagens que  permite a interação entre dois usuários através da troca de mensagens;
-   Conexão com a API de tradução feita e operante as mensagens já estão sendo traduzidas ao serem enviadas; ##########################################################################################################################################
+   Conexão com a API de tradução feita e operante as mensagens já estão sendo traduzidas ao serem enviadas; 
