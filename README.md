@@ -22,8 +22,8 @@ Unichat é feito em React Native uma tecnologia voltada para o desenvolvimento m
 ## New Features
  * [#33](https://github.com/ES2-UFPI/Unichat/pull/33) Autemticação com número de telefome.
   
- * [#26]https://github.com/ES2-UFPI/Unichat/pull/26) Envio de mensagens.
+ * [#26](https://github.com/ES2-UFPI/Unichat/pull/26) Envio de mensagens.
   
  * [#28](https://github.com/ES2-UFPI/Unichat/pull/28) Recebimento de mensagens.
   
- )* [#42](https://github.com/ES2-UFPI/Unichat/pull/42) Tradução da mensagem.
+ * [#42](https://github.com/ES2-UFPI/Unichat/pull/42) Tradução da mensagem.
