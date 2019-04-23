@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 
 import {
   View,
@@ -8,20 +8,44 @@ import {
   TouchableOpacity
 } from "react-native"
 import Icon from "react-native-vector-icons/Feather"
+import { NativeViewGestureHandler } from "react-native-gesture-handler";
 
 const { width: WIDTH } = Dimensions.get("window")
 
-const MessageInput = props => {
-  const { onChangeHandler, onPress, value } = props
-  return (
-    <View style={styles.container}>
+export default class MessageInput extends Component  {
+  constructor (props) {
+    super(props);
+    this.state = {
+      value: '',
+      height: 40
+    }
+  }  
+
+  updtSize = (height) => {
+    this.setState({
+    height
+    });
+  }
+  render (){
+  const {onPress} = this.props;
+  const {value, height} = this.state;
+
+  let newStyle = {
+    height,
+    fontSize: 14,
+    width: WIDTH - 55
+  }
+    return (
+       <View style={styles.container}>
       <TextInput
-        style={styles.input}
-        value={value}
-        onChangeText={onChangeHandler}
+        style={[newStyle]}       
+        onChangeText={(value) => this.setState({value})}
         placeholder="Escreva uma mensagem"
         autoComplete="off"
-        multiline
+        editable={true}
+        multiline={true}
+        value={value}
+        onContentSizeChange={(e) => this.updtSize(e.nativeEvent.contentSize.height)}
       />
       <TouchableOpacity onPress={onPress}>
         <View style={styles.CircleShapeView}>
@@ -30,6 +54,7 @@ const MessageInput = props => {
       </TouchableOpacity>
     </View>
   )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -65,4 +90,3 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MessageInput
