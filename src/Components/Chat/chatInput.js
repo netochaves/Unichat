@@ -8,6 +8,7 @@ import {
   TouchableOpacity
 } from "react-native"
 import Icon from "react-native-vector-icons/Feather"
+import { NativeViewGestureHandler } from "react-native-gesture-handler";
 
 const { width: WIDTH } = Dimensions.get("window")
 
@@ -15,34 +16,35 @@ export default class MessageInput extends Component  {
   constructor (props) {
     super(props);
     this.state = {
-      newValue: '',
+      value: '',
       height: 40
     }
   }  
 
   updtSize = (height) => {
     this.setState({
-      height
+    height
     });
   }
-
-
   render (){
-   
-   
-   const {onPress} = this.props;
-  const {newValue, height} = this.state;
+  const {onPress} = this.props;
+  const {value, height} = this.state;
 
-   
+  let newStyle = {
+    height,
+    fontSize: 14,
+    width: WIDTH - 55
+  }
     return (
        <View style={styles.container}>
       <TextInput
-        style={styles.input}
-        value={newValue}
+        style={[newStyle]}       
         onChangeText={(value) => this.setState({value})}
         placeholder="Escreva uma mensagem"
         autoComplete="off"
-        multiline
+        editable={true}
+        multiline={true}
+        value={value}
         onContentSizeChange={(e) => this.updtSize(e.nativeEvent.contentSize.height)}
       />
       <TouchableOpacity onPress={onPress}>
