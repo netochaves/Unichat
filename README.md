@@ -18,7 +18,7 @@ Unichat é feito em React Native uma tecnologia voltada para o desenvolvimento m
 
 
 
-## Unichat 1.0 - 22/04/2019                                                                                                                                                                                                                                                  
+## Unichat 0.1.0 - 22/04/2019                                                                                                                                                                                                                                                  
 ## NEW
   Tela de registro de número criada que permite o cadastro dos usuários através do seu número de telefone;
   
