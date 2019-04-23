@@ -8,52 +8,53 @@ import {
   TouchableOpacity
 } from "react-native"
 import Icon from "react-native-vector-icons/Feather"
-import { NativeViewGestureHandler } from "react-native-gesture-handler";
 
 const { width: WIDTH } = Dimensions.get("window")
 
-export default class MessageInput extends Component  {
-  constructor (props) {
-    super(props);
+export default class MessageInput extends Component {
+  constructor(props) {
+    super(props)
     this.state = {
-      value: '',
       height: 40
     }
-  }  
+  }
 
-  updtSize = (height) => {
+  updtSize = height => {
     this.setState({
-    height
-    });
+      height
+    })
   }
-  render (){
-  const {onPress} = this.props;
-  const {value, height} = this.state;
 
-  let newStyle = {
-    height,
-    fontSize: 14,
-    width: WIDTH - 55
-  }
+  render() {
+    const { onPress, value, onChangeHandler } = this.props
+    const { height } = this.state
+
+    const newStyle = {
+      height,
+      fontSize: 14,
+      width: WIDTH - 55
+    }
     return (
-       <View style={styles.container}>
-      <TextInput
-        style={[newStyle]}       
-        onChangeText={(value) => this.setState({value})}
-        placeholder="Escreva uma mensagem"
-        autoComplete="off"
-        editable={true}
-        multiline={true}
-        value={value}
-        onContentSizeChange={(e) => this.updtSize(e.nativeEvent.contentSize.height)}
-      />
-      <TouchableOpacity onPress={onPress}>
-        <View style={styles.CircleShapeView}>
-          <Icon style={styles.icon} name="send" size={22} color="#fff" />
-        </View>
-      </TouchableOpacity>
-    </View>
-  )
+      <View style={styles.container}>
+        <TextInput
+          style={[newStyle]}
+          value={value}
+          onChangeText={onChangeHandler}
+          placeholder="Escreva uma mensagem"
+          autoComplete="off"
+          editable
+          multiline
+          onContentSizeChange={e =>
+            this.updtSize(e.nativeEvent.contentSize.height)
+          }
+        />
+        <TouchableOpacity onPress={onPress}>
+          <View style={styles.CircleShapeView}>
+            <Icon style={styles.icon} name="send" size={22} color="#fff" />
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
   }
 }
 
@@ -78,15 +79,9 @@ const styles = StyleSheet.create({
     borderRadius: 30 / 2,
     backgroundColor: "#00BCD4"
   },
-  input: {
-    width: WIDTH - 55,
-    height: 40,
-    fontSize: 14
-  },
   icon: {
     position: "absolute",
     top: 5,
     left: 2
   }
 })
-
