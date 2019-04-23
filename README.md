@@ -15,8 +15,12 @@ Ele está sendo desenvolvido como critério de avaliação da disciplina de Enge
 ## Tecnologias Utilizadas?
 Unichat é feito em React Native uma tecnologia voltada para o desenvolvimento mobile multiplataforma de aplicativos nativos e também faz o uso do firebase tecnologia de posse da Google que oferece vários serviços para o desenvolvimento mobile, como por exemplo: Realtime Database.
 
+
+
+##########################################################################################################################################
+## Unichat 1.0 - 22/04/2019                                                                                                                                                                                                                                                  
 ## NEW
-  Tela de registro de número criada;
-  Tela de autenticação do número registrado;
-  Tela de envio de mensagens;
-  Conexão com a API que faz a tradução das mensagens
+  Tela de registro de número criada que permite o cadastro dos usuários através do seu número de telefone;
+  Tela de autenticação do número registrado nessa tela é enviado um código de verificação para o número informado e aguarda o usuário         informar o código para garantir a autenticidade daquele cadastro;
+  Tela de envio de mensagens que  permite a interação entre dois usuários através da troca de mensagens;
+  Conexão com a API de tradução feita e operante as mensagens já estão sendo traduzidas ao serem enviadas; ##########################################################################################################################################
