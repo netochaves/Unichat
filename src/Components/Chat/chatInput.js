@@ -26,7 +26,7 @@ export default class MessageInput extends Component {
   }
 
   render() {
-    const { onPress, value, onChangeHandler } = this.props
+    const { onPress, value, onChangeHandler, isValueNull } = this.props
     const { height } = this.state
 
     const newStyle = {
@@ -48,7 +48,7 @@ export default class MessageInput extends Component {
             this.updtSize(e.nativeEvent.contentSize.height)
           }
         />
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={onPress} disabled={isValueNull}>
           <View style={styles.CircleShapeView}>
             <Icon style={styles.icon} name="send" size={22} color="#fff" />
           </View>
