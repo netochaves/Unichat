@@ -1,13 +1,22 @@
 import React, { Component } from "react"
-import { View, Text, TextInput, StyleSheet, Picker, Alert, YellowBox } from "react-native"
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Picker,
+  Alert,
+  YellowBox
+} from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { TextInputMask } from "react-native-masked-text"
 import firebase from "react-native-firebase"
+import shortid from "shortid"
 import countryList from "../../assets/country_dials/dials"
 
 YellowBox.ignoreWarnings([
   "Warning: componentWillMount is deprecated",
-  "Warning: componentWillReceiveProps is deprecated",
+  "Warning: componentWillReceiveProps is deprecated"
 ])
 
 export default class Auth extends Component {
@@ -32,7 +41,7 @@ export default class Auth extends Component {
         this.setState({ loading: false, authenticated: false })
       }
     })
-    this.setState({countries: countryList})
+    this.setState({ countries: countryList })
   }
 
   signIn = () => {
@@ -56,14 +65,17 @@ export default class Auth extends Component {
   render() {
     const { navigation } = this.props
     const { countries, countryCode, loading, authenticated } = this.state
-    
+
     if (loading) return null
     if (!authenticated) {
       return (
         <View style={styles.container}>
           <View>
             <Text style={styles.textBig}>Insira seu número de telefone</Text>
-            <Text style={styles.textSmall}> Digite o número do seu telefone junto com o DDD </Text>
+            <Text style={styles.textSmall}>
+              {" "}
+              Digite o número do seu telefone junto com o DDD{" "}
+            </Text>
           </View>
           <View>
             <View style={styles.countryPicker}>
@@ -74,17 +86,18 @@ export default class Auth extends Component {
                 }
               >
                 <Picker.Item label="Escolha seu País" value="" />
-                {countries.map((item, key)=> (
-                  <Picker.Item label={`${item.flag} ${item.name} (${item.dial_code})`} value={item.dial_code} key={key}/>)
-                )}
+                {countries.map(item => (
+                  <Picker.Item
+                    label={`${item.flag} ${item.name} (${item.dial_code})`}
+                    value={item.dial_code}
+                    key={shortid.generate()}
+                  />
+                ))}
               </Picker>
             </View>
           </View>
           <View style={styles.textInputView}>
-            <TextInput
-              style={styles.countryTextInput}
-              value={countryCode}
-            />
+            <TextInput style={styles.countryTextInput} value={countryCode} />
             <TextInputMask
               style={styles.textInputStyle}
               refInput={ref => {
@@ -97,7 +110,7 @@ export default class Auth extends Component {
                 dddMask: "(99)"
               }}
               onChangeText={text => {
-                this.setState({phoneNumber: `${countryCode}${text}`})
+                this.setState({ phoneNumber: `${countryCode}${text}` })
               }}
             />
           </View>
@@ -105,7 +118,7 @@ export default class Auth extends Component {
             colors={["#547BF0", "#6AC3FB"]}
             style={styles.button}
             onPress={() => this.signIn()}
-          > 
+          >
             <Text style={styles.textButton} onPress={() => this.signIn()}>
               Enviar
             </Text>
@@ -149,10 +162,10 @@ const styles = StyleSheet.create({
   countryPicker: {
     width: 330,
     borderBottomWidth: 2,
-    borderColor: "#6AC3FB",
+    borderColor: "#6AC3FB"
   },
   textInputView: {
-    flexDirection: "row",
+    flexDirection: "row"
   },
   countryTextInput: {
     fontSize: 18,
@@ -163,10 +176,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     textAlign: "center",
     color: "gray",
-    borderColor: "#6AC3FB",
+    borderColor: "#6AC3FB"
   },
   textInputStyle: {
-    flex:1,
+    flex: 1,
     fontSize: 18,
     marginRight: 40,
     marginTop: 10,
@@ -174,7 +187,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     textAlign: "center",
     borderColor: "#6AC3FB",
-    color: "gray",
+    color: "gray"
   },
   textButton: {
     alignSelf: "center",

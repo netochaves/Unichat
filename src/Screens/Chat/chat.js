@@ -20,10 +20,12 @@ export default class Conversas extends Component {
   constructor(props) {
     super(props)
     this.scrollView = null
+
     this.state = {
       messageText: "",
       messages: [],
-      user: firebase.auth().currentUser.uid
+      user: firebase.auth().currentUser.uid,
+      isValueNull: true
     }
     const { user } = this.state
 
@@ -77,11 +79,12 @@ export default class Conversas extends Component {
   }
 
   onChangeHandler = text => {
-    this.setState({ messageText: text })
+    this.setState({ messageText: text, isValueNull: false })
   }
 
   sendMessage = () => {
     const { messageText } = this.state
+    if (messageText === "") this.setState({ isValueNull: true })
     const newMessage = {
       content: messageText,
       date: new Date(),
@@ -106,15 +109,15 @@ export default class Conversas extends Component {
           contentTranslated: translated,
           source: "2"
         })
-        .then(() => true)
+        .then(() => true) 
         .catch(error => error)
     })
 
-    this.setState({ messageText: "" })
+    this.setState({ messageText: "", isValueNull: true })
   }
 
   render() {
-    const { messages, messageText } = this.state
+    const { messages, messageText, isValueNull } = this.state
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
@@ -127,6 +130,7 @@ export default class Conversas extends Component {
             value={messageText}
             onPress={this.sendMessage}
             onChangeHandler={text => this.onChangeHandler(text)}
+            isValueNull={isValueNull}
           />
         </View>
       </View>
