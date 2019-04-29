@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   button: {
-    marginLeft: 20,
-    marginRight: 20,
+    marginLeft: 40,
+    marginRight: 40,
     height: 60,
     borderRadius: 20,
     justifyContent: "center"
