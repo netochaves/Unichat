@@ -31,17 +31,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   button: {
-    width: 300,
+    marginLeft: 20,
+    marginRight: 20,
     height: 60,
     borderRadius: 20,
-    alignSelf: "center",
     justifyContent: "center"
   },
   code: {
+    paddingLeft: 10,
+    paddingRight: 10,
     height: 80,
-    paddingLeft: 20,
     marginBottom: 30,
-    alignSelf: "center"
   },
   text3: {
     alignSelf: "center",
