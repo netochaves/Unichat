@@ -5,51 +5,6 @@ import LinearGradient from "react-native-linear-gradient"
 import CodeInput from "react-native-confirmation-code-input"
 import firebase from "react-native-firebase"
 
-const styles = StyleSheet.create({
-  principal: {
-    flex: 1,
-    fontFamily: "OpenSans",
-    justifyContent: "center"
-  },
-  containerText1: {
-    marginBottom: 10,
-    alignSelf: "center"
-  },
-  text1: {
-    fontSize: 18,
-    color: "black",
-    fontWeight: "bold"
-  },
-  containerText2: {
-    marginTop: 10,
-    alignSelf: "center",
-    flexDirection: "row"
-  },
-  text2: {
-    marginLeft: 1,
-    color: "black",
-    fontWeight: "bold"
-  },
-  button: {
-    marginLeft: 40,
-    marginRight: 40,
-    height: 60,
-    borderRadius: 20,
-    justifyContent: "center"
-  },
-  code: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    height: 80,
-    marginBottom: 30,
-  },
-  text3: {
-    alignSelf: "center",
-    fontSize: 25,
-    color: "white"
-  }
-})
-
 export default class Verificacao extends Component {
   constructor() {
     super()
@@ -94,7 +49,7 @@ export default class Verificacao extends Component {
             size={40}
             inactiveColor="gray"
             activeColor="gray"
-            inputPosition="left"
+            inputPosition="center"
             keyboardType="number-pad"
             onFulfill={code => this.confirmChoice(code)}
           />
@@ -114,3 +69,46 @@ export default class Verificacao extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  principal: {
+    flex: 1,
+    fontFamily: "OpenSans",
+    justifyContent: "center"
+  },
+  containerText1: {
+    marginBottom: 10,
+    alignSelf: "center"
+  },
+  text1: {
+    fontSize: 18,
+    color: "black",
+    fontWeight: "bold"
+  },
+  containerText2: {
+    marginTop: 10,
+    alignSelf: "center",
+    flexDirection: "row"
+  },
+  text2: {
+    marginLeft: 1,
+    color: "black",
+    fontWeight: "bold"
+  },
+  button: {
+    marginLeft: 40,
+    marginRight: 40,
+    height: 60,
+    borderRadius: 20,
+    justifyContent: "center"
+  },
+  code: {
+    height: 80,
+    marginBottom: 30,
+  },
+  text3: {
+    alignSelf: "center",
+    fontSize: 25,
+    color: "white"
+  }
+})
