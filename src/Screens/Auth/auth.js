@@ -28,17 +28,18 @@ export default class Auth extends Component {
       countries: [],
       countryCode: "",
       phoneNumber: null,
-      loading: true,
-      authenticated: false
+      loading: true
     }
   }
 
   componentDidMount() {
+    const { navigation } = this.props
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.setState({ loading: false, authenticated: true })
+        this.setState({ loading: false })
+        navigation.navigate("ChatScreen")
       } else {
-        this.setState({ loading: false, authenticated: false })
+        this.setState({ loading: false })
       }
     })
     this.setState({ countries: countryList })
@@ -63,73 +64,69 @@ export default class Auth extends Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { countries, countryCode, loading, authenticated } = this.state
+    const { countries, countryCode, loading } = this.state
 
     if (loading) return null
-    if (!authenticated) {
-      return (
-        <View style={styles.container}>
-          <View>
-            <Text style={styles.textBig}>Insira seu número de telefone</Text>
-            <Text style={styles.textSmall}>
-              {" "}
-              Digite o número do seu telefone junto com o DDD{" "}
-            </Text>
-          </View>
-          <View>
-            <View style={styles.countryPicker}>
-              <Picker
-                selectedValue={countryCode}
-                onValueChange={itemValue =>
-                  this.setState({ countryCode: itemValue })
-                }
-              >
-                <Picker.Item label="Escolha seu País" value="" />
-                {countries.map(item => (
-                  <Picker.Item
-                    label={`${item.flag} ${item.name} (${item.dial_code})`}
-                    value={item.dial_code}
-                    key={shortid.generate()}
-                  />
-                ))}
-              </Picker>
-            </View>
-          </View>
-          <View style={styles.textInputView}>
-            <TextInput style={styles.countryTextInput} value={countryCode} />
-            <TextInputMask
-              style={styles.textInputStyle}
-              refInput={ref => {
-                this.input = ref
-              }}
-              type="cel-phone"
-              options={{
-                maskType: "BRL",
-                withDDD: true,
-                dddMask: "(99)"
-              }}
-              onChangeText={text => {
-                this.setState({ phoneNumber: `${countryCode}${text}` })
-              }}
-            />
-          </View>
-          <LinearGradient
-            colors={["#547BF0", "#6AC3FB"]}
-            style={styles.button}
-            onPress={() => this.signIn()}
-          >
-            <Text style={styles.textButton} onPress={() => this.signIn()}>
-              Enviar
-            </Text>
-          </LinearGradient>
-          <Text style={styles.textEnd}>
-            Custos de SMS talvez possam ser aplicados
+    return (
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.textBig}>Insira seu número de telefone</Text>
+          <Text style={styles.textSmall}>
+            {" "}
+            Digite o número do seu telefone junto com o DDD{" "}
           </Text>
         </View>
-      )
-    }
-    return navigation.navigate("ChatScreen")
+        <View>
+          <View style={styles.countryPicker}>
+            <Picker
+              selectedValue={countryCode}
+              onValueChange={itemValue =>
+                this.setState({ countryCode: itemValue })
+              }
+            >
+              <Picker.Item label="Escolha seu País" value="" />
+              {countries.map(item => (
+                <Picker.Item
+                  label={`${item.flag} ${item.name} (${item.dial_code})`}
+                  value={item.dial_code}
+                  key={shortid.generate()}
+                />
+              ))}
+            </Picker>
+          </View>
+        </View>
+        <View style={styles.textInputView}>
+          <TextInput style={styles.countryTextInput} value={countryCode} />
+          <TextInputMask
+            style={styles.textInputStyle}
+            refInput={ref => {
+              this.input = ref
+            }}
+            type="cel-phone"
+            options={{
+              maskType: "BRL",
+              withDDD: true,
+              dddMask: "(99)"
+            }}
+            onChangeText={text => {
+              this.setState({ phoneNumber: `${countryCode}${text}` })
+            }}
+          />
+        </View>
+        <LinearGradient
+          colors={["#547BF0", "#6AC3FB"]}
+          style={styles.button}
+          onPress={() => this.signIn()}
+        >
+          <Text style={styles.textButton} onPress={() => this.signIn()}>
+            Enviar
+          </Text>
+        </LinearGradient>
+        <Text style={styles.textEnd}>
+          Custos de SMS talvez possam ser aplicados
+        </Text>
+      </View>
+    )
   }
 }
 
