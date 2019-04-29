@@ -199,8 +199,8 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 20,
     justifyContent: "center",
-    marginLeft: 20,
-    marginRight: 20,
+    marginLeft: 40,
+    marginRight: 40,
     marginTop: 20
   }
 })
