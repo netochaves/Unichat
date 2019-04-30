@@ -118,6 +118,7 @@ export default class Conversas extends Component {
 
   render() {
     const { messages, messageText, isValueNull } = this.state
+    // firebase.auth().signOut()
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />

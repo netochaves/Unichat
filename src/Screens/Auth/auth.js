@@ -134,12 +134,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     fontFamily: "OpenSans",
-    alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
     padding: 5
   },
   textBig: {
+    alignSelf: "center",
     fontSize: 24,
     color: "black",
     fontWeight: "bold",
@@ -147,17 +147,20 @@ const styles = StyleSheet.create({
     marginBottom: 30
   },
   textSmall: {
+    alignSelf: "center",
     fontSize: 12,
     color: "gray",
     marginBottom: 10
   },
   textEnd: {
+    alignSelf: "center",
     fontSize: 12,
     color: "gray",
     marginTop: 50
   },
   countryPicker: {
-    width: 330,
+    marginLeft: 40,
+    marginRight: 40,
     borderBottomWidth: 2,
     borderColor: "#6AC3FB"
   },
@@ -166,8 +169,8 @@ const styles = StyleSheet.create({
   },
   countryTextInput: {
     fontSize: 18,
+    width: 50,
     marginLeft: 40,
-    marginRight: 40,
     marginTop: 10,
     marginBottom: 10,
     borderBottomWidth: 2,
@@ -178,6 +181,7 @@ const styles = StyleSheet.create({
   textInputStyle: {
     flex: 1,
     fontSize: 18,
+    marginLeft: 20,
     marginRight: 40,
     marginTop: 10,
     marginBottom: 10,
@@ -192,10 +196,11 @@ const styles = StyleSheet.create({
     color: "white"
   },
   button: {
-    width: 280,
     height: 60,
     borderRadius: 20,
     justifyContent: "center",
+    marginLeft: 40,
+    marginRight: 40,
     marginTop: 20
   }
 })
