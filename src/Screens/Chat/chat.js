@@ -28,9 +28,6 @@ export default class Conversas extends Component {
       isValueNull: true
     }
     const { user } = this.state
-
-    // Trecho de código apenas para auxiliar na seleção de pra quem vou enviar a msg
-    // Deve ser retirado após a implementação de contatos
     if (user === "E6PMM9JOGYRBDKbDDdFWKiR2LVa2") {
       this.refDest = firebase
         .firestore()
@@ -109,7 +106,7 @@ export default class Conversas extends Component {
           contentTranslated: translated,
           source: "2"
         })
-        .then(() => true) 
+        .then(() => true)
         .catch(error => error)
     })
 
