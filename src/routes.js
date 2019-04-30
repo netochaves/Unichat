@@ -33,7 +33,7 @@ const appStackNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "ContactsScreen"
+    initialRouteName: "AuthScreen"
   },
   { header: null }
 )

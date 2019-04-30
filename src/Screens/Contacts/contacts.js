@@ -2,10 +2,10 @@ import React, { Component } from "react"
 import { View, FlatList, StyleSheet } from "react-native"
 import { ListItem } from "react-native-elements"
 
+import ContactHeader from "../../Components/Contacts/contactHeader"
+
 export default class Contatos extends Component {
   state = {
-    seed: 1,
-    page: 1,
     contacts: [],
     isLoading: false,
     isRefreshing: false
@@ -15,11 +15,11 @@ export default class Contatos extends Component {
     this.loadContacts()
   }
 
+  // Nessa função basicamente vamos verificar se existe um contato novo no firebase (movimento de arrastar pra baixo e soltar)
   handleRefresh = () => {
-    const { seed, isRefreshing } = this.state
+    const { isRefreshing } = this.state
     this.setState(
       {
-        seed: seed + 1,
         isRefreshing: true
       },
       () => {
@@ -28,32 +28,10 @@ export default class Contatos extends Component {
     )
   }
 
-  handleLoadMore = () => {
-    const { page } = this.state
-    this.setState(
-      {
-        page: page + 1
-      },
-      () => {
-        this.loadContacts()
-      }
-    )
-  }
-
+  // Nessa função é os contatos serão carregados devidamente
   loadContacts = () => {
-    const { seed, page, contacts, isLoading } = this.state
+    const { contacts, isLoading } = this.state
     this.setState({ isLoading: true })
-
-    fetch(`https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`)
-      .then(response => response.json())
-      .then(response => {
-        this.setState({
-          contacts:
-            page === 1 ? response.results : [...contacts, ...response.results],
-          isRefreshing: false
-        })
-      })
-      .catch(() => {})
   }
 
   onChangeHandler = () => {}
@@ -62,21 +40,26 @@ export default class Contatos extends Component {
     const { contacts, isRefreshing } = this.state
 
     return (
-        <View style={styles.scene}>
+      <View style={styles.container}>
+        <ContactHeader />
         <FlatList
           data={contacts}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <ListItem
-                title={item.name.first}
-                subtitle={item.phone}
-                leftAvatar={{ source: {uri: item.picture.thumbnail} }}
+              style={styles.contact}
+              title={item.name.first}
+              subtitle={item.phone}
+              leftAvatar={{
+                source: { uri: item.picture.thumbnail },
+                size: "medium"
+              }}
             />
-        )}
-        keyExtractor={i => i.email}
-        refreshing={isRefreshing}
-        onRefresh={this.handleRefresh}
-        onEndReached={this.handleLoadMore}
-        onEndThreshold={0}
+          )}
+          keyExtractor={i => i.email}
+          refreshing={isRefreshing}
+          onRefresh={this.handleRefresh}
+          onEndReached={this.handleLoadMore}
+          onEndThreshold={0}
         />
       </View>
     )
@@ -84,8 +67,13 @@ export default class Contatos extends Component {
 }
 
 const styles = StyleSheet.create({
-  scene: {
+  container: {
     flex: 1,
-    paddingTop: 25
+    backgroundColor: "#E8E3E3"
   },
+  contact: {
+    width: "100%",
+    backgroundColor: "#E8E3E3",
+    marginBottom: 1
+  }
 })
