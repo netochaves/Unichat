@@ -18,7 +18,7 @@ const tabBarNavigator = createMaterialTopTabNavigator(
         tabBarIcon: ({ tintColor }) => (
           <Icon
             name="ios-chatbubbles"
-            size={25}
+            size={28}
             type="ionicon"
             color={tintColor}
           />
@@ -30,7 +30,7 @@ const tabBarNavigator = createMaterialTopTabNavigator(
       screen: Contatos,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
-          <Icon name="md-people" size={25} type="ionicon" color={tintColor} />
+          <Icon name="md-people" size={28} type="ionicon" color={tintColor} />
         ),
         tabBarLabel: "Contatos"
       }
@@ -40,7 +40,7 @@ const tabBarNavigator = createMaterialTopTabNavigator(
       screen: Chat,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
-          <Icon name="md-settings" size={25} type="ionicon" color={tintColor} />
+          <Icon name="md-settings" size={28} type="ionicon" color={tintColor} />
         ),
         tabBarLabel: "Configurações"
       }
