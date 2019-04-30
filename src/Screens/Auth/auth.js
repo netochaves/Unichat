@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Picker,
   Alert,
-  YellowBox
+  YellowBox,
+  TouchableOpacity
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { TextInputMask } from "react-native-masked-text"
@@ -113,15 +114,17 @@ export default class Auth extends Component {
             }}
           />
         </View>
-        <LinearGradient
-          colors={["#547BF0", "#6AC3FB"]}
-          style={styles.button}
-          onPress={() => this.signIn()}
-        >
-          <Text style={styles.textButton} onPress={() => this.signIn()}>
-            Enviar
-          </Text>
-        </LinearGradient>
+        <TouchableOpacity>
+          <LinearGradient
+            colors={["#547BF0", "#6AC3FB"]}
+            style={styles.button}
+            onPress={() => this.signIn()}
+          >
+            <Text style={styles.textButton} onPress={() => this.signIn()}>
+              Enviar
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
         <Text style={styles.textEnd}>
           Custos de SMS talvez possam ser aplicados
         </Text>
