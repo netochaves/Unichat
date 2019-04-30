@@ -3,6 +3,7 @@ import { createAppContainer, createStackNavigator } from "react-navigation"
 import Auth from "~/Screens/Auth/auth"
 import Verification from "~/Screens/Verification/verification"
 import Chat from "~/Screens/Chat/chat"
+import Contatos from "~/Screens/Contacts/contacts"
 
 const appStackNavigator = createStackNavigator(
   {
@@ -20,6 +21,12 @@ const appStackNavigator = createStackNavigator(
     },
     ChatScreen: {
       screen: Chat,
+      navigationOptions: {
+        header: null
+      }
+    },
+    ContactsScreen: {
+      screen: Contatos,
       navigationOptions: {
         header: null
       }
