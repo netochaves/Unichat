@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-import { View, Text, StyleSheet, Linking } from "react-native"
+import { View, Text, StyleSheet, Linking, TouchableOpacity } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import CodeInput from "react-native-confirmation-code-input"
 import firebase from "react-native-firebase"
@@ -54,11 +54,11 @@ export default class Verificacao extends Component {
             onFulfill={code => this.confirmChoice(code)}
           />
         </View>
-        <View style={styles}>
+        <TouchableOpacity>
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
             <Text style={styles.text3}>Verificar</Text>
           </LinearGradient>
-        </View>
+        </TouchableOpacity>
         <View style={styles.containerText2}>
           <Text>Não recebeu o código de verificação?</Text>
           <Text style={styles.text2} onPress={() => Linking.openURL("#")}>
