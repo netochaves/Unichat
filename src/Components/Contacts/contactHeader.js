@@ -7,7 +7,9 @@ const contactsHeader = () => (
   <View style={styles.header}>
     <View style={styles.headerContent}>
       <Text style={styles.contactsInfo}>Contatos</Text>
-      <Icon iconStyle={styles.searchIcon} name="search" color="#00aced" />
+      <View style={styles.searchIcon}>
+        <Icon name="search" color="#00aced" />
+      </View>
     </View>
   </View>
 )
@@ -19,23 +21,21 @@ const styles = StyleSheet.create({
     marginTop: 0
   },
   headerContent: {
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignContent: "center",
     marginBottom: 20,
     marginLeft: 10,
-    marginTop: 10,
+    marginTop: 20,
     marginRight: 10,
     flexDirection: "row"
   },
   contactsInfo: {
     flex: 1,
-    marginTop: 10,
-    marginLeft: 10,
     fontSize: 28,
     textAlign: "center"
   },
   searchIcon: {
-    marginTop: 10
+    justifyContent: "center",
   }
 })
 
