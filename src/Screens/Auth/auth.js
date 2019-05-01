@@ -136,7 +136,6 @@ export default class Auth extends Component {
           <LinearGradient
             colors={["#547BF0", "#6AC3FB"]}
             style={styles.button}
-            // onPress={() => this.signIn()}
           >
             <Text style={styles.textButton}>
               Enviar
