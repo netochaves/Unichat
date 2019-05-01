@@ -47,6 +47,23 @@ export default class Auth extends Component {
     this.setState({ countries: countryList })
   }
 
+  confirmPhone = () => {
+    const { phoneNumber } = this.state
+
+    Alert.alert(
+      "Confirmar",
+      `O número ${  phoneNumber  } está correto?`,
+      [
+        {text: "Sim", onPress: () => this.signIn()},
+        {
+          text: "Não",
+          style: "cancel",
+        },
+      ],
+      {cancelable: false},
+    )
+  }
+
   signIn = () => {
     const { phoneNumber } = this.state
 
@@ -60,7 +77,7 @@ export default class Auth extends Component {
           phoneNumber
         })
       })
-      .catch(error => {
+      .catch(() => {
         Alert.alert("Erro na verificação", `O número ${  phoneNumber  } não é válido!`)
       })
   }
@@ -115,7 +132,7 @@ export default class Auth extends Component {
             }}
           />
         </View>
-        <TouchableOpacity onPress={() => this.signIn()} disabled={notValid}>
+        <TouchableOpacity onPress={() => this.confirmPhone()} disabled={notValid}>
           <LinearGradient
             colors={["#547BF0", "#6AC3FB"]}
             style={styles.button}
