@@ -29,6 +29,7 @@ export default class Auth extends Component {
       countries: [],
       countryCode: "",
       phoneNumber: null,
+      notValid: true,
       loading: true
     }
   }
@@ -60,12 +61,12 @@ export default class Auth extends Component {
         })
       })
       .catch(error => {
-        Alert.alert("Erro na verificação", error.message)
+        Alert.alert("Erro na verificação", `O número ${  phoneNumber  } não é válido!`)
       })
   }
 
   render() {
-    const { countries, countryCode, loading } = this.state
+    const { countries, countryCode, loading, notValid } = this.state
 
     if (loading) return null
     return (
@@ -110,17 +111,17 @@ export default class Auth extends Component {
               dddMask: "(99)"
             }}
             onChangeText={text => {
-              this.setState({ phoneNumber: `${countryCode}${text}` })
+              this.setState({ phoneNumber: `${countryCode}${text}`, notValid: false })
             }}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => this.signIn()} disabled={notValid}>
           <LinearGradient
             colors={["#547BF0", "#6AC3FB"]}
             style={styles.button}
-            onPress={() => this.signIn()}
+            // onPress={() => this.signIn()}
           >
-            <Text style={styles.textButton} onPress={() => this.signIn()}>
+            <Text style={styles.textButton}>
               Enviar
             </Text>
           </LinearGradient>
