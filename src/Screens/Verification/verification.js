@@ -8,7 +8,15 @@ import firebase from "react-native-firebase"
 export default class Verificacao extends Component {
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+      code: ""
+    }
+  }
+
+  submitCode = () => {
+    const { code } = this.state
+
+    this.confirmChoice(code)
   }
 
   confirmChoice = code => {
@@ -51,10 +59,14 @@ export default class Verificacao extends Component {
             activeColor="gray"
             inputPosition="center"
             keyboardType="number-pad"
-            onFulfill={code => this.confirmChoice(code)}
+            onFulfill={code => {
+                this.setState({ code })
+                this.confirmChoice(code)
+              }
+            }
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={ () => this.submitCode() }>
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
             <Text style={styles.text3}>Verificar</Text>
           </LinearGradient>
