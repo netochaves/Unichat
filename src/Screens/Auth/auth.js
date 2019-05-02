@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Picker,
   Alert,
-  YellowBox
+  YellowBox,
+  TouchableOpacity
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { TextInputMask } from "react-native-masked-text"
@@ -28,6 +29,7 @@ export default class Auth extends Component {
       countries: [],
       countryCode: "",
       phoneNumber: null,
+      notValid: true,
       loading: true
     }
   }
@@ -45,6 +47,23 @@ export default class Auth extends Component {
     this.setState({ countries: countryList })
   }
 
+  confirmPhone = () => {
+    const { phoneNumber } = this.state
+
+    Alert.alert(
+      "Confirmar",
+      `O número ${  phoneNumber  } está correto?`,
+      [
+        {text: "Sim", onPress: () => this.signIn()},
+        {
+          text: "Não",
+          style: "cancel",
+        },
+      ],
+      {cancelable: false},
+    )
+  }
+
   signIn = () => {
     const { phoneNumber } = this.state
 
@@ -58,13 +77,13 @@ export default class Auth extends Component {
           phoneNumber
         })
       })
-      .catch(error => {
-        Alert.alert("Erro na verificação", error.message)
+      .catch(() => {
+        Alert.alert("Erro na verificação", `O número ${  phoneNumber  } não é válido!`)
       })
   }
 
   render() {
-    const { countries, countryCode, loading } = this.state
+    const { countries, countryCode, loading, notValid } = this.state
 
     if (loading) return null
     return (
@@ -109,19 +128,20 @@ export default class Auth extends Component {
               dddMask: "(99)"
             }}
             onChangeText={text => {
-              this.setState({ phoneNumber: `${countryCode}${text}` })
+              this.setState({ phoneNumber: `${countryCode}${text}`, notValid: false })
             }}
           />
         </View>
-        <LinearGradient
-          colors={["#547BF0", "#6AC3FB"]}
-          style={styles.button}
-          onPress={() => this.signIn()}
-        >
-          <Text style={styles.textButton} onPress={() => this.signIn()}>
-            Enviar
-          </Text>
-        </LinearGradient>
+        <TouchableOpacity onPress={() => this.confirmPhone()} disabled={notValid}>
+          <LinearGradient
+            colors={["#547BF0", "#6AC3FB"]}
+            style={styles.button}
+          >
+            <Text style={styles.textButton}>
+              Enviar
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
         <Text style={styles.textEnd}>
           Custos de SMS talvez possam ser aplicados
         </Text>
