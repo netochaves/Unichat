@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint *.js **/*.js"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.3.4",
@@ -55,5 +56,9 @@
     "assets": [
       "./src/assets/fonts/"
     ]
+  },
+  "engines": {
+    "node": "11.14.0",
+    "npm": "6.7.0"
   }
 }

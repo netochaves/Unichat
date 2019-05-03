@@ -31,6 +31,22 @@
           }
         },
         {
+          "client_id": "393633194087-beneh8861ao3a70kkklet1dkqn0ae03o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unichat",
+            "certificate_hash": "c290c70ae0e03ef3a5607c4ef0c438139e62d2a4"
+          }
+        },
+        {
+          "client_id": "393633194087-pt8egjp8vkms1s1ao5oi5cmc94p0s5j1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unichat",
+            "certificate_hash": "56801f5171bfce3aaf860539a87fd121c63e2273"
+          }
+        },
+        {
           "client_id": "393633194087-k82sibqqeq3rsmc9h6hbmvcme6hqq2qe.apps.googleusercontent.com",
           "client_type": 3
         }
