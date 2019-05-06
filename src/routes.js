@@ -5,6 +5,7 @@ import {
   createMaterialTopTabNavigator
 } from "react-navigation"
 import PerfilSettings from "~/Screens/PerfilSettings/perfilsettings"
+import PreviewImage from "~/Screens/PreviewImage/previewImg"
 import Auth from "~/Screens/Auth/auth"
 import Verification from "~/Screens/Verification/verification"
 import Chat from "~/Screens/Chat/chat"
@@ -77,6 +78,12 @@ const appStackNavigator = createStackNavigator(
     },
     PerfilSettings: {
       screen: PerfilSettings,
+      navigationOptions: {
+        header: null
+      }
+    },
+    PreviewImage: {
+      screen: PreviewImage,
       navigationOptions: {
         header: null
       }
