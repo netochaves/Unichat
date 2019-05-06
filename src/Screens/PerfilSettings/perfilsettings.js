@@ -17,8 +17,6 @@ import profileImage from "../../assets/imgs/profile-placeholder.png"
 import languagelist from "../../assets/languages/languages"
 
 export default class PerfilSettings extends Component {
-  static navigationoptions = {}
-
   constructor() {
     super()
     this.state = {
