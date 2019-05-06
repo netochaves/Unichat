@@ -8,8 +8,7 @@ import {
   TouchableOpacity,
   Picker,
   StyleSheet,
-  Dimensions,
-  Alert
+  Dimensions
 } from "react-native"
 import { Icon } from "react-native-elements"
 import shortid from "shortid"
@@ -36,7 +35,7 @@ export default class PerfilSettings extends Component {
   previewImage = () => {
     const { navigation } = this.props
     const { img } = this.state
-    navigation.navigate("PreviewImg", { img })
+    navigation.navigate("PreviewImage", { img })
   }
 
   render() {
@@ -44,38 +43,42 @@ export default class PerfilSettings extends Component {
 
     return (
       <View style={styles.container}>
-          <Text style={styles.Titulo}>Configurações de Perfil</Text>
-          <View style={styles.image}>
-            <TouchableOpacity onPress={() => {this.previewImage()}}>
-              <Image source={img} style={styles.imagePlaceHolder}/>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.roundbutton}>
-              <Icon name="create" />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.labeltext}>Nome:</Text>
-          <TextInput style={styles.entrada} placeholder="Digite seu nome"/>
-          <Text style={styles.labeltext}>Email:</Text>
-          <TextInput style={styles.entrada} placeholder="Digite seu e-mail"/>
-          <Text style={styles.labeltext}>Idiomas:</Text>
-          <View style={styles.languagePicker}>
-            <Picker
-              selectedValue={code}
-              onValueChange={itemValue => this.setState({ code: itemValue })}
-            >
-              <Picker.Item label="Escolha seu idioma" value="" />
-              {language.map(item => (
-                <Picker.Item
-                  label={`${item.name}`}
-                  value={item.code}
-                  key={shortid.generate()}
-                />
-                ))}
-            </Picker>
-          </View>
-          <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-            <Text style={styles.textButton}>Avançar</Text>
-          </LinearGradient>
+        <Text style={styles.Titulo}>Configurações de Perfil</Text>
+        <View style={styles.image}>
+          <TouchableOpacity
+            onPress={() => {
+              this.previewImage()
+            }}
+          >
+            <Image source={img} style={styles.imagePlaceHolder} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.roundbutton}>
+            <Icon name="create" />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.labeltext}>Nome:</Text>
+        <TextInput style={styles.entrada} placeholder="Digite seu nome" />
+        <Text style={styles.labeltext}>Email:</Text>
+        <TextInput style={styles.entrada} placeholder="Digite seu e-mail" />
+        <Text style={styles.labeltext}>Idiomas:</Text>
+        <View style={styles.languagePicker}>
+          <Picker
+            selectedValue={code}
+            onValueChange={itemValue => this.setState({ code: itemValue })}
+          >
+            <Picker.Item label="Escolha seu idioma" value="" />
+            {language.map(item => (
+              <Picker.Item
+                label={`${item.name}`}
+                value={item.code}
+                key={shortid.generate()}
+              />
+            ))}
+          </Picker>
+        </View>
+        <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
+          <Text style={styles.textButton}>Avançar</Text>
+        </LinearGradient>
       </View>
     )
   }
@@ -92,23 +95,24 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "black",
-    alignSelf: "center"
+    alignSelf: "center",
+    marginTop: 10
   },
   image: {
     justifyContent: "center",
     alignItems: "center",
-    width: (comprimento - 50)/2,
-    height: (comprimento - 50)/2,
+    width: (comprimento - 50) / 2,
+    height: (comprimento - 50) / 2,
     marginTop: 10,
-    borderRadius: (comprimento - 50)/4,
+    borderRadius: (comprimento - 50) / 4,
     borderColor: "#6AC3FB",
     borderWidth: 2,
     alignSelf: "center"
   },
   imagePlaceHolder: {
-    width: (comprimento - 54)/2,
-    height: (comprimento - 54)/2,
-    borderRadius: (comprimento - 54)/4,
+    width: (comprimento - 54) / 2,
+    height: (comprimento - 54) / 2,
+    borderRadius: (comprimento - 54) / 4
   },
   roundbutton: {
     borderWidth: 1,
@@ -127,7 +131,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: "#6AC3FB",
     marginLeft: 40,
-    marginRight: 40,
+    marginRight: 40
   },
   button: {
     borderRadius: 20,
@@ -135,7 +139,7 @@ const styles = StyleSheet.create({
     height: 60,
     marginTop: 40,
     marginLeft: 40,
-    marginRight: 40,
+    marginRight: 40
   },
   textButton: {
     alignSelf: "center",
