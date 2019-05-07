@@ -20,11 +20,11 @@ const tabBarNavigator = createMaterialTopTabNavigator(
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
           <Icon name="md-people" size={28} type="ionicon" color={tintColor} />
-          ),
-          tabBarLabel: "Contatos"
-        }
-      },
-      
+        ),
+        tabBarLabel: "Contatos"
+      }
+    },
+
     Conversas: {
       screen: Conversas,
       navigationOptions: {
@@ -109,6 +109,12 @@ const appStackNavigator = createStackNavigator(
         header: null
       }
     },
+    ChatScreen: {
+      screen: Chat,
+      navigationOptions: {
+        header: null
+      }
+    }
   },
   {
     initialRouteName: "AuthScreen"
