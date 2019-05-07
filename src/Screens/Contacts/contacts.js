@@ -1,6 +1,12 @@
 /* eslint-disable react-native/split-platform-components */
 import React, { Component } from "react"
-import { View, FlatList, StyleSheet, ToastAndroid } from "react-native"
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  ToastAndroid,
+  PermissionsAndroid
+} from "react-native"
 import { ListItem, Avatar } from "react-native-elements"
 import Contacts from "react-native-contacts"
 import AsyncStorage from "@react-native-community/async-storage"
@@ -51,13 +57,18 @@ export default class Contatos extends Component {
   }
 
   syncronize = () => {
-    Contacts.getAll((err, contacts) => {
-      if (err === "denied") {
-        // error
-      } else {
-        this.storeData(contacts)
-      }
-      this.getData()
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+      title: "Contacts",
+      message: "This app would like to view your contacts."
+    }).then(() => {
+      Contacts.getAll((err, contacts) => {
+        if (err === "denied") {
+          // error
+        } else {
+          this.storeData(contacts)
+        }
+        this.getData()
+      })
     })
     ToastAndroid.showWithGravityAndOffset(
       "Sincronização concluida",
