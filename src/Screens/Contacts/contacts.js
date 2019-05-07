@@ -1,36 +1,54 @@
-import React, { Component, PureComponent } from "react"
-import { View, FlatList, StyleSheet } from "react-native"
+/* eslint-disable react-native/split-platform-components */
+import React, { Component } from "react"
+import { View, FlatList, StyleSheet, ToastAndroid } from "react-native"
 import { ListItem } from "react-native-elements"
 import Contacts from "react-native-contacts"
 import AsyncStorage from "@react-native-community/async-storage"
-
+import firebase from "react-native-firebase"
 import ContactHeader from "../../Components/Contacts/contactHeader"
 
-export default class Contatos extends PureComponent {
+export default class Contatos extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      contacts: [],
-      isRefreshing: false
+      contacts: []
     }
+    this.ref = firebase.firestore().collection("users")
   }
 
   componentDidMount() {
-    AsyncStorage.getItem("@contacts").then(contacts => {
-      console.log("[DID MOUNT IS CALLING]")
-      this.setState({ contacts: JSON.parse(contacts) })
+    this.getData()
+  }
+
+  getData = async () => {
+    AsyncStorage.getItem("@contacts").then(contactsResponse => {
+      const contacts = JSON.parse(contactsResponse)
+      const contactsAux = []
+      this.ref.get().then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          contacts.forEach(contactFromPhone => {
+            if (contactFromPhone.phoneNumbers.length > 0) {
+              let numberFromPhone = contactFromPhone.phoneNumbers[0].number
+              numberFromPhone = numberFromPhone.split(" ").join("")
+              numberFromPhone = numberFromPhone.split("-").join("")
+              if (doc.data().phone === numberFromPhone) {
+                contactsAux.push(contactFromPhone)
+              }
+            }
+          })
+        })
+        this.setState({ contacts: contactsAux })
+      })
     })
   }
 
-  storeData = async contacts => {
+  storeData = async contactsFromPhone => {
     try {
-      await AsyncStorage.setItem("@contacts", JSON.stringify(contacts))
+      await AsyncStorage.setItem("@contacts", JSON.stringify(contactsFromPhone))
     } catch (err) {
       throw err
     }
   }
-
-  getData = async () => {}
 
   syncronize = () => {
     Contacts.getAll((err, contacts) => {
@@ -39,32 +57,32 @@ export default class Contatos extends PureComponent {
       } else {
         this.storeData(contacts)
       }
+      this.getData()
     })
-    this.getData()
-  }
-
-  // Nessa função basicamente vamos verificar se existe um contato novo no firebase (movimento de arrastar pra baixo e soltar)
-  handleRefresh = () => {
-    this.setState({
-      isRefreshing: true
-    })
+    ToastAndroid.showWithGravityAndOffset(
+      "Sincronização concluida",
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50
+    )
   }
 
   render() {
-    const { contacts, isRefreshing } = this.state
-    console.log(this.state.contacts)
-
+    const { contacts } = this.state
     return (
       <View style={styles.container}>
-        <ContactHeader />
+        <ContactHeader syncronize={this.syncronize} />
         <FlatList
-          data={contacts}
+          data={contacts.sort((a, b) => a.givenName.localeCompare(b))}
           renderItem={({ item }) => {
-            console.log(item)
             return (
               <ListItem
                 style={styles.contact}
-                title={item.givenName}
+                title={`${item.givenName} ${
+                  item.middleName !== null ? item.middleName : ""
+                } ${item.familyName !== null ? item.familyName : ""}
+                `}
                 subtitle={
                   item.phoneNumbers.length > 0
                     ? item.phoneNumbers[0].number
@@ -80,9 +98,6 @@ export default class Contatos extends PureComponent {
             )
           }}
           keyExtractor={i => i.recordID}
-          refreshing={isRefreshing}
-          onRefresh={this.handleRefresh}
-          onEndReached={this.handleLoadMore}
           onEndThreshold={0}
         />
       </View>

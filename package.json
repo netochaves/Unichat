@@ -22,6 +22,7 @@
     "react-native-gesture-handler": "^1.1.0",
     "react-native-linear-gradient": "^2.5.4",
     "react-native-masked-text": "^1.12.2",
+    "react-native-popup-menu": "^0.15.6",
     "react-native-power-translator": "^1.1.1",
     "react-native-size-matters": "^0.1.7",
     "react-native-svg": "^9.3.7",
@@ -58,7 +59,7 @@
     ]
   },
   "engines": {
-    "node": "11.14.0",
+    "node": "11.15.0",
     "npm": "6.7.0"
   }
 }

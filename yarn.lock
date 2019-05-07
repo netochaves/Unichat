@@ -5630,6 +5630,11 @@ react-native-masked-text@^1.12.2:
     moment "2.19.3"
     tinymask "^1.0.2"
 
+react-native-popup-menu@^0.15.6:
+  version "0.15.6"
+  resolved "https://registry.yarnpkg.com/react-native-popup-menu/-/react-native-popup-menu-0.15.6.tgz#ebf885c289028e330dd66d887e685a8b0c2de970"
+  integrity sha512-ILFbQEofZQThVYAtVcOEgHJ+9wvn8992J+Oy/ByX83PoP88Meq3iw3pG1AwxMOoAPm/LjihtsDBqZ1lxjvosDg==
+
 react-native-power-translator@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-native-power-translator/-/react-native-power-translator-1.1.1.tgz#f4bf9a5a13a21618e3bf7f6c587f021677baff6c"
