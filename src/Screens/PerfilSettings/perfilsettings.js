@@ -32,8 +32,15 @@ export default class PerfilSettings extends Component {
   }
 
   handleChooseImage = () => {
-    ImagePicker.showImagePicker(null, response => {
+    const options = {
+      noData: true,
+      title: "Escolha uma foto",
+    }
 
+    ImagePicker.showImagePicker(options, response => {
+      if(response.uri) {
+        this.setState({img: response})
+      }
     })
   }
 
@@ -55,7 +62,12 @@ export default class PerfilSettings extends Component {
               this.previewImage()
             }}
           >
-            <Image source={img} style={styles.imagePlaceHolder} />
+          {img && (
+            <Image
+            source={{uri: img.uri}} 
+            style={styles.imagePlaceHolder}
+            />
+          )}
           </TouchableOpacity>
           <TouchableOpacity 
           style={styles.roundbutton}
