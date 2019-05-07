@@ -11,6 +11,7 @@ import {
   Dimensions
 } from "react-native"
 import { Icon } from "react-native-elements"
+import firebase from "react-native-firebase"
 import shortid from "shortid"
 import LinearGradient from "react-native-linear-gradient"
 import ImagePicker from "react-native-image-picker"
@@ -23,12 +24,29 @@ export default class PerfilSettings extends Component {
     this.state = {
       language: [],
       code: "",
-      img: profileImage
+      img: profileImage,
+      userName: "",
+      eMail: ""
     }
   }
 
   componentDidMount() {
     this.setState({ language: languagelist })
+  }
+
+  confirmPerfilSettings = () => {
+    const user = firebase.auth().currentUser
+    const { userName, eMail, code } = this.state
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(user.uid)
+      .set({
+        phone: user.phoneNumber,
+        username: userName,
+        email: eMail,
+        language_code: code
+      })
   }
 
   handleChooseImage = () => {
@@ -51,7 +69,7 @@ export default class PerfilSettings extends Component {
   }
 
   render() {
-    const { language, code, img } = this.state
+    const { language, code, img} = this.state
 
     return (
       <View style={styles.container}>
@@ -77,9 +95,15 @@ export default class PerfilSettings extends Component {
           </TouchableOpacity>
         </View>
         <Text style={styles.labeltext}>Nome:</Text>
-        <TextInput style={styles.entrada} placeholder="Digite seu nome" />
+        <TextInput
+          style={styles.entrada}
+          onChangeText={text => this.setState({userName: text})}
+          placeholder="Digite seu nome" />
         <Text style={styles.labeltext}>Email:</Text>
-        <TextInput style={styles.entrada} placeholder="Digite seu e-mail" />
+        <TextInput
+          style={styles.entrada}
+          onChangeText={text => this.setState({eMail: text})}
+          placeholder="Digite seu e-mail" />
         <Text style={styles.labeltext}>Idiomas:</Text>
         <View style={styles.languagePicker}>
           <Picker
@@ -96,9 +120,11 @@ export default class PerfilSettings extends Component {
             ))}
           </Picker>
         </View>
-        <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-          <Text style={styles.textButton}>Avançar</Text>
-        </LinearGradient>
+        <TouchableOpacity onPress={this.confirmPerfilSettings}>
+          <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
+            <Text style={styles.textButton}>Cadastrar</Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </View>
     )
   }

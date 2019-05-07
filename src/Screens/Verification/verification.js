@@ -36,7 +36,9 @@ export default class Verificacao extends Component {
             .set({
               phone: phoneNumber
             })
-          navigation.navigate("ChatScreen")
+          navigation.navigate("PerfilSettings", {
+            phoneNumber
+          })
         })
         // Caso dê algum erro, o tratamento é feito aqui
         .catch(() => {})

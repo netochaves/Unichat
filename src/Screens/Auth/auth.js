@@ -39,7 +39,7 @@ export default class Auth extends Component {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({ loading: false })
-        navigation.navigate("ChatScreen")
+        navigation.navigate("PerfilSettings")
       } else {
         this.setState({ loading: false })
       }
