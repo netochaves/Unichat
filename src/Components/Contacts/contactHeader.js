@@ -1,18 +1,30 @@
 import React from "react"
 
-import { View, StyleSheet, Text } from "react-native"
+import { View, StyleSheet, Text, TouchableNativeFeedback } from "react-native"
 import { Icon } from "react-native-elements"
 
-const contactsHeader = () => (
-  <View style={styles.header}>
-    <View style={styles.headerContent}>
-      <Text style={styles.contactsInfo}>Contatos</Text>
-      <View style={styles.searchIcon}>
-        <Icon name="search" color="#00aced" />
+const contactsHeader = props => {
+  const { syncronize } = props
+  return (
+    <View style={styles.header}>
+      <View style={styles.headerContent}>
+        <Text style={styles.contactsInfo}>Contatos</Text>
+        <View style={styles.Icon}>
+          <Icon name="search" color="#00aced" />
+        </View>
+        <TouchableNativeFeedback>
+          <Icon
+            containerStyle={styles.syncIcon}
+            name="sync"
+            color="#00aced"
+            type="material"
+            onPress={syncronize}
+          />
+        </TouchableNativeFeedback>
       </View>
     </View>
-  </View>
-)
+  )
+}
 
 const styles = StyleSheet.create({
   header: {
@@ -23,9 +35,9 @@ const styles = StyleSheet.create({
   headerContent: {
     justifyContent: "center",
     alignContent: "center",
-    marginBottom: 20,
+    marginBottom: 10,
     marginLeft: 10,
-    marginTop: 20,
+    marginTop: 10,
     marginRight: 10,
     flexDirection: "row"
   },
@@ -34,8 +46,12 @@ const styles = StyleSheet.create({
     fontSize: 28,
     textAlign: "center"
   },
-  searchIcon: {
+  Icon: {
+    justifyContent: "center"
+  },
+  syncIcon: {
     justifyContent: "center",
+    marginLeft: 10
   }
 })
 
