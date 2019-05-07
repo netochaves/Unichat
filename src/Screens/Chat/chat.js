@@ -96,12 +96,6 @@ export default class Conversas extends Component {
       source: "1"
     }
 
-    this.ref.get().then(doc => {
-      if (!doc.exists) {
-        doc.set({ destKey: destUser.key })
-      }
-    })
-
     this.ref
       .add({
         content: newMessage.content,
