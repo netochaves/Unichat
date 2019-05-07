@@ -4,16 +4,29 @@ import {
   createStackNavigator,
   createMaterialTopTabNavigator
 } from "react-navigation"
+import PerfilSettings from "~/Screens/PerfilSettings/perfilsettings"
+import PreviewImage from "~/Screens/PreviewImage/previewImg"
 import Auth from "~/Screens/Auth/auth"
 import Verification from "~/Screens/Verification/verification"
 import Chat from "~/Screens/Chat/chat"
 import Contatos from "~/Screens/Contacts/contacts"
+import Conversas from "~/Screens/Conversas/conversas"
 import { Icon } from "react-native-elements"
 
 const tabBarNavigator = createMaterialTopTabNavigator(
   {
-    ChatScreen: {
-      screen: Chat,
+    ContactsScreen: {
+      screen: Contatos,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="md-people" size={28} type="ionicon" color={tintColor} />
+          ),
+          tabBarLabel: "Contatos"
+        }
+      },
+      
+    Conversas: {
+      screen: Conversas,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
           <Icon
@@ -24,15 +37,6 @@ const tabBarNavigator = createMaterialTopTabNavigator(
           />
         ),
         tabBarLabel: "Conversas"
-      }
-    },
-    ContactsScreen: {
-      screen: Contatos,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => (
-          <Icon name="md-people" size={28} type="ionicon" color={tintColor} />
-        ),
-        tabBarLabel: "Contatos"
       }
     },
 
@@ -47,6 +51,7 @@ const tabBarNavigator = createMaterialTopTabNavigator(
     }
   },
   {
+    initialRouteName: "Conversas",
     tabBarPosition: "bottom",
     tabBarOptions: {
       upperCaseLabel: false,
@@ -74,13 +79,25 @@ const appStackNavigator = createStackNavigator(
         header: null
       }
     },
+    PerfilSettings: {
+      screen: PerfilSettings,
+      navigationOptions: {
+        header: null
+      }
+    },
+    PreviewImage: {
+      screen: PreviewImage,
+      navigationOptions: {
+        header: null
+      }
+    },
     VerificationScreen: {
       screen: Verification,
       navigationOptions: {
         header: null
       }
     },
-    ChatScreen: {
+    Conversas: {
       screen: tabBarNavigator,
       navigationOptions: {
         header: null
@@ -91,7 +108,7 @@ const appStackNavigator = createStackNavigator(
       navigationOptions: {
         header: null
       }
-    }
+    },
   },
   {
     initialRouteName: "AuthScreen"
