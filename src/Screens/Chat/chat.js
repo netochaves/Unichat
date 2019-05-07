@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-import { View, StyleSheet, StatusBar } from "react-native"
+import { View, StyleSheet, StatusBar, BackHandler } from "react-native"
 import {
   ProviderTypes,
   TranslatorConfiguration,
@@ -57,6 +57,7 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe = this.ref
       .orderBy("date", "asc")
       .onSnapshot(querySnapshot => {
@@ -73,6 +74,16 @@ export default class Conversas extends Component {
         })
         this.setState({ messages })
       })
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+  }
+
+  handleBackPress = () => {
+    const { navigation } = this.props
+    navigation.goBack()
+    return true
   }
 
   onChangeHandler = text => {
