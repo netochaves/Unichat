@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   Picker,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Alert
 } from "react-native"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
@@ -26,7 +27,8 @@ export default class PerfilSettings extends Component {
       code: "",
       img: profileImage,
       userName: "",
-      eMail: ""
+      eMail: "",
+      profileImageUrl: ""
     }
   }
 
@@ -37,7 +39,7 @@ export default class PerfilSettings extends Component {
   confirmPerfilSettings = () => {
     const { navigation } = this.props
     const user = firebase.auth().currentUser
-    const { userName, eMail, code } = this.state
+    const { userName, eMail, code, profileImageUrl } = this.state
     firebase
       .firestore()
       .collection("users")
@@ -46,9 +48,38 @@ export default class PerfilSettings extends Component {
         phone: user.phoneNumber,
         username: userName,
         email: eMail,
-        language_code: code
+        language_code: code,
+        profile_img_url: profileImageUrl
       })
       navigation.navigate("ChatScreen")
+  }
+
+  uploadphotos = () => {
+    const user = firebase.auth().currentUser
+    const { img } = this.state
+
+    firebase
+      .storage()
+      .ref(`profile_pics/${user.uid}`)
+      .putFile(img.path).on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        snapshot => {
+          let state = {}
+          state = {
+            ...state,
+            progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Progress bar
+          }
+          if(snapshot.state === firebase.storage.TaskState.SUCCESS) {
+            Alert.alert("Image upload successful.")
+            state = {
+              uploading: false,
+              progress: 0,
+              profileImageUrl: snapshot.downloadURL
+            }
+          }
+
+          this.setState(state)
+        })
   }
 
   handleChooseImage = () => {
@@ -60,6 +91,7 @@ export default class PerfilSettings extends Component {
     ImagePicker.showImagePicker(options, response => {
       if(response.uri) {
         this.setState({img: response})
+        this.uploadphotos()
       }
     })
   }
@@ -71,7 +103,7 @@ export default class PerfilSettings extends Component {
   }
 
   render() {
-    const { language, code, img} = this.state
+    const { language, code, img, uploading, progress } = this.state
 
     return (
       <View style={styles.container}>
