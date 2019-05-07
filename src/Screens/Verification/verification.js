@@ -1,8 +1,16 @@
 import React, { Component } from "react"
 
-import { View, Text, StyleSheet, Linking, TouchableOpacity, BackHandler } from "react-native"
+import {
+  View,
+  Text,
+  StyleSheet,
+  Linking,
+  TouchableOpacity,
+  BackHandler
+} from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import CodeInput from "react-native-confirmation-code-input"
+import firebase from "react-native-firebase"
 
 export default class Verificacao extends Component {
   constructor() {
@@ -38,8 +46,18 @@ export default class Verificacao extends Component {
       confirmResult
         .confirm(code)
         // Continuar as rotas se a confirmação ocorrer com sucesso aqui
-        .then(() => {
-          navigation.navigate("PerfilSettings")
+        .then(user => {
+          const userRef = firebase
+            .firestore()
+            .collection("users")
+            .doc(user.uid)
+          userRef.get().then(doc => {
+            if (!doc.exists) {
+              navigation.navigate("PerfilSettings")
+            } else {
+              navigation.navigate("Conversas")
+            }
+          })
         })
         // Caso dê algum erro, o tratamento é feito aqui
         .catch(() => {})
