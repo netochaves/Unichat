@@ -92,7 +92,7 @@ export default class Conversas extends Component {
     if (messageText === "") this.setState({ isValueNull: true })
     const newMessage = {
       content: messageText,
-      date: new Date(),
+      date: firebase.database().getServerTime(),
       source: "1"
     }
 
