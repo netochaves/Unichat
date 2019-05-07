@@ -7,7 +7,8 @@ import {
   Picker,
   Alert,
   YellowBox,
-  TouchableOpacity
+  TouchableOpacity,
+  BackHandler
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { TextInputMask } from "react-native-masked-text"
@@ -35,13 +36,17 @@ export default class Auth extends Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     const { navigation } = this.props
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        const userRef = firebase.firestore().collection("users").doc(user.uid)
+        const userRef = firebase
+          .firestore()
+          .collection("users")
+          .doc(user.uid)
         this.setState({ loading: false })
         userRef.get().then(doc => {
-          if(!doc.exists) {
+          if (!doc.exists) {
             navigation.navigate("PerfilSettings")
           } else {
             navigation.navigate("Conversas")
@@ -54,20 +59,29 @@ export default class Auth extends Component {
     this.setState({ countries: countryList })
   }
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+  }
+
+  handleBackPress = () => {
+    BackHandler.exitApp()
+    return true
+  }
+
   confirmPhone = () => {
     const { phoneNumber } = this.state
 
     Alert.alert(
       "Confirmar",
-      `O número ${  phoneNumber  } está correto?`,
+      `O número ${phoneNumber} está correto?`,
       [
-        {text: "Sim", onPress: () => this.signIn()},
+        { text: "Sim", onPress: () => this.signIn() },
         {
           text: "Não",
-          style: "cancel",
-        },
+          style: "cancel"
+        }
       ],
-      {cancelable: false},
+      { cancelable: false }
     )
   }
 
@@ -85,7 +99,10 @@ export default class Auth extends Component {
         })
       })
       .catch(() => {
-        Alert.alert("Erro na verificação", `O número ${  phoneNumber  } não é válido!`)
+        Alert.alert(
+          "Erro na verificação",
+          `O número ${phoneNumber} não é válido!`
+        )
       })
   }
 
@@ -135,18 +152,19 @@ export default class Auth extends Component {
               dddMask: "(99)"
             }}
             onChangeText={text => {
-              this.setState({ phoneNumber: `${countryCode}${text}`, notValid: false })
+              this.setState({
+                phoneNumber: `${countryCode}${text}`,
+                notValid: false
+              })
             }}
           />
         </View>
-        <TouchableOpacity onPress={() => this.confirmPhone()} disabled={notValid}>
-          <LinearGradient
-            colors={["#547BF0", "#6AC3FB"]}
-            style={styles.button}
-          >
-            <Text style={styles.textButton}>
-              Enviar
-            </Text>
+        <TouchableOpacity
+          onPress={() => this.confirmPhone()}
+          disabled={notValid}
+        >
+          <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
+            <Text style={styles.textButton}>Enviar</Text>
           </LinearGradient>
         </TouchableOpacity>
         <Text style={styles.textEnd}>
