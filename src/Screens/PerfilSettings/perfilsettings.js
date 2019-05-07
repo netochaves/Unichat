@@ -103,7 +103,7 @@ export default class PerfilSettings extends Component {
   }
 
   render() {
-    const { language, code, img, uploading, progress } = this.state
+    const { language, code, img } = this.state
 
     return (
       <View style={styles.container}>
