@@ -1,7 +1,7 @@
 /* eslint-disable react-native/split-platform-components */
 import React, { Component } from "react"
 import { View, FlatList, StyleSheet, ToastAndroid } from "react-native"
-import { ListItem } from "react-native-elements"
+import { ListItem, Avatar } from "react-native-elements"
 import Contacts from "react-native-contacts"
 import AsyncStorage from "@react-native-community/async-storage"
 import firebase from "react-native-firebase"
@@ -81,19 +81,26 @@ export default class Contatos extends Component {
                 style={styles.contact}
                 title={`${item.givenName} ${
                   item.middleName !== null ? item.middleName : ""
-                } ${item.familyName !== null ? item.familyName : ""}
-                `}
+                } ${item.familyName !== null ? item.familyName : ""}`}
                 subtitle={
                   item.phoneNumbers.length > 0
                     ? item.phoneNumbers[0].number
                     : null
                 }
-                leftAvatar={{
-                  source: {
-                    uri: item.thumbnailPath === "" ? null : item.thumbnailPath
-                  },
-                  size: "medium"
-                }}
+                leftAvatar={
+                  item.thumbnailPath === "" ? (
+                    <Avatar
+                      rounded
+                      icon={{ name: "user", type: "font-awesome" }}
+                      size="medium"
+                    />
+                  ) : (
+                    {
+                      source: { uri: item.thumbnailPath },
+                      size: "medium"
+                    }
+                  )
+                }
               />
             )
           }}
@@ -111,7 +118,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#E8E3E3"
   },
   contact: {
-    width: "100%",
     backgroundColor: "#E8E3E3",
     marginBottom: 1
   }
