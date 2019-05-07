@@ -9,7 +9,8 @@ import {
   Picker,
   StyleSheet,
   Dimensions,
-  Alert
+  Alert,
+  BackHandler
 } from "react-native"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
@@ -33,7 +34,16 @@ export default class PerfilSettings extends Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.setState({ language: languagelist })
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+  }
+
+  handleBackPress = () => {
+    return true
   }
 
   confirmPerfilSettings = () => {
@@ -51,7 +61,7 @@ export default class PerfilSettings extends Component {
         language_code: code,
         profile_img_url: profileImageUrl
       })
-      navigation.navigate("Conversas")
+    navigation.navigate("Conversas")
   }
 
   uploadphotos = () => {
@@ -61,36 +71,35 @@ export default class PerfilSettings extends Component {
     firebase
       .storage()
       .ref(`profile_pics/${user.uid}`)
-      .putFile(img.path).on(
-        firebase.storage.TaskEvent.STATE_CHANGED,
-        snapshot => {
-          let state = {}
+      .putFile(img.path)
+      .on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => {
+        let state = {}
+        state = {
+          ...state,
+          progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Progress bar
+        }
+        if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+          Alert.alert("Image upload successful.")
           state = {
-            ...state,
-            progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Progress bar
+            uploading: false,
+            progress: 0,
+            profileImageUrl: snapshot.downloadURL
           }
-          if(snapshot.state === firebase.storage.TaskState.SUCCESS) {
-            Alert.alert("Image upload successful.")
-            state = {
-              uploading: false,
-              progress: 0,
-              profileImageUrl: snapshot.downloadURL
-            }
-          }
+        }
 
-          this.setState(state)
-        })
+        this.setState(state)
+      })
   }
 
   handleChooseImage = () => {
     const options = {
       noData: true,
-      title: "Escolha uma foto",
+      title: "Escolha uma foto"
     }
 
     ImagePicker.showImagePicker(options, response => {
-      if(response.uri) {
-        this.setState({img: response})
+      if (response.uri) {
+        this.setState({ img: response })
         this.uploadphotos()
       }
     })
@@ -114,16 +123,16 @@ export default class PerfilSettings extends Component {
               this.previewImage()
             }}
           >
-          {img && (
-            <Image
-            source={{uri: img.uri}} 
-            style={styles.imagePlaceHolder}
-            />
-          )}
+            {img && (
+              <Image
+                source={{ uri: img.uri }}
+                style={styles.imagePlaceHolder}
+              />
+            )}
           </TouchableOpacity>
-          <TouchableOpacity 
-          style={styles.roundbutton}
-          onPress={this.handleChooseImage}
+          <TouchableOpacity
+            style={styles.roundbutton}
+            onPress={this.handleChooseImage}
           >
             <Icon name="create" />
           </TouchableOpacity>
@@ -131,13 +140,15 @@ export default class PerfilSettings extends Component {
         <Text style={styles.labeltext}>Nome:</Text>
         <TextInput
           style={styles.entrada}
-          onChangeText={text => this.setState({userName: text})}
-          placeholder="Digite seu nome" />
+          onChangeText={text => this.setState({ userName: text })}
+          placeholder="Digite seu nome"
+        />
         <Text style={styles.labeltext}>Email:</Text>
         <TextInput
           style={styles.entrada}
-          onChangeText={text => this.setState({eMail: text})}
-          placeholder="Digite seu e-mail" />
+          onChangeText={text => this.setState({ eMail: text })}
+          placeholder="Digite seu e-mail"
+        />
         <Text style={styles.labeltext}>Idiomas:</Text>
         <View style={styles.languagePicker}>
           <Picker
