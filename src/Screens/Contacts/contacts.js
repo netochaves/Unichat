@@ -38,7 +38,8 @@ export default class Contatos extends Component {
               numberFromPhone = numberFromPhone.split(" ").join("")
               numberFromPhone = numberFromPhone.split("-").join("")
               if (doc.data().phone === numberFromPhone) {
-                contactsAux.push(contactFromPhone)
+                const { profile_img_url } = doc.data()
+                contactsAux.push({ ...contactFromPhone, profile_img_url })
               }
             }
           })
@@ -99,7 +100,7 @@ export default class Contatos extends Component {
                     : null
                 }
                 leftAvatar={
-                  item.thumbnailPath === "" ? (
+                  item.profile_img_url === "" ? (
                     <Avatar
                       rounded
                       icon={{ name: "user", type: "font-awesome" }}
@@ -107,7 +108,7 @@ export default class Contatos extends Component {
                     />
                   ) : (
                     {
-                      source: { uri: item.thumbnailPath },
+                      source: { uri: item.profile_img_url },
                       size: "medium"
                     }
                   )
