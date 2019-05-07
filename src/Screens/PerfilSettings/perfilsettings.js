@@ -13,6 +13,7 @@ import {
 import { Icon } from "react-native-elements"
 import shortid from "shortid"
 import LinearGradient from "react-native-linear-gradient"
+import ImagePicker from "react-native-image-picker"
 import profileImage from "../../assets/imgs/profile-placeholder.png"
 import languagelist from "../../assets/languages/languages"
 
@@ -28,6 +29,12 @@ export default class PerfilSettings extends Component {
 
   componentDidMount() {
     this.setState({ language: languagelist })
+  }
+
+  handleChooseImage = () => {
+    ImagePicker.showImagePicker(null, response => {
+
+    })
   }
 
   previewImage = () => {
@@ -50,7 +57,10 @@ export default class PerfilSettings extends Component {
           >
             <Image source={img} style={styles.imagePlaceHolder} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.roundbutton}>
+          <TouchableOpacity 
+          style={styles.roundbutton}
+          onPress={this.handleChooseImage}
+          >
             <Icon name="create" />
           </TouchableOpacity>
         </View>

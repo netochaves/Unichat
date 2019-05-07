@@ -108,7 +108,7 @@ const appStackNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "AuthScreen"
+    initialRouteName: "PerfilSettings"
   },
   { header: null }
 )
