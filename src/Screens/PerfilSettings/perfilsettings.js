@@ -35,6 +35,7 @@ export default class PerfilSettings extends Component {
   }
 
   confirmPerfilSettings = () => {
+    const { navigation } = this.props
     const user = firebase.auth().currentUser
     const { userName, eMail, code } = this.state
     firebase
@@ -47,6 +48,7 @@ export default class PerfilSettings extends Component {
         email: eMail,
         language_code: code
       })
+      navigation.navigate("ChatScreen")
   }
 
   handleChooseImage = () => {

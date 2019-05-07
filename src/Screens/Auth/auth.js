@@ -38,8 +38,15 @@ export default class Auth extends Component {
     const { navigation } = this.props
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
+        const userRef = firebase.firestore().collection("users").doc(user.uid)
         this.setState({ loading: false })
-        navigation.navigate("PerfilSettings")
+        userRef.get().then(doc => {
+          if(!doc.exists) {
+            navigation.navigate("PerfilSettings")
+          } else {
+            navigation.navigate("ChatScreen")
+          }
+        })
       } else {
         this.setState({ loading: false })
       }
