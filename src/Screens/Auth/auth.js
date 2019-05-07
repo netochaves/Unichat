@@ -44,7 +44,7 @@ export default class Auth extends Component {
           if(!doc.exists) {
             navigation.navigate("PerfilSettings")
           } else {
-            navigation.navigate("ChatScreen")
+            navigation.navigate("Conversas")
           }
         })
       } else {
