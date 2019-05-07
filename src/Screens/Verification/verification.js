@@ -3,7 +3,6 @@ import React, { Component } from "react"
 import { View, Text, StyleSheet, Linking, TouchableOpacity } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import CodeInput from "react-native-confirmation-code-input"
-import firebase from "react-native-firebase"
 
 export default class Verificacao extends Component {
   constructor() {
@@ -22,21 +21,13 @@ export default class Verificacao extends Component {
   confirmChoice = code => {
     const { navigation } = this.props
     const confirmResult = navigation.getParam("confirmResultFirebase")
-    const phoneNumber = navigation.getParam("phoneNumber")
 
     if (confirmResult && code.length) {
       confirmResult
         .confirm(code)
         // Continuar as rotas se a confirmação ocorrer com sucesso aqui
-        .then(user => {
-          firebase
-            .firestore()
-            .collection("users")
-            .doc(user.uid)
-            .set({
-              phone: phoneNumber
-            })
-          navigation.navigate("Conversas")
+        .then(() => {
+          navigation.navigate("PerfilSettings")
         })
         // Caso dê algum erro, o tratamento é feito aqui
         .catch(() => {})
