@@ -22,3 +22,7 @@ matrix:
       cache:
         directories:
           - "node_modules"
+notifications:
+  slack: es2-ufpi:LhKJh1gCRiJcjkLiDxEai3l1
+    on_success: always
+    on_failure: always
