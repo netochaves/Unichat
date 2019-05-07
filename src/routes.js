@@ -12,6 +12,7 @@ import Chat from "~/Screens/Chat/chat"
 import Contatos from "~/Screens/Contacts/contacts"
 import Conversas from "~/Screens/Conversas/conversas"
 import { Icon } from "react-native-elements"
+import firebase from "react-native-firebase"
 
 const tabBarNavigator = createMaterialTopTabNavigator(
   {
@@ -121,7 +122,15 @@ const appStackNavigator = createStackNavigator(
   },
   { header: null }
 )
-
-const Routes = createAppContainer(appStackNavigator)
+// firebase.auth().signOut()
+let rota = createAppContainer(appStackNavigator)
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    rota = createAppContainer(tabBarNavigator)
+  } else {
+    rota = createAppContainer(appStackNavigator)
+  }
+})
+const Routes = rota
 
 export default Routes
