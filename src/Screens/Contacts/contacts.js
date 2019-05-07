@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react-native/split-platform-components */
 import React, { Component } from "react"
 import {
