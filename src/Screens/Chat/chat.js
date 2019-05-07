@@ -19,35 +19,23 @@ export default class Conversas extends Component {
 
   constructor(props) {
     super(props)
+    const { navigation } = this.props
     this.scrollView = null
-
     this.state = {
       messageText: "",
       messages: [],
       user: firebase.auth().currentUser.uid,
-      isValueNull: true
+      isValueNull: true,
+      destUser: navigation.getParam("item")
     }
-    const { user } = this.state
-    if (user === "E6PMM9JOGYRBDKbDDdFWKiR2LVa2") {
-      this.refDest = firebase
-        .firestore()
-        .collection("users")
-        .doc("AC3Z5tAq29PBqaU6ax49jMhy1Kl1")
-        .collection("Messages")
-    } else if (user === "AC3Z5tAq29PBqaU6ax49jMhy1Kl1") {
-      this.refDest = firebase
-        .firestore()
-        .collection("users")
-        .doc("E6PMM9JOGYRBDKbDDdFWKiR2LVa2")
-        .collection("Messages")
-    }
-    // Trecho termina aqui
-
+    const { user, destUser } = this.state
     this.ref = firebase
       .firestore()
       .collection("users")
       .doc(user)
-      .collection("Messages")
+      .collection("conversas")
+      .doc(destUser.key)
+      .collection("messages")
 
     TranslatorConfiguration.setConfig(
       ProviderTypes.Google,
@@ -91,6 +79,15 @@ export default class Conversas extends Component {
   }
 
   sendMessage = () => {
+    const { destUser, user } = this.state
+    const refDest = firebase
+      .firestore()
+      .collection("users")
+      .doc(destUser.key)
+      .collection("conversas")
+      .doc(user)
+      .collection("messages")
+
     const { messageText } = this.state
     if (messageText === "") this.setState({ isValueNull: true })
     const newMessage = {
@@ -98,6 +95,12 @@ export default class Conversas extends Component {
       date: new Date(),
       source: "1"
     }
+
+    this.ref.get().then(doc => {
+      if (!doc.exists) {
+        doc.set({ destKey: destUser.key })
+      }
+    })
 
     this.ref
       .add({
@@ -110,7 +113,7 @@ export default class Conversas extends Component {
 
     const translator = TranslatorFactory.createTranslator()
     translator.translate(messageText, "en").then(translated => {
-      this.refDest
+      refDest
         .add({
           content: newMessage.content,
           date: newMessage.date,
@@ -125,12 +128,17 @@ export default class Conversas extends Component {
   }
 
   render() {
-    const { messages, messageText, isValueNull } = this.state
+    const { messages, messageText, isValueNull, destUser } = this.state
     // firebase.auth().signOut()
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-        <ChatHeader />
+        <ChatHeader
+          userName={`${destUser.givenName} ${
+            destUser.middleName !== null ? destUser.middleName : ""
+          } ${destUser.familyName !== null ? destUser.familyName : ""}`}
+          userPhoto={destUser.profile_img_url}
+        />
         <View style={styles.chatContainer}>
           <ChatContainer messages={messages} />
         </View>

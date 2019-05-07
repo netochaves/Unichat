@@ -3,22 +3,25 @@ import React from "react"
 import { View, StyleSheet, Text } from "react-native"
 import { Avatar, Icon } from "react-native-elements"
 
-const chatHeader = () => (
-  <View style={styles.header}>
-    <View style={styles.headerContent}>
-      <Avatar rounded title="NC" size={40} />
-      <View style={styles.userInfo}>
-        <Text style={styles.userName}>Neto Chaves</Text>
-        <Text style={styles.lastSeen}>Visto por ultimos às 8:10pm</Text>
+const chatHeader = props => {
+  const { userName, userPhoto } = props
+  return (
+    <View style={styles.header}>
+      <View style={styles.headerContent}>
+        <Avatar rounded source={{ uri: userPhoto }} size={40} />
+        <View style={styles.userInfo}>
+          <Text style={styles.userName}>{userName}</Text>
+          <Text style={styles.lastSeen}>Visto por ultimos às 8:10pm</Text>
+        </View>
+        <Icon
+          containerStyle={styles.moreInfo}
+          name="dots-vertical"
+          type="material-community"
+        />
       </View>
-      <Icon
-        containerStyle={styles.moreInfo}
-        name="dots-vertical"
-        type="material-community"
-      />
     </View>
-  </View>
-)
+  )
+}
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "#fff",

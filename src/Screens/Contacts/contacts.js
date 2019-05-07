@@ -6,7 +6,8 @@ import {
   FlatList,
   StyleSheet,
   ToastAndroid,
-  PermissionsAndroid
+  PermissionsAndroid,
+  TouchableOpacity
 } from "react-native"
 import { ListItem, Avatar } from "react-native-elements"
 import Contacts from "react-native-contacts"
@@ -40,7 +41,11 @@ export default class Contatos extends Component {
               numberFromPhone = numberFromPhone.split("-").join("")
               if (doc.data().phone === numberFromPhone) {
                 const { profile_img_url } = doc.data()
-                contactsAux.push({ ...contactFromPhone, profile_img_url })
+                contactsAux.push({
+                  ...contactFromPhone,
+                  key: doc.id,
+                  profile_img_url
+                })
               }
             }
           })
@@ -83,6 +88,7 @@ export default class Contatos extends Component {
 
   render() {
     const { contacts } = this.state
+    const { navigation } = this.props
     return (
       <View style={styles.container}>
         <ContactHeader syncronize={this.syncronize} />
@@ -90,31 +96,35 @@ export default class Contatos extends Component {
           data={contacts.sort((a, b) => a.givenName.localeCompare(b))}
           renderItem={({ item }) => {
             return (
-              <ListItem
-                style={styles.contact}
-                title={`${item.givenName} ${
-                  item.middleName !== null ? item.middleName : ""
-                } ${item.familyName !== null ? item.familyName : ""}`}
-                subtitle={
-                  item.phoneNumbers.length > 0
-                    ? item.phoneNumbers[0].number
-                    : null
-                }
-                leftAvatar={
-                  item.profile_img_url === "" ? (
-                    <Avatar
-                      rounded
-                      icon={{ name: "user", type: "font-awesome" }}
-                      size="medium"
-                    />
-                  ) : (
-                    {
-                      source: { uri: item.profile_img_url },
-                      size: "medium"
-                    }
-                  )
-                }
-              />
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ChatScreen", { item })}
+              >
+                <ListItem
+                  style={styles.contact}
+                  title={`${item.givenName} ${
+                    item.middleName !== null ? item.middleName : ""
+                  } ${item.familyName !== null ? item.familyName : ""}`}
+                  subtitle={
+                    item.phoneNumbers.length > 0
+                      ? item.phoneNumbers[0].number
+                      : null
+                  }
+                  leftAvatar={
+                    item.profile_img_url === "" ? (
+                      <Avatar
+                        rounded
+                        icon={{ name: "user", type: "font-awesome" }}
+                        size="medium"
+                      />
+                    ) : (
+                      {
+                        source: { uri: item.profile_img_url },
+                        size: "medium"
+                      }
+                    )
+                  }
+                />
+              </TouchableOpacity>
             )
           }}
           keyExtractor={i => i.recordID}
@@ -128,10 +138,10 @@ export default class Contatos extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8E3E3"
+    backgroundColor: "#F4F5F8"
   },
   contact: {
-    backgroundColor: "#E8E3E3",
+    backgroundColor: "#F4F5F8",
     marginBottom: 1
   }
 })
