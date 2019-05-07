@@ -21,4 +21,9 @@ matrix:
         - npm run lint
       cache:
         directories:
-          - "node_modules"
+          - node_modules
+notifications:
+  slack:
+    secure: ohnKTmc9Ft2YLx/cH9GL3dbgmiIQkxWSAyZGJZPKS3TW59O2FiqWWL0M1E6Hw6n3DSvtMiD6az2lRXLKAGrZSL10UgW718gyAmGzmpH7wtWwsxT0cAMWZGKLRYumty1PxAuaY3zY3UL+bPkM88Yjsps90hU0YObpuEwMv4sdiMiJcSHVYGCLhbyLHOPaAbRRzehWJRT9vTWJ+KCHv+0/RLZlhuhjzz1kIsRr4YOSPqBm7jVlLb8pRePUgZFMIbI++SIguKKImmI0Qoki1Cnbk3UmJmDpAJ4a157lpTIaNirOAjbQUw0x8WonMCaru0UfLyHU2u23MxTvSQ53LrPOOuyVF7anB4Vf5XkzBxARvnaUI7PoBu0XFhRNG9nvw8nv7lL0kWDbib/6Q4Fp0UtDZGsYM8JQ30JhQLk/+0GkxMLqWgH1Xmpuk0ktvBeLJZqIICuEgomMpTRM/+S4ooeMDTb8o4lyyjb2u0WuXx8JKoZQYJS7rDrL8GE6VyN+I8ZJlXG3Leu00erbdOSmsil/YDdrofOpbzaJ6k2rHQu59BYioZXAnf/x4LVsBb/Ul/DDIPZE2VJBZSzDWjuP/mpQj9XTlSLChlCrUJ6Y0wZ3BsZiLkrUdvBypRLgBw5VWdRu7n2u1QVx+Dcs7qavK7T6mZSDKi6qLPaZXcVFoKWLX+k=
+    on_success: always
+    on_failure: always

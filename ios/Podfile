@@ -11,6 +11,9 @@ target 'Unichat' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'react-native-contacts', :path => '../node_modules/react-native-contacts'
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
   target 'UnichatTests' do
