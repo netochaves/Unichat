@@ -23,6 +23,6 @@ matrix:
         directories:
           - "node_modules"
 notifications:
-  slack: es2-ufpi:LhKJh1gCRiJcjkLiDxEai3l1
+  slack: es2-ufpi:CMeoCLxKLl6orKH8LUyXKZGX
     on_success: always
     on_failure: always
