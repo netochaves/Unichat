@@ -6,7 +6,7 @@ import {
   FlatList,
   StyleSheet,
   ToastAndroid,
-  PermissionsAndroid
+  PermissionsAndroid,
 } from "react-native"
 import { ListItem, Avatar } from "react-native-elements"
 import Contacts from "react-native-contacts"
@@ -128,10 +128,10 @@ export default class Contatos extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8E3E3"
+    backgroundColor: "#F4F5F8"
   },
   contact: {
-    backgroundColor: "#E8E3E3",
+    backgroundColor: "#F4F5F8",
     marginBottom: 1
   }
 })
