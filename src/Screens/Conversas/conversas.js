@@ -33,7 +33,7 @@ export default class Conversas extends Component {
 
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
-
+    const { contacts } = this.state
     this.ref.get().then(doc => {
       this.setState({
         myName: doc.data().username,
@@ -41,20 +41,25 @@ export default class Conversas extends Component {
       })
     })
 
-    this.getAllChats()
+    this.getData()
 
-    this.ref.collection("conversas").onSnapshot(querySnapshot => {
-      const conversas = []
-      querySnapshot.forEach(doc => {
-        const { contactName, profileImgUrl } = doc.data()
-        conversas.push({
-          key: doc.id,
-          profileImage: profileImgUrl,
-          contactName
+    this.unsubscribe = this.ref
+      .collection("conversas")
+      .onSnapshot(querySnapshot => {
+        const conversas = []
+        querySnapshot.forEach(doc => {
+          contacts.forEach(contact => {
+            if (contact.id === doc.id) {
+              conversas.push({
+                key: doc.id,
+                profileImage: contact.profile_img_url,
+                contactName: contact.contactName
+              })
+            }
+          })
         })
+        this.setState({ conversas })
       })
-      this.setState({ conversas })
-    })
   }
 
   componentWillUnmount() {
@@ -62,17 +67,23 @@ export default class Conversas extends Component {
   }
 
   getAllChats = () => {
+    const { contacts } = this.state
+    this.getData()
+
     this.snapshot = this.ref
       .collection("conversas")
       .get()
       .then(querySnapshot => {
         const conversas = []
         querySnapshot.forEach(doc => {
-          const { contactName, profileImgUrl } = doc.data()
-          conversas.push({
-            key: doc.id,
-            profileImage: profileImgUrl,
-            contactName
+          contacts.forEach(contact => {
+            if (contact.key === doc.id) {
+              conversas.push({
+                key: doc.id,
+                profileImage: contact.profile_img_url,
+                contactName: contact.contactName
+              })
+            }
           })
         })
         this.setState({ conversas })
@@ -86,53 +97,34 @@ export default class Conversas extends Component {
   getData = async () => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
       const contacts = JSON.parse(contactsResponse)
-      const contactsAux = []
-      firebase
-        .firestore()
-        .collection("users")
+      console.log(contacts)
+      this.ref
+        .collection("conversas")
         .get()
         .then(querySnapshot => {
+          const conversas = []
+          console.log("e aqui")
           querySnapshot.forEach(doc => {
-            contacts.forEach(contactFromPhone => {
-              const contactName = `${contactFromPhone.givenName} ${
-                contactFromPhone.middleName !== null
-                  ? contactFromPhone.middleName
-                  : ""
-              } ${
-                contactFromPhone.familyName !== null
-                  ? contactFromPhone.familyName
-                  : ""
-              }`
-              if (contactFromPhone.phoneNumbers.length > 0) {
-                let numberFromPhone = contactFromPhone.phoneNumbers[0].number
-                numberFromPhone = numberFromPhone.split(" ").join("")
-                numberFromPhone = numberFromPhone.split("-").join("")
-                if (doc.data().phone === numberFromPhone) {
-                  const { profile_img_url } = doc.data()
-                  contactsAux.push({
-                    ...contactFromPhone,
-                    contactName,
-                    key: doc.id,
-                    profile_img_url
-                  })
-                }
+            contacts.forEach(contact => {
+              console.log("aqui tbm")
+              if (contact.key === doc.id) {
+                conversas.push({
+                  contact,
+                  key: doc.id,
+                  profileImage: contact.profile_img_url,
+                  contactName: contact.contactName
+                })
               }
             })
           })
-          this.setState({ contacts: contactsAux })
+          this.setState({ conversas })
         })
     })
   }
 
-  goToChat = id => {
-    this.getData()
+  goToChat = item => {
     const { navigation } = this.props
-    const { contacts } = this.state
-    contacts.forEach(item => {
-      if (item.key === id) {
-        navigation.navigate("ChatScreen", { item })
-      }
-    })
+    navigation.navigate("ChatScreen", { item })
   }
 
   newConversa = () => {}
@@ -164,7 +156,7 @@ export default class Conversas extends Component {
             return (
               <ListItem
                 onPress={() => {
-                  this.goToChat(item.key)
+                  this.goToChat(item.contact)
                 }}
                 style={styles.conversa}
                 subtitle={

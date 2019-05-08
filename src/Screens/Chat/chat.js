@@ -36,6 +36,13 @@ export default class Conversas extends Component {
       .collection("conversas")
       .doc(destUser.key)
 
+    this.refDest = firebase
+      .firestore()
+      .collection("users")
+      .doc(destUser.key)
+      .collection("conversas")
+      .doc(user)
+
     TranslatorConfiguration.setConfig(
       ProviderTypes.Google,
       "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
@@ -81,17 +88,11 @@ export default class Conversas extends Component {
   sendMessage = () => {
     const { destUser, user } = this.state
     this.ref.set({
-      contactName: destUser.contactName,
-      profileImgUrl: destUser.profile_img_url
+      userKey: destUser.key
     })
-
-    const refDest = firebase
-      .firestore()
-      .collection("users")
-      .doc(destUser.key)
-      .collection("conversas")
-      .doc(user)
-      .collection("messages")
+    this.refDest.set({
+      userKey: user
+    })
 
     const { messageText } = this.state
     if (messageText === "") this.setState({ isValueNull: true })
@@ -113,7 +114,8 @@ export default class Conversas extends Component {
 
     const translator = TranslatorFactory.createTranslator()
     translator.translate(messageText, "en").then(translated => {
-      refDest
+      this.refDest
+        .collection("messages")
         .add({
           content: newMessage.content,
           date: newMessage.date,

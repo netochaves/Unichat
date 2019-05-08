@@ -30,47 +30,43 @@ export default class Contatos extends Component {
 
   getData = async () => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
-      const contacts = JSON.parse(contactsResponse)
-      const contactsAux = []
-      this.ref.get().then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          contacts.forEach(contactFromPhone => {
-            const contactName = `${contactFromPhone.givenName} ${
-              contactFromPhone.middleName !== null
-                ? contactFromPhone.middleName
-                : ""
-            } ${
-              contactFromPhone.familyName !== null
-                ? contactFromPhone.familyName
-                : ""
-            }`
-            if (contactFromPhone.phoneNumbers.length > 0) {
-              let numberFromPhone = contactFromPhone.phoneNumbers[0].number
-              numberFromPhone = numberFromPhone.split(" ").join("")
-              numberFromPhone = numberFromPhone.split("-").join("")
-              if (doc.data().phone === numberFromPhone) {
-                const { profile_img_url } = doc.data()
-                contactsAux.push({
-                  ...contactFromPhone,
-                  contactName,
-                  key: doc.id,
-                  profile_img_url
-                })
-              }
-            }
-          })
-        })
-        this.setState({ contacts: contactsAux })
-      })
+      this.setState({ contacts: JSON.parse(contactsResponse) })
     })
   }
 
   storeData = async contactsFromPhone => {
-    try {
-      await AsyncStorage.setItem("@contacts", JSON.stringify(contactsFromPhone))
-    } catch (err) {
-      throw err
-    }
+    const contactsAux = []
+    this.ref.get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        contactsFromPhone.forEach(contactFromPhone => {
+          const contactName = `${contactFromPhone.givenName} ${
+            contactFromPhone.middleName !== null
+              ? contactFromPhone.middleName
+              : ""
+          } ${
+            contactFromPhone.familyName !== null
+              ? contactFromPhone.familyName
+              : ""
+          }`
+          if (contactFromPhone.phoneNumbers.length > 0) {
+            let numberFromPhone = contactFromPhone.phoneNumbers[0].number
+            numberFromPhone = numberFromPhone.split(" ").join("")
+            numberFromPhone = numberFromPhone.split("-").join("")
+            if (doc.data().phone === numberFromPhone) {
+              const { profile_img_url } = doc.data()
+              contactsAux.push({
+                ...contactFromPhone,
+                contactName,
+                key: doc.id,
+                profile_img_url
+              })
+            }
+          }
+        })
+      })
+      console.log(contactsAux)
+      return AsyncStorage.setItem("@contacts", JSON.stringify(contactsAux))
+    })
   }
 
   syncronize = () => {
