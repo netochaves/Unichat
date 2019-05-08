@@ -129,6 +129,7 @@ export default class Conversas extends Component {
 
   render() {
     const { messages, messageText, isValueNull, destUser } = this.state
+    const { navigation } = this.props
     // firebase.auth().signOut()
     return (
       <View style={styles.container}>
@@ -136,6 +137,7 @@ export default class Conversas extends Component {
         <ChatHeader
           userName={destUser.contactName}
           userPhoto={destUser.profile_img_url}
+          navigation={navigation}
         />
         <View style={styles.chatContainer}>
           <ChatContainer messages={messages} />

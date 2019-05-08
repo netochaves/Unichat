@@ -13,7 +13,6 @@ import { ListItem, Icon } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
-import getTime from "~/functions/getTime"
 
 export default class Conversas extends Component {
   constructor() {
@@ -173,9 +172,7 @@ export default class Conversas extends Component {
                     <Text style={styles.name}>{item.contactName}</Text>
                     <Text style={styles.lastMsg}>{item.lastMessage}</Text>
                     <View style={styles.rightInformation}>
-                      <Text style={styles.data}>
-                        {item.lastMessage}
-                      </Text>
+                      <Text style={styles.data}>{item.lastMessage}</Text>
                       <LinearGradient
                         colors={["#547BF0", "#6AC3FB"]}
                         style={styles.cont}
