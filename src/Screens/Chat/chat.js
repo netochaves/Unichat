@@ -35,7 +35,6 @@ export default class Conversas extends Component {
       .doc(user)
       .collection("conversas")
       .doc(destUser.key)
-      .collection("messages")
 
     TranslatorConfiguration.setConfig(
       ProviderTypes.Google,
@@ -47,6 +46,7 @@ export default class Conversas extends Component {
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe = this.ref
+      .collection("messages")
       .orderBy("date", "asc")
       .onSnapshot(querySnapshot => {
         const messages = []
@@ -80,6 +80,11 @@ export default class Conversas extends Component {
 
   sendMessage = () => {
     const { destUser, user } = this.state
+    this.ref.set({
+      contactName: destUser.contactName,
+      profileImgUrl: destUser.profile_img_url
+    })
+
     const refDest = firebase
       .firestore()
       .collection("users")
@@ -97,6 +102,7 @@ export default class Conversas extends Component {
     }
 
     this.ref
+      .collection("messages")
       .add({
         content: newMessage.content,
         date: newMessage.date,
@@ -128,9 +134,7 @@ export default class Conversas extends Component {
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <ChatHeader
-          userName={`${destUser.givenName} ${
-            destUser.middleName !== null ? destUser.middleName : ""
-          } ${destUser.familyName !== null ? destUser.familyName : ""}`}
+          userName={destUser.contactName}
           userPhoto={destUser.profile_img_url}
         />
         <View style={styles.chatContainer}>

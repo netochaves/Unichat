@@ -3,32 +3,8 @@ import React from "react"
 import { View } from "react-native"
 import shortid from "shortid"
 import { ScrollView } from "react-native-gesture-handler"
-
+import getTime from "~/functions/getTime"
 import Message from "../mensagem"
-
-const getTime = date => {
-  let TimeType
-  let hour
-  let minutes
-
-  hour = date.getHours()
-  if (hour <= 11) {
-    TimeType = "AM"
-  } else {
-    TimeType = "PM"
-  }
-  if (hour > 12) {
-    hour -= 12
-  }
-  if (hour === 0) {
-    hour = 12
-  }
-  minutes = date.getMinutes()
-  if (minutes < 10) {
-    minutes = 0 + minutes.toString()
-  }
-  return `${hour.toString()} : ${minutes.toString()} ${TimeType.toString()}`
-}
 
 const Chat = props => {
   const { messages } = props

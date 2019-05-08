@@ -35,6 +35,15 @@ export default class Contatos extends Component {
       this.ref.get().then(querySnapshot => {
         querySnapshot.forEach(doc => {
           contacts.forEach(contactFromPhone => {
+            const contactName = `${contactFromPhone.givenName} ${
+              contactFromPhone.middleName !== null
+                ? contactFromPhone.middleName
+                : ""
+            } ${
+              contactFromPhone.familyName !== null
+                ? contactFromPhone.familyName
+                : ""
+            }`
             if (contactFromPhone.phoneNumbers.length > 0) {
               let numberFromPhone = contactFromPhone.phoneNumbers[0].number
               numberFromPhone = numberFromPhone.split(" ").join("")
@@ -43,6 +52,7 @@ export default class Contatos extends Component {
                 const { profile_img_url } = doc.data()
                 contactsAux.push({
                   ...contactFromPhone,
+                  contactName,
                   key: doc.id,
                   profile_img_url
                 })
@@ -101,9 +111,7 @@ export default class Contatos extends Component {
               >
                 <ListItem
                   style={styles.contact}
-                  title={`${item.givenName} ${
-                    item.middleName !== null ? item.middleName : ""
-                  } ${item.familyName !== null ? item.familyName : ""}`}
+                  title={item.contactName}
                   subtitle={
                     item.phoneNumbers.length > 0
                       ? item.phoneNumbers[0].number
