@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ToastAndroid,
   PermissionsAndroid,
+  TouchableOpacity
 } from "react-native"
 import { ListItem, Avatar } from "react-native-elements"
 import Contacts from "react-native-contacts"
@@ -29,33 +30,42 @@ export default class Contatos extends Component {
 
   getData = async () => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
-      const contacts = JSON.parse(contactsResponse)
-      const contactsAux = []
-      this.ref.get().then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          contacts.forEach(contactFromPhone => {
-            if (contactFromPhone.phoneNumbers.length > 0) {
-              let numberFromPhone = contactFromPhone.phoneNumbers[0].number
-              numberFromPhone = numberFromPhone.split(" ").join("")
-              numberFromPhone = numberFromPhone.split("-").join("")
-              if (doc.data().phone === numberFromPhone) {
-                const { profile_img_url } = doc.data()
-                contactsAux.push({ ...contactFromPhone, profile_img_url })
-              }
-            }
-          })
-        })
-        this.setState({ contacts: contactsAux })
-      })
+      this.setState({ contacts: JSON.parse(contactsResponse) })
     })
   }
 
   storeData = async contactsFromPhone => {
-    try {
-      await AsyncStorage.setItem("@contacts", JSON.stringify(contactsFromPhone))
-    } catch (err) {
-      throw err
-    }
+    const contactsAux = []
+    this.ref.get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        contactsFromPhone.forEach(contactFromPhone => {
+          const contactName = `${contactFromPhone.givenName} ${
+            contactFromPhone.middleName !== null
+              ? contactFromPhone.middleName
+              : ""
+          } ${
+            contactFromPhone.familyName !== null
+              ? contactFromPhone.familyName
+              : ""
+          }`
+          if (contactFromPhone.phoneNumbers.length > 0) {
+            let numberFromPhone = contactFromPhone.phoneNumbers[0].number
+            numberFromPhone = numberFromPhone.split(" ").join("")
+            numberFromPhone = numberFromPhone.split("-").join("")
+            if (doc.data().phone === numberFromPhone) {
+              const { profile_img_url } = doc.data()
+              contactsAux.push({
+                ...contactFromPhone,
+                contactName,
+                key: doc.id,
+                profile_img_url
+              })
+            }
+          }
+        })
+      })
+      return AsyncStorage.setItem("@contacts", JSON.stringify(contactsAux))
+    })
   }
 
   syncronize = () => {
@@ -83,6 +93,7 @@ export default class Contatos extends Component {
 
   render() {
     const { contacts } = this.state
+    const { navigation } = this.props
     return (
       <View style={styles.container}>
         <ContactHeader syncronize={this.syncronize} />
@@ -90,31 +101,33 @@ export default class Contatos extends Component {
           data={contacts.sort((a, b) => a.givenName.localeCompare(b))}
           renderItem={({ item }) => {
             return (
-              <ListItem
-                style={styles.contact}
-                title={`${item.givenName} ${
-                  item.middleName !== null ? item.middleName : ""
-                } ${item.familyName !== null ? item.familyName : ""}`}
-                subtitle={
-                  item.phoneNumbers.length > 0
-                    ? item.phoneNumbers[0].number
-                    : null
-                }
-                leftAvatar={
-                  item.profile_img_url === "" ? (
-                    <Avatar
-                      rounded
-                      icon={{ name: "user", type: "font-awesome" }}
-                      size="medium"
-                    />
-                  ) : (
-                    {
-                      source: { uri: item.profile_img_url },
-                      size: "medium"
-                    }
-                  )
-                }
-              />
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ChatScreen", { item })}
+              >
+                <ListItem
+                  style={styles.contact}
+                  title={item.contactName}
+                  subtitle={
+                    item.phoneNumbers.length > 0
+                      ? item.phoneNumbers[0].number
+                      : null
+                  }
+                  leftAvatar={
+                    item.profile_img_url === "" ? (
+                      <Avatar
+                        rounded
+                        icon={{ name: "user", type: "font-awesome" }}
+                        size="medium"
+                      />
+                    ) : (
+                      {
+                        source: { uri: item.profile_img_url },
+                        size: "medium"
+                      }
+                    )
+                  }
+                />
+              </TouchableOpacity>
             )
           }}
           keyExtractor={i => i.recordID}

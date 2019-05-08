@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable react-native/split-platform-components */
 import React, { Component } from "react"
 import {
   View,
@@ -8,12 +10,15 @@ import {
   Alert,
   YellowBox,
   TouchableOpacity,
-  BackHandler
+  BackHandler,
+  PermissionsAndroid
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { TextInputMask } from "react-native-masked-text"
 import firebase from "react-native-firebase"
 import shortid from "shortid"
+import AsyncStorage from "@react-native-community/async-storage"
+import Contacts from "react-native-contacts"
 import countryList from "../../assets/country_dials/dials"
 
 YellowBox.ignoreWarnings([
@@ -36,6 +41,8 @@ export default class Auth extends Component {
   }
 
   componentDidMount() {
+    this.sync()
+
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     const { navigation } = this.props
     firebase.auth().onAuthStateChanged(user => {
@@ -61,6 +68,55 @@ export default class Auth extends Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+  }
+
+  sync = () => {
+    const ref = firebase.firestore().collection("users")
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+      title: "Contacts",
+      message: "This app would like to view your contacts."
+    }).then(() => {
+      Contacts.getAll((err, contacts) => {
+        if (err === "denied") {
+          // error
+        } else {
+          const contactsAux = []
+          ref.get().then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              contacts.forEach(contactFromPhone => {
+                const contactName = `${contactFromPhone.givenName} ${
+                  contactFromPhone.middleName !== null
+                    ? contactFromPhone.middleName
+                    : ""
+                } ${
+                  contactFromPhone.familyName !== null
+                    ? contactFromPhone.familyName
+                    : ""
+                }`
+                if (contactFromPhone.phoneNumbers.length > 0) {
+                  let numberFromPhone = contactFromPhone.phoneNumbers[0].number
+                  numberFromPhone = numberFromPhone.split(" ").join("")
+                  numberFromPhone = numberFromPhone.split("-").join("")
+                  if (doc.data().phone === numberFromPhone) {
+                    const { profile_img_url } = doc.data()
+                    contactsAux.push({
+                      ...contactFromPhone,
+                      contactName,
+                      key: doc.id,
+                      profile_img_url
+                    })
+                  }
+                }
+              })
+            })
+            return AsyncStorage.setItem(
+              "@contacts",
+              JSON.stringify(contactsAux)
+            )
+          })
+        }
+      })
+    })
   }
 
   handleBackPress = () => {
@@ -115,8 +171,7 @@ export default class Auth extends Component {
         <View>
           <Text style={styles.textBig}>Insira seu número de telefone</Text>
           <Text style={styles.textSmall}>
-            {" "}
-            Digite o número do seu telefone junto com o DDD{" "}
+            Digite o número do seu telefone junto com o DDD
           </Text>
         </View>
         <View>
