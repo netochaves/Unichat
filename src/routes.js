@@ -1,4 +1,5 @@
 import React from "react"
+
 import {
   createAppContainer,
   createStackNavigator,
@@ -13,12 +14,15 @@ import Contatos from "~/Screens/Contacts/contacts"
 import Conversas from "~/Screens/Conversas/conversas"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
+import Syncronize from "~/functions/syncronize"
 
 let rota = "AuthScreen"
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
+    Syncronize()
     rota = "Conversas"
   } else {
+    Syncronize()
     rota = "AuthScreen"
   }
 })

@@ -20,8 +20,7 @@ export default class Conversas extends Component {
     this.state = {
       conversas: [],
       myName: "",
-      myPicture: null,
-      contacts: []
+      myPicture: null
     }
     this.lastMessage = null
 
@@ -32,62 +31,19 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
+    console.log("conversas")
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
-    const { contacts } = this.state
     this.ref.get().then(doc => {
       this.setState({
         myName: doc.data().username,
         myPicture: doc.data().profile_img_url
       })
     })
-
     this.getData()
-
-    this.unsubscribe = this.ref
-      .collection("conversas")
-      .onSnapshot(querySnapshot => {
-        const conversas = []
-        querySnapshot.forEach(doc => {
-          contacts.forEach(contact => {
-            if (contact.id === doc.id) {
-              conversas.push({
-                key: doc.id,
-                profileImage: contact.profile_img_url,
-                contactName: contact.contactName
-              })
-            }
-          })
-        })
-        this.setState({ conversas })
-      })
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
-  }
-
-  getAllChats = () => {
-    const { contacts } = this.state
-    this.getData()
-
-    this.snapshot = this.ref
-      .collection("conversas")
-      .get()
-      .then(querySnapshot => {
-        const conversas = []
-        querySnapshot.forEach(doc => {
-          contacts.forEach(contact => {
-            if (contact.key === doc.id) {
-              conversas.push({
-                key: doc.id,
-                profileImage: contact.profile_img_url,
-                contactName: contact.contactName
-              })
-            }
-          })
-        })
-        this.setState({ conversas })
-      })
   }
 
   handleBackPress = () => {
@@ -97,28 +53,22 @@ export default class Conversas extends Component {
   getData = async () => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
       const contacts = JSON.parse(contactsResponse)
-      console.log(contacts)
-      this.ref
-        .collection("conversas")
-        .get()
-        .then(querySnapshot => {
-          const conversas = []
-          console.log("e aqui")
-          querySnapshot.forEach(doc => {
-            contacts.forEach(contact => {
-              console.log("aqui tbm")
-              if (contact.key === doc.id) {
-                conversas.push({
-                  contact,
-                  key: doc.id,
-                  profileImage: contact.profile_img_url,
-                  contactName: contact.contactName
-                })
-              }
-            })
+      this.ref.collection("conversas").onSnapshot(querySnapshot => {
+        const conversas = []
+        querySnapshot.forEach(doc => {
+          contacts.forEach(contact => {
+            if (contact.key === doc.id) {
+              conversas.push({
+                contact,
+                key: doc.id,
+                profileImage: contact.profile_img_url,
+                contactName: contact.contactName
+              })
+            }
           })
-          this.setState({ conversas })
         })
+        this.setState({ conversas })
+      })
     })
   }
 
@@ -127,7 +77,10 @@ export default class Conversas extends Component {
     navigation.navigate("ChatScreen", { item })
   }
 
-  newConversa = () => {}
+  newConversa = () => {
+    const { navigation } = this.props
+    navigation.navigate("ContactsScreen")
+  }
 
   search = () => {}
 
