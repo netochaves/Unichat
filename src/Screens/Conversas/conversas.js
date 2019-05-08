@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { Component } from "react"
 import {
   View,
@@ -9,44 +10,35 @@ import {
   BackHandler
 } from "react-native"
 import { ListItem, Icon } from "react-native-elements"
-import img from "~/assets/imgs/profile-placeholder.png"
 import LinearGradient from "react-native-linear-gradient"
-import shortid from "shortid"
+import firebase from "react-native-firebase"
+import AsyncStorage from "@react-native-community/async-storage"
 
 export default class Conversas extends Component {
   constructor() {
     super()
     this.state = {
-      conversas: [
-        {
-          id: shortid.generate(),
-          name: "Evandro",
-          lastMsg: "Olá tudo bem?",
-          unread: 50,
-          data: "17:40 PM"
-        },
-        {
-          id: shortid.generate(),
-          name: "João Pedro",
-          lastMsg: "Bom dia",
-          unread: 3,
-          data: "1:26 PM"
-        },
-        {
-          id: shortid.generate(),
-          name: "Beton",
-          lastMsg: "Sai fora",
-          unread: 2,
-          data: "1:40 AM"
-        }
-      ],
-      myName: "Max Lima",
-      myPicture: img
+      conversas: [],
+      myName: "",
+      myPicture: null
     }
+    this.lastMessage = null
+
+    this.ref = firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
   }
 
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
+    this.ref.get().then(doc => {
+      this.setState({
+        myName: doc.data().username,
+        myPicture: doc.data().profile_img_url
+      })
+    })
+    this.getData()
   }
 
   componentWillUnmount() {
@@ -57,23 +49,47 @@ export default class Conversas extends Component {
     return true
   }
 
-  goToChat = () => {
-    const { navigation } = this.props
-    navigation.navigate("ChatScreen")
+  getData = async () => {
+    AsyncStorage.getItem("@contacts").then(contactsResponse => {
+      const contacts = JSON.parse(contactsResponse)
+      this.ref.collection("conversas").onSnapshot(querySnapshot => {
+        const conversas = []
+        querySnapshot.forEach(doc => {
+          contacts.forEach(contact => {
+            if (contact.key === doc.id) {
+              conversas.push({
+                contact,
+                key: doc.id,
+                profileImage: contact.profile_img_url,
+                contactName: contact.contactName
+              })
+            }
+          })
+        })
+        this.setState({ conversas })
+      })
+    })
   }
 
-  newConversa = () => {}
+  goToChat = item => {
+    const { navigation } = this.props
+    navigation.navigate("ChatScreen", { item })
+  }
+
+  newConversa = () => {
+    const { navigation } = this.props
+    navigation.navigate("ContactsScreen")
+  }
 
   search = () => {}
 
   render() {
     const { conversas, myName, myPicture } = this.state
-
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <Image source={myPicture} style={styles.myPicture} />
+            <Image source={{ uri: myPicture }} style={styles.myPicture} />
             <Text style={styles.conversasInfo}>{myName}</Text>
             <TouchableOpacity
               onPress={() => {
@@ -88,34 +104,36 @@ export default class Conversas extends Component {
         </View>
         <FlatList
           data={conversas}
-          renderItem={({ item }) => (
-            <ListItem
-              onPress={() => {
-                this.goToChat()
-              }}
-              style={styles.conversa}
-              subtitle={
-                <View style={styles.containerSub}>
-                  <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.lastMsg}>{item.lastMsg}</Text>
-                  <View style={styles.rightInformation}>
-                    <Text style={styles.data}>{item.data}</Text>
-                    <LinearGradient
-                      colors={["#547BF0", "#6AC3FB"]}
-                      style={styles.cont}
-                    >
-                      <Text style={styles.unread}>{item.unread}</Text>
-                    </LinearGradient>
+          renderItem={({ item }) => {
+            return (
+              <ListItem
+                onPress={() => {
+                  this.goToChat(item.contact)
+                }}
+                style={styles.conversa}
+                subtitle={
+                  <View style={styles.containerSub}>
+                    <Text style={styles.name}>{item.contactName}</Text>
+                    <Text style={styles.lastMsg}>{item.lastMessage}</Text>
+                    <View style={styles.rightInformation}>
+                      <Text style={styles.data}>{item.lastMessage}</Text>
+                      <LinearGradient
+                        colors={["#547BF0", "#6AC3FB"]}
+                        style={styles.cont}
+                      >
+                        <Text style={styles.unread}>{item.unread}</Text>
+                      </LinearGradient>
+                    </View>
                   </View>
-                </View>
-              }
-              leftAvatar={{
-                source: img,
-                size: "medium"
-              }}
-            />
-          )}
-          keyExtractor={i => i.id}
+                }
+                leftAvatar={{
+                  source: { uri: item.profileImage },
+                  size: "medium"
+                }}
+              />
+            )
+          }}
+          keyExtractor={i => i.key}
         />
         <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
           <TouchableOpacity
