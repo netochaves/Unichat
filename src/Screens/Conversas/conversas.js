@@ -31,7 +31,6 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
-    console.log("conversas")
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.ref.get().then(doc => {
       this.setState({

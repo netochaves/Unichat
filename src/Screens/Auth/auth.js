@@ -171,8 +171,7 @@ export default class Auth extends Component {
         <View>
           <Text style={styles.textBig}>Insira seu número de telefone</Text>
           <Text style={styles.textSmall}>
-            {" "}
-            Digite o número do seu telefone junto com o DDD{" "}
+            Digite o número do seu telefone junto com o DDD
           </Text>
         </View>
         <View>

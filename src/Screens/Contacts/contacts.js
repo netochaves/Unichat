@@ -30,7 +30,6 @@ export default class Contatos extends Component {
 
   getData = async () => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
-      console.log(contactsResponse)
       this.setState({ contacts: JSON.parse(contactsResponse) })
     })
   }
@@ -65,7 +64,6 @@ export default class Contatos extends Component {
           }
         })
       })
-      console.log(contactsAux)
       return AsyncStorage.setItem("@contacts", JSON.stringify(contactsAux))
     })
   }
