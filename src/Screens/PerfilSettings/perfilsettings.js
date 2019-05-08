@@ -10,15 +10,16 @@ import {
   StyleSheet,
   Dimensions,
   Alert,
-  BackHandler
+  BackHandler,
+  KeyboardAvoidingView
 } from "react-native"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
 import shortid from "shortid"
 import LinearGradient from "react-native-linear-gradient"
 import ImagePicker from "react-native-image-picker"
-import profileImage from "../../assets/imgs/profile-placeholder.png"
 import languagelist from "../../assets/languages/languages"
+import placeHolder from "../../assets/place_holder/placeHolder"
 
 export default class PerfilSettings extends Component {
   constructor() {
@@ -26,7 +27,7 @@ export default class PerfilSettings extends Component {
     this.state = {
       language: [],
       code: "",
-      img: profileImage,
+      img: placeHolder[0],
       userName: "",
       eMail: "",
       profileImageUrl: ""
@@ -115,7 +116,7 @@ export default class PerfilSettings extends Component {
     const { language, code, img } = this.state
 
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="position">
         <Text style={styles.Titulo}>Configurações de Perfil</Text>
         <View style={styles.image}>
           <TouchableOpacity
@@ -170,7 +171,7 @@ export default class PerfilSettings extends Component {
             <Text style={styles.textButton}>Cadastrar</Text>
           </LinearGradient>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }
