@@ -1,13 +1,29 @@
+/* eslint-disable camelcase */
+/* eslint-disable react-native/split-platform-components */
 import React, { Component } from "react"
-import { View, Text, TextInput, StyleSheet, Picker, Alert, YellowBox } from "react-native"
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Picker,
+  Alert,
+  YellowBox,
+  TouchableOpacity,
+  BackHandler,
+  PermissionsAndroid
+} from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { TextInputMask } from "react-native-masked-text"
 import firebase from "react-native-firebase"
+import shortid from "shortid"
+import AsyncStorage from "@react-native-community/async-storage"
+import Contacts from "react-native-contacts"
 import countryList from "../../assets/country_dials/dials"
 
 YellowBox.ignoreWarnings([
   "Warning: componentWillMount is deprecated",
-  "Warning: componentWillReceiveProps is deprecated",
+  "Warning: componentWillReceiveProps is deprecated"
 ])
 
 export default class Auth extends Component {
@@ -19,20 +35,110 @@ export default class Auth extends Component {
       countries: [],
       countryCode: "",
       phoneNumber: null,
-      loading: true,
-      authenticated: false
+      notValid: true,
+      loading: true
     }
   }
 
   componentDidMount() {
+    this.sync()
+
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
+    const { navigation } = this.props
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.setState({ loading: false, authenticated: true })
+        const userRef = firebase
+          .firestore()
+          .collection("users")
+          .doc(user.uid)
+        this.setState({ loading: false })
+        userRef.get().then(doc => {
+          if (!doc.exists) {
+            navigation.navigate("PerfilSettings")
+          } else {
+            navigation.navigate("Conversas")
+          }
+        })
       } else {
-        this.setState({ loading: false, authenticated: false })
+        this.setState({ loading: false })
       }
     })
-    this.setState({countries: countryList})
+    this.setState({ countries: countryList })
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+  }
+
+  sync = () => {
+    const ref = firebase.firestore().collection("users")
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+      title: "Contacts",
+      message: "This app would like to view your contacts."
+    }).then(() => {
+      Contacts.getAll((err, contacts) => {
+        if (err === "denied") {
+          // error
+        } else {
+          const contactsAux = []
+          ref.get().then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              contacts.forEach(contactFromPhone => {
+                const contactName = `${contactFromPhone.givenName} ${
+                  contactFromPhone.middleName !== null
+                    ? contactFromPhone.middleName
+                    : ""
+                } ${
+                  contactFromPhone.familyName !== null
+                    ? contactFromPhone.familyName
+                    : ""
+                }`
+                if (contactFromPhone.phoneNumbers.length > 0) {
+                  let numberFromPhone = contactFromPhone.phoneNumbers[0].number
+                  numberFromPhone = numberFromPhone.split(" ").join("")
+                  numberFromPhone = numberFromPhone.split("-").join("")
+                  if (doc.data().phone === numberFromPhone) {
+                    const { profile_img_url } = doc.data()
+                    contactsAux.push({
+                      ...contactFromPhone,
+                      contactName,
+                      key: doc.id,
+                      profile_img_url
+                    })
+                  }
+                }
+              })
+            })
+            return AsyncStorage.setItem(
+              "@contacts",
+              JSON.stringify(contactsAux)
+            )
+          })
+        }
+      })
+    })
+  }
+
+  handleBackPress = () => {
+    BackHandler.exitApp()
+    return true
+  }
+
+  confirmPhone = () => {
+    const { phoneNumber } = this.state
+
+    Alert.alert(
+      "Confirmar",
+      `O número ${phoneNumber} está correto?`,
+      [
+        { text: "Sim", onPress: () => this.signIn() },
+        {
+          text: "Não",
+          style: "cancel"
+        }
+      ],
+      { cancelable: false }
+    )
   }
 
   signIn = () => {
@@ -48,75 +154,79 @@ export default class Auth extends Component {
           phoneNumber
         })
       })
-      .catch(error => {
-        Alert.alert("Erro na verificação", error.message)
+      .catch(() => {
+        Alert.alert(
+          "Erro na verificação",
+          `O número ${phoneNumber} não é válido!`
+        )
       })
   }
 
   render() {
-    const { navigation } = this.props
-    const { countries, countryCode, loading, authenticated } = this.state
-    
+    const { countries, countryCode, loading, notValid } = this.state
+
     if (loading) return null
-    if (!authenticated) {
-      return (
-        <View style={styles.container}>
-          <View>
-            <Text style={styles.textBig}>Insira seu número de telefone</Text>
-            <Text style={styles.textSmall}> Digite o número do seu telefone junto com o DDD </Text>
-          </View>
-          <View>
-            <View style={styles.countryPicker}>
-              <Picker
-                selectedValue={countryCode}
-                onValueChange={itemValue =>
-                  this.setState({ countryCode: itemValue })
-                }
-              >
-                <Picker.Item label="Escolha seu País" value="" />
-                {countries.map((item, key)=> (
-                  <Picker.Item label={`${item.flag} ${item.name} (${item.dial_code})`} value={item.dial_code} key={key}/>)
-                )}
-              </Picker>
-            </View>
-          </View>
-          <View style={styles.textInputView}>
-            <TextInput
-              style={styles.countryTextInput}
-              value={countryCode}
-            />
-            <TextInputMask
-              style={styles.textInputStyle}
-              refInput={ref => {
-                this.input = ref
-              }}
-              type="cel-phone"
-              options={{
-                maskType: "BRL",
-                withDDD: true,
-                dddMask: "(99)"
-              }}
-              onChangeText={text => {
-                this.setState({phoneNumber: `${countryCode}${text}`})
-              }}
-            />
-          </View>
-          <LinearGradient
-            colors={["#547BF0", "#6AC3FB"]}
-            style={styles.button}
-            onPress={() => this.signIn()}
-          > 
-            <Text style={styles.textButton} onPress={() => this.signIn()}>
-              Enviar
-            </Text>
-          </LinearGradient>
-          <Text style={styles.textEnd}>
-            Custos de SMS talvez possam ser aplicados
+    return (
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.textBig}>Insira seu número de telefone</Text>
+          <Text style={styles.textSmall}>
+            Digite o número do seu telefone junto com o DDD
           </Text>
         </View>
-      )
-    }
-    return navigation.navigate("ChatScreen")
+        <View>
+          <View style={styles.countryPicker}>
+            <Picker
+              selectedValue={countryCode}
+              onValueChange={itemValue =>
+                this.setState({ countryCode: itemValue })
+              }
+            >
+              <Picker.Item label="Escolha seu País" value="" />
+              {countries.map(item => (
+                <Picker.Item
+                  label={`${item.flag} ${item.name} (${item.dial_code})`}
+                  value={item.dial_code}
+                  key={shortid.generate()}
+                />
+              ))}
+            </Picker>
+          </View>
+        </View>
+        <View style={styles.textInputView}>
+          <TextInput style={styles.countryTextInput} value={countryCode} />
+          <TextInputMask
+            style={styles.textInputStyle}
+            refInput={ref => {
+              this.input = ref
+            }}
+            type="cel-phone"
+            options={{
+              maskType: "BRL",
+              withDDD: true,
+              dddMask: "(99)"
+            }}
+            onChangeText={text => {
+              this.setState({
+                phoneNumber: `${countryCode}${text}`,
+                notValid: false
+              })
+            }}
+          />
+        </View>
+        <TouchableOpacity
+          onPress={() => this.confirmPhone()}
+          disabled={notValid}
+        >
+          <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
+            <Text style={styles.textButton}>Enviar</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        <Text style={styles.textEnd}>
+          Custos de SMS talvez possam ser aplicados
+        </Text>
+      </View>
+    )
   }
 }
 
@@ -124,12 +234,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     fontFamily: "OpenSans",
-    alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
     padding: 5
   },
   textBig: {
+    alignSelf: "center",
     fontSize: 24,
     color: "black",
     fontWeight: "bold",
@@ -137,44 +247,48 @@ const styles = StyleSheet.create({
     marginBottom: 30
   },
   textSmall: {
+    alignSelf: "center",
     fontSize: 12,
     color: "gray",
     marginBottom: 10
   },
   textEnd: {
+    alignSelf: "center",
     fontSize: 12,
     color: "gray",
     marginTop: 50
   },
   countryPicker: {
-    width: 330,
+    marginLeft: 40,
+    marginRight: 40,
     borderBottomWidth: 2,
-    borderColor: "#6AC3FB",
+    borderColor: "#6AC3FB"
   },
   textInputView: {
-    flexDirection: "row",
+    flexDirection: "row"
   },
   countryTextInput: {
     fontSize: 18,
+    width: 50,
     marginLeft: 40,
-    marginRight: 40,
     marginTop: 10,
     marginBottom: 10,
     borderBottomWidth: 2,
     textAlign: "center",
     color: "gray",
-    borderColor: "#6AC3FB",
+    borderColor: "#6AC3FB"
   },
   textInputStyle: {
-    flex:1,
+    flex: 1,
     fontSize: 18,
+    marginLeft: 20,
     marginRight: 40,
     marginTop: 10,
     marginBottom: 10,
     borderBottomWidth: 2,
     textAlign: "center",
     borderColor: "#6AC3FB",
-    color: "gray",
+    color: "gray"
   },
   textButton: {
     alignSelf: "center",
@@ -182,10 +296,11 @@ const styles = StyleSheet.create({
     color: "white"
   },
   button: {
-    width: 280,
     height: 60,
     borderRadius: 20,
     justifyContent: "center",
+    marginLeft: 40,
+    marginRight: 40,
     marginTop: 20
   }
 })

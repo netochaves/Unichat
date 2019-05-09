@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-import { View, StyleSheet, StatusBar } from "react-native"
+import { View, StyleSheet, StatusBar, BackHandler } from "react-native"
 import {
   ProviderTypes,
   TranslatorConfiguration,
@@ -19,36 +19,29 @@ export default class Conversas extends Component {
 
   constructor(props) {
     super(props)
+    const { navigation } = this.props
     this.scrollView = null
     this.state = {
       messageText: "",
       messages: [],
-      user: firebase.auth().currentUser.uid
+      user: firebase.auth().currentUser.uid,
+      isValueNull: true,
+      destUser: navigation.getParam("item")
     }
-    const { user } = this.state
-
-    // Trecho de código apenas para auxiliar na seleção de pra quem vou enviar a msg
-    // Deve ser retirado após a implementação de contatos
-    if (user === "E6PMM9JOGYRBDKbDDdFWKiR2LVa2") {
-      this.refDest = firebase
-        .firestore()
-        .collection("users")
-        .doc("AC3Z5tAq29PBqaU6ax49jMhy1Kl1")
-        .collection("Messages")
-    } else if (user === "AC3Z5tAq29PBqaU6ax49jMhy1Kl1") {
-      this.refDest = firebase
-        .firestore()
-        .collection("users")
-        .doc("E6PMM9JOGYRBDKbDDdFWKiR2LVa2")
-        .collection("Messages")
-    }
-    // Trecho termina aqui
-
+    const { user, destUser } = this.state
     this.ref = firebase
       .firestore()
       .collection("users")
       .doc(user)
-      .collection("Messages")
+      .collection("conversas")
+      .doc(destUser.key)
+
+    this.refDest = firebase
+      .firestore()
+      .collection("users")
+      .doc(destUser.key)
+      .collection("conversas")
+      .doc(user)
 
     TranslatorConfiguration.setConfig(
       ProviderTypes.Google,
@@ -58,7 +51,9 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe = this.ref
+      .collection("messages")
       .orderBy("date", "asc")
       .onSnapshot(querySnapshot => {
         const messages = []
@@ -76,19 +71,39 @@ export default class Conversas extends Component {
       })
   }
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+  }
+
+  handleBackPress = () => {
+    const { navigation } = this.props
+    navigation.goBack()
+    return true
+  }
+
   onChangeHandler = text => {
-    this.setState({ messageText: text })
+    this.setState({ messageText: text, isValueNull: false })
   }
 
   sendMessage = () => {
+    const { destUser, user } = this.state
+    this.ref.set({
+      userKey: destUser.key
+    })
+    this.refDest.set({
+      userKey: user
+    })
+
     const { messageText } = this.state
+    if (messageText === "") this.setState({ isValueNull: true })
     const newMessage = {
       content: messageText,
-      date: new Date(),
+      date: firebase.database().getServerTime(),
       source: "1"
     }
 
     this.ref
+      .collection("messages")
       .add({
         content: newMessage.content,
         date: newMessage.date,
@@ -100,6 +115,7 @@ export default class Conversas extends Component {
     const translator = TranslatorFactory.createTranslator()
     translator.translate(messageText, "en").then(translated => {
       this.refDest
+        .collection("messages")
         .add({
           content: newMessage.content,
           date: newMessage.date,
@@ -110,15 +126,21 @@ export default class Conversas extends Component {
         .catch(error => error)
     })
 
-    this.setState({ messageText: "" })
+    this.setState({ messageText: "", isValueNull: true })
   }
 
   render() {
-    const { messages, messageText } = this.state
+    const { messages, messageText, isValueNull, destUser } = this.state
+    const { navigation } = this.props
+    // firebase.auth().signOut()
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-        <ChatHeader />
+        <ChatHeader
+          userName={destUser.contactName}
+          userPhoto={destUser.profile_img_url}
+          navigation={navigation}
+        />
         <View style={styles.chatContainer}>
           <ChatContainer messages={messages} />
         </View>
@@ -127,6 +149,7 @@ export default class Conversas extends Component {
             value={messageText}
             onPress={this.sendMessage}
             onChangeHandler={text => this.onChangeHandler(text)}
+            isValueNull={isValueNull}
           />
         </View>
       </View>
