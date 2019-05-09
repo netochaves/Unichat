@@ -2,9 +2,23 @@ import React, { Component } from "react"
 import { Svg, Path } from "react-native-svg"
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import { moderateScale } from "react-native-size-matters"
+import {
+  Menu,
+  MenuProvider,
+  MenuTrigger,
+  MenuOption,
+  MenuOptions
+} from "react-native-popup-menu"
 
 const styles = StyleSheet.create({
   // Estilo para a mensagem do remetente
+  menu: {
+    flexDirection: "row",
+    alignSelf: "flex-start",
+    marginLeft: 10,
+    marginTop: 5,
+    marginRight: 60
+  },
   remet: {
     marginTop: 5,
     flexDirection: "row",
@@ -148,30 +162,37 @@ export default class Mensagem extends Component {
       // Destinatario
       message = (
         <View style={styles.dest}>
-          <TouchableOpacity
-            onLongPress={() => {
-              this.verLinguaOriginal()
-            }}
-          >
-            <View style={styles.arrowDest}>
-              <Svg
-                width={moderateScale(15.5, 0.6)}
-                height={moderateScale(17.5, 0.6)}
-                viewBox="32.484 17.5 15.515 17.5"
-                enable-background="new 32.485 17.5 15.515 17.5"
-              >
-                <Path
-                  d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
-                  fill="white"
-                  x="0"
-                  y="0"
+          <MenuProvider>
+            <Menu style={styles.menu}>
+              <MenuTrigger triggerOnLongPress="true">
+                <View style={styles.arrowDest}>
+                  <Svg
+                    width={moderateScale(15.5, 0.6)}
+                    height={moderateScale(17.5, 0.6)}
+                    viewBox="32.484 17.5 15.515 17.5"
+                    enable-background="new 32.485 17.5 15.515 17.5"
+                  >
+                    <Path
+                      d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
+                      fill="white"
+                      x="0"
+                      y="0"
+                    />
+                  </Svg>
+                </View>
+                <View style={styles.boxDest}>
+                  <Text style={styles.textDest}>{content}</Text>
+                </View>
+              </MenuTrigger>
+              <MenuOptions>
+                <MenuOption
+                  onSelect={() => this.verLinguaOriginal()}
+                  text="Traduzir para idioma original"
                 />
-              </Svg>
-            </View>
-            <View style={styles.boxDest}>
-              <Text style={styles.textDest}>{content}</Text>
-            </View>
-          </TouchableOpacity>
+              </MenuOptions>
+            </Menu>
+          </MenuProvider>
+
           <View style={styles.dateDest}>
             <Text style={styles.texto}>{date}</Text>
           </View>
