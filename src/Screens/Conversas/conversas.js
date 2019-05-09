@@ -7,7 +7,8 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  BackHandler
+  BackHandler,
+  Alert
 } from "react-native"
 import { ListItem, Icon } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
@@ -76,6 +77,24 @@ export default class Conversas extends Component {
     navigation.navigate("ChatScreen", { item })
   }
 
+  deleteChat = item => {
+    const { conversas } = this.state
+    
+    conversas.map(conversa => {
+      if(conversa.key === item.key) {
+        this.ref.collection("conversas").doc(item.key).collection("messages")
+        .get()
+        .then(snapshot => {
+          snapshot.docs.forEach(docs => {
+            docs.ref.delete()
+          })
+        })
+        this.ref.collection("conversas").doc(item.key).delete()
+      }
+      return true
+    })
+  }
+
   newConversa = () => {
     const { navigation } = this.props
     navigation.navigate("ContactsScreen")
@@ -109,6 +128,9 @@ export default class Conversas extends Component {
               <ListItem
                 onPress={() => {
                   this.goToChat(item.contact)
+                }}
+                onLongPress={() => {
+                  this.deleteChat(item.contact)
                 }}
                 style={styles.conversa}
                 subtitle={
