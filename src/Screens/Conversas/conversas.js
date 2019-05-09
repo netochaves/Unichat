@@ -77,6 +77,21 @@ export default class Conversas extends Component {
     navigation.navigate("ChatScreen", { item })
   }
 
+  confirmDelete = item => {
+    Alert.alert(
+      "Apagar",
+      "Deseja apagar a conversa?",
+      [
+        { text: "Sim", onPress: () => this.deleteChat(item) },
+        {
+          text: "Não",
+          style: "cancel"
+        }
+      ],
+      { cancelable: false }
+    )
+  }
+
   deleteChat = item => {
     const { conversas } = this.state
     
@@ -130,7 +145,7 @@ export default class Conversas extends Component {
                   this.goToChat(item.contact)
                 }}
                 onLongPress={() => {
-                  this.deleteChat(item.contact)
+                  this.confirmDelete(item.contact)
                 }}
                 style={styles.conversa}
                 subtitle={
