@@ -30,6 +30,7 @@ const Chat = props => {
               }
               date={getTime(message.date)}
               source={message.source}
+              original={message.content}
             />
           )
         })}
