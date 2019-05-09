@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { Svg, Path } from "react-native-svg"
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import { moderateScale } from "react-native-size-matters"
 
 const styles = StyleSheet.create({
@@ -85,10 +85,37 @@ const styles = StyleSheet.create({
 })
 
 export default class Mensagem extends Component {
-  state = {}
+  constructor() {
+    super()
+    this.state = {
+      content: "",
+      date: "",
+      source: "",
+      original: ""
+    }
+  }
+
+  componentDidMount() {
+    const { content, date, source, original } = this.props
+
+    this.setState({ content, date, source, original })
+  }
+
+  verLinguaOriginal = () => {
+    const { original } = this.state
+    Alert.alert(
+      "Confirmar",
+      "Deseja ver a mensagem na linguagem original?",
+      [
+        { text: "Sim", onPress: () => this.setState({ content: original }) },
+        { text: "Não" }
+      ],
+      { cancelable: false }
+    )
+  }
 
   render() {
-    const { content, date, source } = this.props
+    const { content, date, source } = this.state
     let message
     // Remetente
     if (source === "1") {
@@ -121,24 +148,30 @@ export default class Mensagem extends Component {
       // Destinatario
       message = (
         <View style={styles.dest}>
-          <View style={styles.arrowDest}>
-            <Svg
-              width={moderateScale(15.5, 0.6)}
-              height={moderateScale(17.5, 0.6)}
-              viewBox="32.484 17.5 15.515 17.5"
-              enable-background="new 32.485 17.5 15.515 17.5"
-            >
-              <Path
-                d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
-                fill="white"
-                x="0"
-                y="0"
-              />
-            </Svg>
-          </View>
-          <View style={styles.boxDest}>
-            <Text style={styles.textDest}>{content}</Text>
-          </View>
+          <TouchableOpacity
+            onLongPress={() => {
+              this.verLinguaOriginal()
+            }}
+          >
+            <View style={styles.arrowDest}>
+              <Svg
+                width={moderateScale(15.5, 0.6)}
+                height={moderateScale(17.5, 0.6)}
+                viewBox="32.484 17.5 15.515 17.5"
+                enable-background="new 32.485 17.5 15.515 17.5"
+              >
+                <Path
+                  d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
+                  fill="white"
+                  x="0"
+                  y="0"
+                />
+              </Svg>
+            </View>
+            <View style={styles.boxDest}>
+              <Text style={styles.textDest}>{content}</Text>
+            </View>
+          </TouchableOpacity>
           <View style={styles.dateDest}>
             <Text style={styles.texto}>{date}</Text>
           </View>
