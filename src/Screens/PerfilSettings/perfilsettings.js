@@ -88,8 +88,8 @@ export default class PerfilSettings extends Component {
           }
         }
 
-        this.setState(state)
-      })
+          this.setState(state)
+        })
   }
 
   handleChooseImage = () => {
