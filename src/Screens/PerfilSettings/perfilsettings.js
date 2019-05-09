@@ -69,27 +69,29 @@ export default class PerfilSettings extends Component {
     const user = firebase.auth().currentUser
     const { img } = this.state
 
-    firebase
-      .storage()
-      .ref(`profile_pics/${user.uid}`)
-      .putFile(img.path)
-      .on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => {
-        let state = {}
-        state = {
-          ...state,
-          progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Progress bar
-        }
-        if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-          Alert.alert("Image upload successful.")
+    if (img !== placeHolder[0]) {
+      firebase
+        .storage()
+        .ref(`profile_pics/${user.uid}`)
+        .putFile(img.path)
+        .on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => {
+          let state = {}
           state = {
-            uploading: false,
-            progress: 0,
-            profileImageUrl: snapshot.downloadURL
+            ...state,
+            progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Progress bar
           }
-        }
+          if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+            Alert.alert("Image upload successful.")
+            state = {
+              uploading: false,
+              progress: 0,
+              profileImageUrl: snapshot.downloadURL
+            }
+          }
 
-        this.setState(state)
-      })
+          this.setState(state)
+        })
+    }
   }
 
   handleChooseImage = () => {
