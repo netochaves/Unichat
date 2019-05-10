@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Dimensions,
   BackHandler,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
@@ -32,7 +33,6 @@ export default class PerfilSettings extends Component {
       profileImageUrl: "",
       disabled: true,
       uploading: false,
-      progress: 0
     }
   }
 
@@ -80,13 +80,11 @@ export default class PerfilSettings extends Component {
         let state = {}
         state = {
           ...state,
-          progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Progress bar
         }
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
           state = {
             disabled: false,
             uploading: false,
-            progress: 0,
             profileImageUrl: snapshot.downloadURL
           }
         }
@@ -119,7 +117,7 @@ export default class PerfilSettings extends Component {
   }
 
   render() {
-    const { language, code, img, disabled, uploading, progress } = this.state
+    const { language, code, img, disabled, uploading } = this.state
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="position">
@@ -134,7 +132,11 @@ export default class PerfilSettings extends Component {
               <Image
                 source={{ uri: img.uri }}
                 style={styles.imagePlaceHolder}
+                blurRadius={uploading ? 5 : 0}
               />
+            )}
+            {uploading && (
+              <ActivityIndicator size={64} color="#6AC3FB" style={styles.loadingIcon} />
             )}
           </TouchableOpacity>
           <TouchableOpacity
@@ -144,9 +146,6 @@ export default class PerfilSettings extends Component {
             <Icon name="create" />
           </TouchableOpacity>
         </View>
-        {uploading && (
-          <View style={[styles.progressBar, { width: `${progress}%` }]} />
-        )}
         <Text style={styles.labeltext}>Nome:</Text>
         <TextInput
           style={styles.entrada}
@@ -189,7 +188,7 @@ export default class PerfilSettings extends Component {
   }
 }
 
-const comprimento = Dimensions.get("window").width
+const screenWidth = Dimensions.get("window").width
 
 const styles = StyleSheet.create({
   container: {
@@ -206,18 +205,18 @@ const styles = StyleSheet.create({
   image: {
     justifyContent: "center",
     alignItems: "center",
-    width: (comprimento - 50) / 2,
-    height: (comprimento - 50) / 2,
+    width: (screenWidth - 50) / 2,
+    height: (screenWidth - 50) / 2,
     marginTop: 10,
-    borderRadius: (comprimento - 50) / 4,
+    borderRadius: (screenWidth - 50) / 4,
     borderColor: "#6AC3FB",
     borderWidth: 2,
     alignSelf: "center"
   },
   imagePlaceHolder: {
-    width: (comprimento - 54) / 2,
-    height: (comprimento - 54) / 2,
-    borderRadius: (comprimento - 54) / 4
+    width: (screenWidth - 54) / 2,
+    height: (screenWidth - 54) / 2,
+    borderRadius: (screenWidth - 54) / 4
   },
   roundbutton: {
     borderWidth: 1,
@@ -264,11 +263,13 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     marginRight: 40
   },
-  progressBar: {
-    backgroundColor: "#6AC3FB",
-    height: 5,
-    borderRadius: 20,
-    marginTop: 20,
-    shadowColor: "#000",
+  loadingIcon: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: "center",
+    justifyContent: "center"
   }
 })
