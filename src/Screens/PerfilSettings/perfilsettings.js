@@ -11,7 +11,8 @@ import {
   Dimensions,
   Alert,
   BackHandler,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Keyboard
 } from "react-native"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
@@ -88,8 +89,8 @@ export default class PerfilSettings extends Component {
           }
         }
 
-          this.setState(state)
-        })
+        this.setState(state)
+      })
   }
 
   handleChooseImage = () => {
@@ -154,7 +155,10 @@ export default class PerfilSettings extends Component {
         <View style={styles.languagePicker}>
           <Picker
             selectedValue={code}
-            onValueChange={itemValue => this.setState({ code: itemValue })}
+            onValueChange={itemValue => {
+              this.setState({ code: itemValue })
+              Keyboard.dismiss()
+            }}
           >
             <Picker.Item label="Escolha seu idioma" value="" />
             {language.map(item => (
