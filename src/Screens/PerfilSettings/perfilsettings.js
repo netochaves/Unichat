@@ -9,7 +9,6 @@ import {
   Picker,
   StyleSheet,
   Dimensions,
-  Alert,
   BackHandler,
   KeyboardAvoidingView
 } from "react-native"
@@ -31,7 +30,9 @@ export default class PerfilSettings extends Component {
       userName: "",
       eMail: "",
       profileImageUrl: "",
-      disabled: true
+      disabled: true,
+      uploading: false,
+      progress: 0
     }
   }
 
@@ -69,6 +70,7 @@ export default class PerfilSettings extends Component {
   uploadphotos = () => {
     const user = firebase.auth().currentUser
     const { img } = this.state
+    this.setState({uploading: true})
 
     firebase
       .storage()
@@ -81,9 +83,9 @@ export default class PerfilSettings extends Component {
           progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Progress bar
         }
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-          Alert.alert("Imagem salva com sucesso.")
           state = {
             disabled: false,
+            uploading: false,
             progress: 0,
             profileImageUrl: snapshot.downloadURL
           }
@@ -117,7 +119,7 @@ export default class PerfilSettings extends Component {
   }
 
   render() {
-    const { language, code, img, disabled } = this.state
+    const { language, code, img, disabled, uploading, progress } = this.state
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="position">
@@ -142,6 +144,9 @@ export default class PerfilSettings extends Component {
             <Icon name="create" />
           </TouchableOpacity>
         </View>
+        {uploading && (
+          <View style={[styles.progressBar, { width: `${progress}%` }]} />
+        )}
         <Text style={styles.labeltext}>Nome:</Text>
         <TextInput
           style={styles.entrada}
@@ -258,5 +263,12 @@ const styles = StyleSheet.create({
     borderColor: "#6AC3FB",
     marginLeft: 40,
     marginRight: 40
+  },
+  progressBar: {
+    backgroundColor: "#6AC3FB",
+    height: 5,
+    borderRadius: 20,
+    marginTop: 20,
+    shadowColor: "#000",
   }
 })
