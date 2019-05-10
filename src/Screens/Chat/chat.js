@@ -26,7 +26,8 @@ export default class Conversas extends Component {
       messages: [],
       user: firebase.auth().currentUser.uid,
       isValueNull: true,
-      destUser: navigation.getParam("item")
+      destUser: navigation.getParam("item"),
+      destLanguage: ""
     }
     const { user, destUser } = this.state
     this.ref = firebase
@@ -43,11 +44,24 @@ export default class Conversas extends Component {
       .collection("conversas")
       .doc(user)
 
-    TranslatorConfiguration.setConfig(
-      ProviderTypes.Google,
-      "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
-      "en"
-    )
+    firebase
+      .firestore()
+      .collection("users")
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.docs.forEach(doc => {
+          if (doc.id === destUser.key) {
+            // eslint-disable-next-line camelcase
+            const { language_code } = doc.data()
+            TranslatorConfiguration.setConfig(
+              ProviderTypes.Google,
+              "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
+              language_code
+            )
+            this.setState({ destLanguage: language_code })
+          }
+        })
+      })
   }
 
   componentDidMount() {
@@ -86,7 +100,7 @@ export default class Conversas extends Component {
   }
 
   sendMessage = () => {
-    const { destUser, user } = this.state
+    const { destUser, user, destLanguage } = this.state
     this.ref.set({
       userKey: destUser.key
     })
@@ -113,7 +127,7 @@ export default class Conversas extends Component {
       .catch(error => error)
 
     const translator = TranslatorFactory.createTranslator()
-    translator.translate(messageText, "en").then(translated => {
+    translator.translate(messageText, destLanguage).then(translated => {
       this.refDest
         .collection("messages")
         .add({
