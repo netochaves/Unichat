@@ -30,7 +30,8 @@ export default class PerfilSettings extends Component {
       img: placeHolder[0],
       userName: "",
       eMail: "",
-      profileImageUrl: ""
+      profileImageUrl: "",
+      disabled: true
     }
   }
 
@@ -82,7 +83,7 @@ export default class PerfilSettings extends Component {
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
           Alert.alert("Image upload successful.")
           state = {
-            uploading: false,
+            disabled: false,
             progress: 0,
             profileImageUrl: snapshot.downloadURL
           }
@@ -113,7 +114,7 @@ export default class PerfilSettings extends Component {
   }
 
   render() {
-    const { language, code, img } = this.state
+    const { language, code, img, disabled } = this.state
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="position">
@@ -166,8 +167,12 @@ export default class PerfilSettings extends Component {
             ))}
           </Picker>
         </View>
-        <TouchableOpacity onPress={this.confirmPerfilSettings}>
-          <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
+        <TouchableOpacity 
+          onPress={this.confirmPerfilSettings}
+          disabled={disabled}>
+          <LinearGradient 
+            colors={disabled ? ["#9b9fa5", "#9b9fa5"] : ["#547BF0", "#6AC3FB"]} 
+            style={styles.buttonEnable}>
             <Text style={styles.textButton}>Cadastrar</Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -225,7 +230,7 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     marginRight: 40
   },
-  button: {
+  buttonEnable: {
     borderRadius: 20,
     justifyContent: "center",
     height: 60,
