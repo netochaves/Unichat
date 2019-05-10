@@ -96,7 +96,10 @@ export default class PerfilSettings extends Component {
   handleChooseImage = () => {
     const options = {
       noData: true,
-      title: "Escolha uma foto"
+      title: "Escolha uma foto",
+      cancelButtonTitle: "Sair",
+      takePhotoButtonTitle: "Tirar uma foto",
+      chooseFromLibraryButtonTitle: "Escolha uma foto da galeria"
     }
 
     ImagePicker.showImagePicker(options, response => {
