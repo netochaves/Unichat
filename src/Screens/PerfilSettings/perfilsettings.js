@@ -81,7 +81,7 @@ export default class PerfilSettings extends Component {
           progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100 // Progress bar
         }
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-          Alert.alert("Image upload successful.")
+          Alert.alert("Imagem salva com sucesso.")
           state = {
             disabled: false,
             progress: 0,
