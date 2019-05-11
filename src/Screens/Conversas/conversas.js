@@ -55,36 +55,6 @@ export default class Conversas extends Component {
     return true
   }
 
-  getNumMsgsNaoLidas = () => {
-    const { conversas } = this.state
-    // Alert.alert("Check", "1")
-    conversas.map((conversa, i) => {
-      // Alert.alert("Check", "2")
-      this.ref
-        .collection("conversas")
-        .doc(conversa.key)
-        .collection("messages")
-        .onSnapshot(snapshot => {
-          snapshot.forEach(msg => {
-            const { source, unread } = msg.data()
-            if (source === "2") {
-              if (unread) {
-                conversas[i].numUnreadMsgs += 1
-              }
-            }
-          })
-          if (conversas[i].numUnreadMsgs > 0) {
-            conversas[i].unreadMsgs = true
-          }
-          Alert.alert(
-            "Num msgs na conversa",
-            conversas[i].numUnreadMsgs.toString()
-          )
-        })
-      return true
-    })
-  }
-
   getData = async () => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
       const contacts = JSON.parse(contactsResponse)
@@ -93,19 +63,19 @@ export default class Conversas extends Component {
         querySnapshot.forEach(doc => {
           contacts.forEach(contact => {
             if (contact.key === doc.id) {
+              const { numUnreadMsgs, unreadMsgs } = doc.data()
               conversas.push({
                 contact,
                 key: doc.id,
                 profileImage: contact.profile_img_url,
                 contactName: contact.contactName,
-                unreadMsgs: false,
-                numUnreadMsgs: 0
+                unreadMsgs,
+                numUnreadMsgs
               })
             }
           })
         })
         this.setState({ conversas })
-        this.getNumMsgsNaoLidas()
       })
     })
   }
@@ -184,41 +154,38 @@ export default class Conversas extends Component {
           data={conversas}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity
+              <ListItem
                 onPress={() => {
                   this.goToChat(item.contact)
                 }}
                 onLongPress={() => {
                   this.confirmDelete(item.contact)
                 }}
-              >
-                <ListItem
-                  style={styles.conversa}
-                  subtitle={
-                    <View style={styles.containerSub}>
-                      <Text style={styles.name}>{item.contactName}</Text>
-                      <Text style={styles.lastMsg}>{item.lastMessage}</Text>
-                      <View style={styles.rightInformation}>
-                        <Text style={styles.data}>{item.lastMessage}</Text>
-                        {item.unreadMsgs && (
-                          <LinearGradient
-                            colors={["#547BF0", "#6AC3FB"]}
-                            style={styles.cont}
-                          >
-                            <Text style={styles.unread}>
-                              {item.numUnreadMsgs}
-                            </Text>
-                          </LinearGradient>
-                        )}
-                      </View>
+                style={styles.conversa}
+                subtitle={
+                  <View style={styles.containerSub}>
+                    <Text style={styles.name}>{item.contactName}</Text>
+                    <Text style={styles.lastMsg}>{item.lastMessage}</Text>
+                    <View style={styles.rightInformation}>
+                      <Text style={styles.data}>{item.lastMessage}</Text>
+                      {item.unreadMsgs && (
+                        <LinearGradient
+                          colors={["#547BF0", "#6AC3FB"]}
+                          style={styles.cont}
+                        >
+                          <Text style={styles.unread}>
+                            {item.numUnreadMsgs}
+                          </Text>
+                        </LinearGradient>
+                      )}
                     </View>
-                  }
-                  leftAvatar={{
-                    source: { uri: item.profileImage },
-                    size: "medium"
-                  }}
-                />
-              </TouchableOpacity>
+                  </View>
+                }
+                leftAvatar={{
+                  source: { uri: item.profileImage },
+                  size: "medium"
+                }}
+              />
             )
           }}
           keyExtractor={i => i.key}
