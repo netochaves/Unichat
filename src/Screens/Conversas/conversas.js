@@ -63,14 +63,21 @@ export default class Conversas extends Component {
         querySnapshot.forEach(doc => {
           contacts.forEach(contact => {
             if (contact.key === doc.id) {
-              const { numUnreadMsgs, unreadMsgs } = doc.data()
+              const {
+                numUnreadMsgs,
+                unreadMsgs,
+                lastMessage,
+                dateLastMessage
+              } = doc.data()
               conversas.push({
                 contact,
                 key: doc.id,
                 profileImage: contact.profile_img_url,
                 contactName: contact.contactName,
                 unreadMsgs,
-                numUnreadMsgs
+                numUnreadMsgs,
+                lastMessage,
+                dateLastMessage
               })
             }
           })
@@ -167,7 +174,9 @@ export default class Conversas extends Component {
                     <Text style={styles.name}>{item.contactName}</Text>
                     <Text style={styles.lastMsg}>{item.lastMessage}</Text>
                     <View style={styles.rightInformation}>
-                      <Text style={styles.data}>{item.lastMessage}</Text>
+                      <Text style={styles.data}>
+                        {item.dateLastMessage.toDate().toString()}
+                      </Text>
                       {item.unreadMsgs && (
                         <LinearGradient
                           colors={["#547BF0", "#6AC3FB"]}
