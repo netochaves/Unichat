@@ -59,7 +59,6 @@ export default class Conversas extends Component {
         const messages = []
         querySnapshot.forEach(doc => {
           const { content, contentTranslated, date, source } = doc.data()
-          const msgRef = this.ref.collection("messages").doc(doc.id)
           messages.push({
             key: doc.id,
             content,
@@ -67,13 +66,12 @@ export default class Conversas extends Component {
             date: date.toDate(),
             source
           })
-          if (source === "2") {
-            firebase.firestore().runTransaction(t => {
-              return t.get(msgRef).then(() => {
-                t.update(msgRef, { unread: false })
-              })
+          firebase.firestore().runTransaction(t => {
+            return t.get(this.ref).then(() => {
+              t.update(this.ref, { unreadMsgs: false })
+              t.update(this.ref, { numUnreadMsgs: 0 })
             })
-          }
+          })
         })
         this.setState({ messages })
       })
@@ -95,11 +93,34 @@ export default class Conversas extends Component {
 
   sendMessage = () => {
     const { destUser, user } = this.state
-    this.ref.set({
-      userKey: destUser.key
+    this.ref.get().then(doc => {
+      if (!doc.exists) {
+        this.ref.set({
+          userKey: destUser.key,
+          unreadMsgs: false,
+          numUnreadMsgs: 0
+        })
+      }
     })
-    this.refDest.set({
-      userKey: user
+
+    this.refDest.get().then(doc => {
+      if (!doc.exists) {
+        this.refDest.set({
+          userKey: user,
+          unreadMsgs: false,
+          numUnreadMsgs: 0
+        })
+      } else {
+        this.refDest.get().then(conversa => {
+          const { numUnreadMsgs } = conversa.data()
+          firebase.firestore().runTransaction(t => {
+            return t.get(this.refDest).then(() => {
+              t.update(this.refDest, { numUnreadMsgs: numUnreadMsgs + 1 })
+              t.update(this.refDest, { unreadMsgs: true })
+            })
+          })
+        })
+      }
     })
 
     const { messageText } = this.state
@@ -115,8 +136,7 @@ export default class Conversas extends Component {
       .add({
         content: newMessage.content,
         date: newMessage.date,
-        source: newMessage.source,
-        unread: true
+        source: newMessage.source
       })
       .then(() => true)
       .catch(error => error)
@@ -129,8 +149,7 @@ export default class Conversas extends Component {
           content: newMessage.content,
           date: newMessage.date,
           contentTranslated: translated,
-          source: "2",
-          unread: true
+          source: "2"
         })
         .then(() => true)
         .catch(error => error)
