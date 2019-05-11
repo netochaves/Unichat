@@ -67,12 +67,7 @@ export default class Conversas extends Component {
             source
           })
         })
-        firebase.firestore().runTransaction(t => {
-          return t.get(this.ref).then(() => {
-            t.update(this.ref, { unreadMsgs: false })
-            t.update(this.ref, { numUnreadMsgs: 0 })
-          })
-        })
+        this.ref.update({ unreadMsgs: false, numUnreadMsgs: 0 })
         this.setState({ messages })
       })
   }
@@ -93,84 +88,88 @@ export default class Conversas extends Component {
 
   sendMessage = () => {
     const { destUser, user, messageText } = this.state
-    this.ref.get().then(doc => {
-      if (!doc.exists) {
-        this.ref.set({
-          userKey: destUser.key,
-          unreadMsgs: false,
-          numUnreadMsgs: 0,
-          lastMessage: "",
-          dateLastMessage: ""
-        })
+    if (messageText === "") {
+      this.setState({ isValueNull: true })
+    } else {
+      const newMessage = {
+        content: messageText,
+        date: firebase.database().getServerTime(),
+        source: "1"
       }
-    })
-
-    this.refDest.get().then(doc => {
-      if (!doc.exists) {
-        this.refDest.set({
-          userKey: user,
-          unreadMsgs: false,
-          numUnreadMsgs: 0,
-          lastMessage: "",
-          dateLastMessage: ""
-        })
-      } else {
-        this.refDest.get().then(conversa => {
-          const { numUnreadMsgs } = conversa.data()
-          firebase.firestore().runTransaction(t => {
-            return t.get(this.refDest).then(() => {
-              t.update(this.refDest, { numUnreadMsgs: numUnreadMsgs + 1 })
-              t.update(this.refDest, { unreadMsgs: true })
+      this.ref.get().then(doc => {
+        if (!doc.exists) {
+          this.ref.set({
+            userKey: destUser.key,
+            unreadMsgs: false,
+            numUnreadMsgs: 0,
+            lastMessage: newMessage.content,
+            dateLastMessage: newMessage.date
+          })
+        } else {
+          this.ref.update({
+            lastMessage: newMessage.content,
+            dateLastMessage: newMessage.date
+          })
+        }
+      })
+      this.refDest.get().then(doc => {
+        if (!doc.exists) {
+          this.refDest.set({
+            userKey: user,
+            unreadMsgs: false,
+            numUnreadMsgs: 0,
+            lastMessage: "",
+            dateLastMessage: ""
+          })
+          this.refDest.get().then(conversa => {
+            const { numUnreadMsgs } = conversa.data()
+            this.refDest.update({
+              numUnreadMsgs: numUnreadMsgs + 1,
+              unreadMsgs: true
             })
           })
-        })
-      }
-    })
-    if (messageText === "") this.setState({ isValueNull: true })
-    const newMessage = {
-      content: messageText,
-      date: firebase.database().getServerTime(),
-      source: "1"
-    }
-
-    this.ref
-      .collection("messages")
-      .add({
-        content: newMessage.content,
-        date: newMessage.date,
-        source: newMessage.source
-      })
-      .then(() => true)
-      .catch(error => error)
-
-    const translator = TranslatorFactory.createTranslator()
-    translator.translate(messageText, "en").then(translated => {
-      firebase.firestore().runTransaction(t => {
-        return t.get(this.refDest).then(() => {
-          t.update(this.refDest, { lastMessage: translated })
-          t.update(this.refDest, { dateLastMessage: newMessage.date })
-        })
-      })
-      firebase.firestore().runTransaction(t => {
-        return t.get(this.ref).then(() => {
-          t.update(this.ref, { lastMessage: newMessage.content })
-          t.update(this.ref, { dateLastMessage: newMessage.date })
-        })
+        } else {
+          this.refDest.get().then(conversa => {
+            const { numUnreadMsgs } = conversa.data()
+            this.refDest.update({
+              numUnreadMsgs: numUnreadMsgs + 1,
+              unreadMsgs: true
+            })
+          })
+        }
       })
 
-      this.refDest
+      this.ref
         .collection("messages")
         .add({
           content: newMessage.content,
           date: newMessage.date,
-          contentTranslated: translated,
-          source: "2"
+          source: newMessage.source
         })
         .then(() => true)
         .catch(error => error)
-    })
 
-    this.setState({ messageText: "", isValueNull: true })
+      const translator = TranslatorFactory.createTranslator()
+      translator.translate(messageText, "en").then(translated => {
+        this.refDest.update({
+          lastMessage: translated,
+          dateLastMessage: newMessage.date
+        })
+
+        this.refDest
+          .collection("messages")
+          .add({
+            content: newMessage.content,
+            date: newMessage.date,
+            contentTranslated: translated,
+            source: "2"
+          })
+          .then(() => true)
+          .catch(error => error)
+      })
+
+      this.setState({ messageText: "", isValueNull: true })
+    }
   }
 
   render() {
