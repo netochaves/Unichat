@@ -58,12 +58,43 @@ export default class Conversas extends Component {
         querySnapshot.forEach(doc => {
           contacts.forEach(contact => {
             if (contact.key === doc.id) {
-              conversas.push({
-                contact,
-                key: doc.id,
-                profileImage: contact.profile_img_url,
-                contactName: contact.contactName
-              })
+              let numUnreadMsgs = 0
+              this.ref
+                .collection("conversas")
+                .doc(doc.id)
+                .collection("messages")
+                .onSnapshot(snapshot => {
+                  snapshot.forEach(msg => {
+                    const { source, unread } = msg.data()
+                    if (source === "2") {
+                      if (unread) {
+                        Alert.alert("Numero de msgs", numUnreadMsgs.toString())
+                        numUnreadMsgs += 1
+                        Alert.alert("Numero de msgs", numUnreadMsgs.toString())
+                      }
+                    }
+                  })
+                })
+              if (numUnreadMsgs > 0) {
+                Alert.alert("Check", "Tem msgs não lidas")
+                conversas.push({
+                  contact,
+                  key: doc.id,
+                  profileImage: contact.profile_img_url,
+                  contactName: contact.contactName,
+                  unreadMsgs: true,
+                  numUnreadMsgs
+                })
+              } else {
+                // Alert.alert("Check", "Não tem msgs não lidas")
+                conversas.push({
+                  contact,
+                  key: doc.id,
+                  profileImage: contact.profile_img_url,
+                  contactName: contact.contactName,
+                  unreadMsgs: false
+                })
+              }
             }
           })
         })
@@ -94,17 +125,23 @@ export default class Conversas extends Component {
 
   deleteChat = item => {
     const { conversas } = this.state
-    
+
     conversas.map(conversa => {
-      if(conversa.key === item.key) {
-        this.ref.collection("conversas").doc(item.key).collection("messages")
-        .get()
-        .then(snapshot => {
-          snapshot.docs.forEach(docs => {
-            docs.ref.delete()
+      if (conversa.key === item.key) {
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
+          .collection("messages")
+          .get()
+          .then(snapshot => {
+            snapshot.docs.forEach(docs => {
+              docs.ref.delete()
+            })
           })
-        })
-        this.ref.collection("conversas").doc(item.key).delete()
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
+          .delete()
       }
       return true
     })
@@ -154,12 +191,16 @@ export default class Conversas extends Component {
                     <Text style={styles.lastMsg}>{item.lastMessage}</Text>
                     <View style={styles.rightInformation}>
                       <Text style={styles.data}>{item.lastMessage}</Text>
-                      <LinearGradient
-                        colors={["#547BF0", "#6AC3FB"]}
-                        style={styles.cont}
-                      >
-                        <Text style={styles.unread}>{item.unread}</Text>
-                      </LinearGradient>
+                      {item.unreadMsgs && (
+                        <LinearGradient
+                          colors={["#547BF0", "#6AC3FB"]}
+                          style={styles.cont}
+                        >
+                          <Text style={styles.unread}>
+                            {item.numUnreadMsgs}
+                          </Text>
+                        </LinearGradient>
+                      )}
                     </View>
                   </View>
                 }

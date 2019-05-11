@@ -59,6 +59,7 @@ export default class Conversas extends Component {
         const messages = []
         querySnapshot.forEach(doc => {
           const { content, contentTranslated, date, source } = doc.data()
+          const msgRef = this.ref.collection("messages").doc(doc.id)
           messages.push({
             key: doc.id,
             content,
@@ -66,6 +67,13 @@ export default class Conversas extends Component {
             date: date.toDate(),
             source
           })
+          if (source === "2") {
+            firebase.firestore().runTransaction(t => {
+              return t.get(msgRef).then(() => {
+                t.update(msgRef, { unread: false })
+              })
+            })
+          }
         })
         this.setState({ messages })
       })
@@ -107,7 +115,8 @@ export default class Conversas extends Component {
       .add({
         content: newMessage.content,
         date: newMessage.date,
-        source: newMessage.source
+        source: newMessage.source,
+        unread: true
       })
       .then(() => true)
       .catch(error => error)
@@ -120,7 +129,8 @@ export default class Conversas extends Component {
           content: newMessage.content,
           date: newMessage.date,
           contentTranslated: translated,
-          source: "2"
+          source: "2",
+          unread: true
         })
         .then(() => true)
         .catch(error => error)
