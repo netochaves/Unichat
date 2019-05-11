@@ -39,7 +39,12 @@ export default class Conversas extends Component {
         myPicture: doc.data().profile_img_url
       })
     })
-    this.getData()
+    this.unsubscribe = firebase
+      .firestore()
+      .collection("users")
+      .onSnapshot(() => {
+        this.getData()
+      })
   }
 
   componentWillUnmount() {
@@ -50,6 +55,36 @@ export default class Conversas extends Component {
     return true
   }
 
+  getNumMsgsNaoLidas = () => {
+    const { conversas } = this.state
+    // Alert.alert("Check", "1")
+    conversas.map((conversa, i) => {
+      // Alert.alert("Check", "2")
+      this.ref
+        .collection("conversas")
+        .doc(conversa.key)
+        .collection("messages")
+        .onSnapshot(snapshot => {
+          snapshot.forEach(msg => {
+            const { source, unread } = msg.data()
+            if (source === "2") {
+              if (unread) {
+                conversas[i].numUnreadMsgs += 1
+              }
+            }
+          })
+          if (conversas[i].numUnreadMsgs > 0) {
+            conversas[i].unreadMsgs = true
+          }
+          Alert.alert(
+            "Num msgs na conversa",
+            conversas[i].numUnreadMsgs.toString()
+          )
+        })
+      return true
+    })
+  }
+
   getData = async () => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
       const contacts = JSON.parse(contactsResponse)
@@ -58,47 +93,19 @@ export default class Conversas extends Component {
         querySnapshot.forEach(doc => {
           contacts.forEach(contact => {
             if (contact.key === doc.id) {
-              let numUnreadMsgs = 0
-              this.ref
-                .collection("conversas")
-                .doc(doc.id)
-                .collection("messages")
-                .onSnapshot(snapshot => {
-                  snapshot.forEach(msg => {
-                    const { source, unread } = msg.data()
-                    if (source === "2") {
-                      if (unread) {
-                        Alert.alert("Numero de msgs", numUnreadMsgs.toString())
-                        numUnreadMsgs += 1
-                        Alert.alert("Numero de msgs", numUnreadMsgs.toString())
-                      }
-                    }
-                  })
-                })
-              if (numUnreadMsgs > 0) {
-                Alert.alert("Check", "Tem msgs não lidas")
-                conversas.push({
-                  contact,
-                  key: doc.id,
-                  profileImage: contact.profile_img_url,
-                  contactName: contact.contactName,
-                  unreadMsgs: true,
-                  numUnreadMsgs
-                })
-              } else {
-                // Alert.alert("Check", "Não tem msgs não lidas")
-                conversas.push({
-                  contact,
-                  key: doc.id,
-                  profileImage: contact.profile_img_url,
-                  contactName: contact.contactName,
-                  unreadMsgs: false
-                })
-              }
+              conversas.push({
+                contact,
+                key: doc.id,
+                profileImage: contact.profile_img_url,
+                contactName: contact.contactName,
+                unreadMsgs: false,
+                numUnreadMsgs: 0
+              })
             }
           })
         })
         this.setState({ conversas })
+        this.getNumMsgsNaoLidas()
       })
     })
   }
@@ -177,38 +184,41 @@ export default class Conversas extends Component {
           data={conversas}
           renderItem={({ item }) => {
             return (
-              <ListItem
+              <TouchableOpacity
                 onPress={() => {
                   this.goToChat(item.contact)
                 }}
                 onLongPress={() => {
                   this.confirmDelete(item.contact)
                 }}
-                style={styles.conversa}
-                subtitle={
-                  <View style={styles.containerSub}>
-                    <Text style={styles.name}>{item.contactName}</Text>
-                    <Text style={styles.lastMsg}>{item.lastMessage}</Text>
-                    <View style={styles.rightInformation}>
-                      <Text style={styles.data}>{item.lastMessage}</Text>
-                      {item.unreadMsgs && (
-                        <LinearGradient
-                          colors={["#547BF0", "#6AC3FB"]}
-                          style={styles.cont}
-                        >
-                          <Text style={styles.unread}>
-                            {item.numUnreadMsgs}
-                          </Text>
-                        </LinearGradient>
-                      )}
+              >
+                <ListItem
+                  style={styles.conversa}
+                  subtitle={
+                    <View style={styles.containerSub}>
+                      <Text style={styles.name}>{item.contactName}</Text>
+                      <Text style={styles.lastMsg}>{item.lastMessage}</Text>
+                      <View style={styles.rightInformation}>
+                        <Text style={styles.data}>{item.lastMessage}</Text>
+                        {item.unreadMsgs && (
+                          <LinearGradient
+                            colors={["#547BF0", "#6AC3FB"]}
+                            style={styles.cont}
+                          >
+                            <Text style={styles.unread}>
+                              {item.numUnreadMsgs}
+                            </Text>
+                          </LinearGradient>
+                        )}
+                      </View>
                     </View>
-                  </View>
-                }
-                leftAvatar={{
-                  source: { uri: item.profileImage },
-                  size: "medium"
-                }}
-              />
+                  }
+                  leftAvatar={{
+                    source: { uri: item.profileImage },
+                    size: "medium"
+                  }}
+                />
+              </TouchableOpacity>
             )
           }}
           keyExtractor={i => i.key}
