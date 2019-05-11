@@ -86,6 +86,16 @@ export default class Conversas extends Component {
     this.setState({ messageText: text, isValueNull: false })
   }
 
+  proccessLastMsg = string => {
+    let strProcs = ""
+    if (string.length >= 25) {
+      strProcs = `${string.substr(0, 25)}...`
+    } else {
+      strProcs = string
+    }
+    return strProcs
+  }
+
   sendMessage = () => {
     const { destUser, user, messageText } = this.state
     if (messageText === "") {
@@ -102,12 +112,12 @@ export default class Conversas extends Component {
             userKey: destUser.key,
             unreadMsgs: false,
             numUnreadMsgs: 0,
-            lastMessage: newMessage.content,
+            lastMessage: this.proccessLastMsg(newMessage.content),
             dateLastMessage: newMessage.date
           })
         } else {
           this.ref.update({
-            lastMessage: newMessage.content,
+            lastMessage: this.proccessLastMsg(newMessage.content),
             dateLastMessage: newMessage.date
           })
         }
@@ -152,7 +162,7 @@ export default class Conversas extends Component {
       const translator = TranslatorFactory.createTranslator()
       translator.translate(messageText, "en").then(translated => {
         this.refDest.update({
-          lastMessage: translated,
+          lastMessage: this.proccessLastMsg(translated),
           dateLastMessage: newMessage.date
         })
 
