@@ -14,6 +14,7 @@ import { ListItem, Icon } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
+import getTime from "~/functions/getTime"
 
 export default class Conversas extends Component {
   constructor() {
@@ -138,6 +139,24 @@ export default class Conversas extends Component {
 
   search = () => {}
 
+  parseTime = dateNanoScds => {
+    const date = dateNanoScds.toDate()
+    const atualDate = firebase.database().getServerTime()
+    let textDate = ""
+    if (atualDate.getDate() - date.getDate() === 0) {
+      textDate = getTime(date)
+    } else if (atualDate.getDate() - date.getDate() === 1) {
+      textDate = "Ontem"
+    } else if (atualDate.getDate() - date.getDate() >= 7) {
+      textDate = `${date
+        .getDate()
+        .toString()}/${date
+        .getMonth()
+        .toString()}/${date.getFullYear().toString()}`
+    }
+    return textDate
+  }
+
   render() {
     const { conversas, myName, myPicture } = this.state
     return (
@@ -175,7 +194,7 @@ export default class Conversas extends Component {
                     <Text style={styles.lastMsg}>{item.lastMessage}</Text>
                     <View style={styles.rightInformation}>
                       <Text style={styles.data}>
-                        {item.dateLastMessage.toDate().toString()}
+                        {this.parseTime(item.dateLastMessage)}
                       </Text>
                       {item.unreadMsgs && (
                         <LinearGradient
