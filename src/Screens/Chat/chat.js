@@ -66,11 +66,11 @@ export default class Conversas extends Component {
             date: date.toDate(),
             source
           })
-          firebase.firestore().runTransaction(t => {
-            return t.get(this.ref).then(() => {
-              t.update(this.ref, { unreadMsgs: false })
-              t.update(this.ref, { numUnreadMsgs: 0 })
-            })
+        })
+        firebase.firestore().runTransaction(t => {
+          return t.get(this.ref).then(() => {
+            t.update(this.ref, { unreadMsgs: false })
+            t.update(this.ref, { numUnreadMsgs: 0 })
           })
         })
         this.setState({ messages })
@@ -92,13 +92,15 @@ export default class Conversas extends Component {
   }
 
   sendMessage = () => {
-    const { destUser, user } = this.state
+    const { destUser, user, messageText } = this.state
     this.ref.get().then(doc => {
       if (!doc.exists) {
         this.ref.set({
           userKey: destUser.key,
           unreadMsgs: false,
-          numUnreadMsgs: 0
+          numUnreadMsgs: 0,
+          lastMessage: "",
+          dateLastMessage: ""
         })
       }
     })
@@ -108,7 +110,9 @@ export default class Conversas extends Component {
         this.refDest.set({
           userKey: user,
           unreadMsgs: false,
-          numUnreadMsgs: 0
+          numUnreadMsgs: 0,
+          lastMessage: "",
+          dateLastMessage: ""
         })
       } else {
         this.refDest.get().then(conversa => {
@@ -122,8 +126,6 @@ export default class Conversas extends Component {
         })
       }
     })
-
-    const { messageText } = this.state
     if (messageText === "") this.setState({ isValueNull: true })
     const newMessage = {
       content: messageText,
@@ -143,6 +145,19 @@ export default class Conversas extends Component {
 
     const translator = TranslatorFactory.createTranslator()
     translator.translate(messageText, "en").then(translated => {
+      firebase.firestore().runTransaction(t => {
+        return t.get(this.refDest).then(() => {
+          t.update(this.refDest, { lastMessage: translated })
+          t.update(this.refDest, { dateLastMessage: newMessage.date })
+        })
+      })
+      firebase.firestore().runTransaction(t => {
+        return t.get(this.ref).then(() => {
+          t.update(this.ref, { lastMessage: newMessage.content })
+          t.update(this.ref, { dateLastMessage: newMessage.date })
+        })
+      })
+
       this.refDest
         .collection("messages")
         .add({
