@@ -56,16 +56,26 @@ export default class Conversas extends Component {
       this.ref.collection("conversas").onSnapshot(querySnapshot => {
         const conversas = []
         querySnapshot.forEach(doc => {
+          let find = false
+          const { contactPhoto, contactName } = doc.data()
           contacts.forEach(contact => {
             if (contact.key === doc.id) {
               conversas.push({
                 contact,
                 key: doc.id,
-                profileImage: contact.profile_img_url,
+                contactPhoto,
                 contactName: contact.contactName
               })
+              find = true
             }
           })
+          if (find === false) {
+            conversas.push({
+              key: doc.id,
+              contactPhoto,
+              contactName
+            })
+          }
         })
         this.setState({ conversas })
       })
@@ -94,17 +104,23 @@ export default class Conversas extends Component {
 
   deleteChat = item => {
     const { conversas } = this.state
-    
+
     conversas.map(conversa => {
-      if(conversa.key === item.key) {
-        this.ref.collection("conversas").doc(item.key).collection("messages")
-        .get()
-        .then(snapshot => {
-          snapshot.docs.forEach(docs => {
-            docs.ref.delete()
+      if (conversa.key === item.key) {
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
+          .collection("messages")
+          .get()
+          .then(snapshot => {
+            snapshot.docs.forEach(docs => {
+              docs.ref.delete()
+            })
           })
-        })
-        this.ref.collection("conversas").doc(item.key).delete()
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
+          .delete()
       }
       return true
     })
@@ -142,10 +158,10 @@ export default class Conversas extends Component {
             return (
               <ListItem
                 onPress={() => {
-                  this.goToChat(item.contact)
+                  this.goToChat(item)
                 }}
                 onLongPress={() => {
-                  this.confirmDelete(item.contact)
+                  this.confirmDelete(item)
                 }}
                 style={styles.conversa}
                 subtitle={
@@ -164,7 +180,7 @@ export default class Conversas extends Component {
                   </View>
                 }
                 leftAvatar={{
-                  source: { uri: item.profileImage },
+                  source: { uri: item.contactPhoto },
                   size: "medium"
                 }}
               />

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { Component } from "react"
 
 import { View, StyleSheet, StatusBar, BackHandler } from "react-native"
@@ -25,6 +26,7 @@ export default class Conversas extends Component {
       messageText: "",
       messages: [],
       user: firebase.auth().currentUser.uid,
+      userData: null,
       isValueNull: true,
       destUser: navigation.getParam("item")
     }
@@ -42,6 +44,16 @@ export default class Conversas extends Component {
       .doc(destUser.key)
       .collection("conversas")
       .doc(user)
+
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(user)
+      .get()
+      .then(us => {
+        const { phone, profile_img_url } = us.data()
+        this.setState({ userData: { phone, profile_img_url } })
+      })
 
     TranslatorConfiguration.setConfig(
       ProviderTypes.Google,
@@ -86,12 +98,16 @@ export default class Conversas extends Component {
   }
 
   sendMessage = () => {
-    const { destUser, user } = this.state
+    const { destUser, user, userData } = this.state
     this.ref.set({
-      userKey: destUser.key
+      userKey: destUser.key,
+      contactName: destUser.contactName,
+      contactPhoto: destUser.contactPhoto
     })
     this.refDest.set({
-      userKey: user
+      userKey: user,
+      contactName: userData.phone,
+      contactPhoto: userData.profile_img_url
     })
 
     const { messageText } = this.state
@@ -138,7 +154,7 @@ export default class Conversas extends Component {
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <ChatHeader
           userName={destUser.contactName}
-          userPhoto={destUser.profile_img_url}
+          userPhoto={destUser.contactPhoto}
           navigation={navigation}
         />
         <View style={styles.chatContainer}>

@@ -58,7 +58,7 @@ export default class Contatos extends Component {
                 ...contactFromPhone,
                 contactName,
                 key: doc.id,
-                profile_img_url
+                contactPhoto: profile_img_url
               })
             }
           }
@@ -113,7 +113,7 @@ export default class Contatos extends Component {
                       : null
                   }
                   leftAvatar={
-                    item.profile_img_url === "" ? (
+                    item.contactPhoto === "" ? (
                       <Avatar
                         rounded
                         icon={{ name: "user", type: "font-awesome" }}
@@ -121,7 +121,7 @@ export default class Contatos extends Component {
                       />
                     ) : (
                       {
-                        source: { uri: item.profile_img_url },
+                        source: { uri: item.contactPhoto },
                         size: "medium"
                       }
                     )
