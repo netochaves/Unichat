@@ -1,10 +1,9 @@
 import React, { Component } from "react"
 import {
   View,
-  Text,
-  StyleSheet,
-  TouchableOpacity
 } from "react-native"
+import ConfigHeader from "~/Components/Config/configHeader"
+import ConfigBody from "~/Components/Config/configBody"
 
 export default class Config extends Component {
   constructor() {
@@ -17,11 +16,9 @@ export default class Config extends Component {
   render() {
     return (
       <View>
+        <ConfigHeader />
+        <ConfigBody />
       </ View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-
-})
