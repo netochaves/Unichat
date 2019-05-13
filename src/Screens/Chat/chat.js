@@ -58,15 +58,21 @@ export default class Conversas extends Component {
       .onSnapshot(querySnapshot => {
         const messages = []
         querySnapshot.forEach(doc => {
-          const { content, contentTranslated, date, source } = doc.data()
-          messages.push({
-            key: doc.id,
-            content,
-            contentTranslated,
-            date: date.toDate(),
-            source
+          if (doc.exists) {
+            const { content, contentTranslated, date, source } = doc.data()
+            messages.push({
+              key: doc.id,
+              content,
+              contentTranslated,
+              date: date.toDate(),
+              source
+            })
+          }
+          this.ref.get().then(conversa => {
+            if (conversa.exists) {
+              this.ref.update({ unreadMsgs: false, numUnreadMsgs: 0 })
+            }
           })
-          this.ref.update({ unreadMsgs: false, numUnreadMsgs: 0 })
         })
         this.setState({ messages })
       })

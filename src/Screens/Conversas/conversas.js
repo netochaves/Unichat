@@ -24,7 +24,6 @@ export default class Conversas extends Component {
       myName: "",
       myPicture: null
     }
-    this.lastMessage = null
 
     this.ref = firebase
       .firestore()
@@ -40,12 +39,7 @@ export default class Conversas extends Component {
         myPicture: doc.data().profile_img_url
       })
     })
-    this.unsubscribe = firebase
-      .firestore()
-      .collection("users")
-      .onSnapshot(() => {
-        this.getData()
-      })
+    this.getData()
   }
 
   componentWillUnmount() {
