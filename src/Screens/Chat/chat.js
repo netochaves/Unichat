@@ -136,11 +136,25 @@ export default class Conversas extends Component {
 
       const translator = TranslatorFactory.createTranslator()
       translator.translate(messageText, "en").then(translated => {
-        this.refDest.update({
-          lastMessage: this.proccessLastMsg(translated),
-          dateLastMessage: newMessage.date
+        this.refDest.get().then(doc => {
+          if (!doc.exists) {
+            this.refDest.set({
+              userKey: user,
+              unreadMsgs: true,
+              numUnreadMsgs: 1,
+              lastMessage: this.proccessLastMsg(translated),
+              dateLastMessage: newMessage.date
+            })
+          } else {
+            const { numUnreadMsgs } = doc.data()
+            this.refDest.update({
+              numUnreadMsgs: numUnreadMsgs + 1,
+              unreadMsgs: true,
+              lastMessage: this.proccessLastMsg(translated),
+              dateLastMessage: newMessage.date
+            })
+          }
         })
-
         this.refDest
           .collection("messages")
           .add({
@@ -151,24 +165,6 @@ export default class Conversas extends Component {
           })
           .then(() => true)
           .catch(error => error)
-
-        this.refDest.get().then(doc => {
-          if (!doc.exists) {
-            this.refDest.set({
-              userKey: user,
-              unreadMsgs: true,
-              numUnreadMsgs: 1,
-              lastMessage: translated,
-              dateLastMessage: newMessage.date
-            })
-          } else {
-            const { numUnreadMsgs } = doc.data()
-            this.refDest.update({
-              numUnreadMsgs: numUnreadMsgs + 1,
-              unreadMsgs: true
-            })
-          }
-        })
       })
 
       this.setState({ messageText: "", isValueNull: true })
