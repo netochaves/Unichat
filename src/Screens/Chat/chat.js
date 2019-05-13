@@ -66,8 +66,8 @@ export default class Conversas extends Component {
             date: date.toDate(),
             source
           })
+          this.ref.update({ unreadMsgs: false, numUnreadMsgs: 0 })
         })
-        this.ref.update({ unreadMsgs: false, numUnreadMsgs: 0 })
         this.setState({ messages })
       })
   }
@@ -106,6 +106,7 @@ export default class Conversas extends Component {
         date: firebase.database().getServerTime(),
         source: "1"
       }
+
       this.ref.get().then(doc => {
         if (!doc.exists) {
           this.ref.set({
@@ -119,32 +120,6 @@ export default class Conversas extends Component {
           this.ref.update({
             lastMessage: this.proccessLastMsg(newMessage.content),
             dateLastMessage: newMessage.date
-          })
-        }
-      })
-      this.refDest.get().then(doc => {
-        if (!doc.exists) {
-          this.refDest.set({
-            userKey: user,
-            unreadMsgs: false,
-            numUnreadMsgs: 0,
-            lastMessage: "",
-            dateLastMessage: ""
-          })
-          this.refDest.get().then(conversa => {
-            const { numUnreadMsgs } = conversa.data()
-            this.refDest.update({
-              numUnreadMsgs: numUnreadMsgs + 1,
-              unreadMsgs: true
-            })
-          })
-        } else {
-          this.refDest.get().then(conversa => {
-            const { numUnreadMsgs } = conversa.data()
-            this.refDest.update({
-              numUnreadMsgs: numUnreadMsgs + 1,
-              unreadMsgs: true
-            })
           })
         }
       })
@@ -176,6 +151,24 @@ export default class Conversas extends Component {
           })
           .then(() => true)
           .catch(error => error)
+
+        this.refDest.get().then(doc => {
+          if (!doc.exists) {
+            this.refDest.set({
+              userKey: user,
+              unreadMsgs: true,
+              numUnreadMsgs: 1,
+              lastMessage: translated,
+              dateLastMessage: newMessage.date
+            })
+          } else {
+            const { numUnreadMsgs } = doc.data()
+            this.refDest.update({
+              numUnreadMsgs: numUnreadMsgs + 1,
+              unreadMsgs: true
+            })
+          }
+        })
       })
 
       this.setState({ messageText: "", isValueNull: true })
