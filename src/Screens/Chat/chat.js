@@ -98,7 +98,7 @@ export default class Conversas extends Component {
   }
 
   sendMessage = () => {
-    const { destUser, user, userData } = this.state
+    const { destUser, user, userData, messageText } = this.state
     this.ref.set({
       userKey: destUser.key,
       contactName: destUser.contactName,
@@ -110,8 +110,6 @@ export default class Conversas extends Component {
       contactPhoto: userData.profile_img_url
     })
 
-    const { messageText } = this.state
-    if (messageText === "") this.setState({ isValueNull: true })
     const newMessage = {
       content: messageText,
       date: firebase.database().getServerTime(),
