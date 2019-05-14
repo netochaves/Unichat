@@ -2,16 +2,27 @@ import React from "react"
 
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native"
 import { Avatar, Icon } from "react-native-elements"
+import { StackActions, NavigationActions } from "react-navigation"
 
 const chatHeader = props => {
   const { userName, userPhoto, navigation } = props
+  const goBack = () => {
+    const resetAction = StackActions.reset({
+      index: 0,
+      key: null,
+      actions: [
+        NavigationActions.navigate({
+          routeName: "Conversas"
+        })
+      ]
+    })
+    navigation.dispatch(resetAction)
+  }
+
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
-        <TouchableOpacity
-          style={styles.back}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableOpacity style={styles.back} onPress={() => goBack()}>
           <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
         </TouchableOpacity>
         <Avatar
