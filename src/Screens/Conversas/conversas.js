@@ -51,9 +51,9 @@ export default class Conversas extends Component {
   }
 
   getData = async () => {
-    AsyncStorage.getItem("@contacts").then(contactsResponse => {
-      const contacts = JSON.parse(contactsResponse)
-      this.ref.collection("conversas").onSnapshot(querySnapshot => {
+    this.ref.collection("conversas").onSnapshot(querySnapshot => {
+      AsyncStorage.getItem("@contacts").then(contactsResponse => {
+        const contacts = JSON.parse(contactsResponse)
         const conversas = []
         querySnapshot.forEach(doc => {
           let find = false
