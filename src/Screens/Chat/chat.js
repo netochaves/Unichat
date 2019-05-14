@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { Component } from "react"
 
 import { View, StyleSheet, StatusBar, BackHandler } from "react-native"
@@ -6,7 +7,6 @@ import {
   TranslatorConfiguration,
   TranslatorFactory
 } from "react-native-power-translator"
-
 import firebase from "react-native-firebase"
 import ChatInput from "../../Components/Chat/chatInput"
 import ChatHeader from "../../Components/Chat/chatHeader"
@@ -25,6 +25,7 @@ export default class Conversas extends Component {
       messageText: "",
       messages: [],
       user: firebase.auth().currentUser.uid,
+      userData: null,
       isValueNull: true,
       destUser: navigation.getParam("item")
     }
@@ -42,6 +43,22 @@ export default class Conversas extends Component {
       .doc(destUser.key)
       .collection("conversas")
       .doc(user)
+
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(user)
+      .get()
+      .then(us => {
+        const { phone, profile_img_url } = us.data()
+        this.setState({ userData: { phone, profile_img_url } })
+      })
+
+    TranslatorConfiguration.setConfig(
+      ProviderTypes.Google,
+      "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
+      "en"
+    )
   }
 
   componentDidMount() {
@@ -60,6 +77,11 @@ export default class Conversas extends Component {
             date: date.toDate(),
             source
           })
+          this.ref.get().then(conversa => {
+            if (conversa.exists) {
+              this.ref.update({ unreadMsgs: false, numUnreadMsgs: 0 })
+            }
+          })
         })
         this.setState({ messages })
       })
@@ -67,6 +89,7 @@ export default class Conversas extends Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+    this.unsubscribe()
   }
 
   handleBackPress = () => {
@@ -79,61 +102,106 @@ export default class Conversas extends Component {
     this.setState({ messageText: text, isValueNull: false })
   }
 
-  sendMessage = () => {
-    const { destUser, user, messageText } = this.state
-    this.ref.set({
-      userKey: destUser.key
-    })
-    this.refDest.set({
-      userKey: user
-    })
-
-    if (messageText === "") this.setState({ isValueNull: true })
-    const newMessage = {
-      content: messageText,
-      date: firebase.database().getServerTime(),
-      source: "1"
+  proccessLastMsg = string => {
+    let strProcs = ""
+    if (string.length >= 25) {
+      strProcs = `${string.substr(0, 25)}...`
+    } else {
+      strProcs = string
     }
+    return strProcs
+  }
 
-    this.ref
-      .collection("messages")
-      .add({
-        content: newMessage.content,
-        date: newMessage.date,
-        source: newMessage.source
+  sendMessage = () => {
+    const { destUser, user, messageText, userData } = this.state
+    if (messageText === "") {
+      this.setState({ isValueNull: true })
+    } else {
+      const newMessage = {
+        content: messageText,
+        date: firebase.database().getServerTime(),
+        source: "1"
+      }
+
+      this.ref.get().then(doc => {
+        if (!doc.exists) {
+          this.ref.set({
+            userKey: destUser.key,
+            unreadMsgs: false,
+            numUnreadMsgs: 0,
+            lastMessage: this.proccessLastMsg(newMessage.content),
+            dateLastMessage: newMessage.date,
+            contactName: destUser.contactName,
+            contactPhoto: destUser.contactPhoto
+          })
+        } else {
+          this.ref.update({
+            lastMessage: this.proccessLastMsg(newMessage.content),
+            dateLastMessage: newMessage.date
+          })
+        }
       })
-      .then(() => true)
-      .catch(error => error)
 
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(destUser.key)
-      .get()
-      .then(doc => {
-        // eslint-disable-next-line camelcase
-        const { language_code } = doc.data()
-        TranslatorConfiguration.setConfig(
-          ProviderTypes.Google,
-          "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
-          language_code
-        )
-        const translator = TranslatorFactory.createTranslator()
-        translator.translate(messageText, language_code).then(translated => {
-          this.refDest
-            .collection("messages")
-            .add({
-              content: newMessage.content,
-              date: newMessage.date,
-              contentTranslated: translated,
-              source: "2"
-            })
-            .then(() => true)
-            .catch(error => error)
+      this.ref
+        .collection("messages")
+        .add({
+          content: newMessage.content,
+          date: newMessage.date,
+          source: newMessage.source
         })
-      })
+        .then(() => true)
+        .catch(error => error)
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(destUser.key)
+        .get()
+        .then(doc => {
+          // eslint-disable-next-line camelcase
+          const { language_code } = doc.data()
+          TranslatorConfiguration.setConfig(
+            ProviderTypes.Google,
+            "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
+            language_code
+          )
+          const translator = TranslatorFactory.createTranslator()
+          translator.translate(messageText, language_code).then(translated => {
+            this.refDest.get().then(conversa => {
+              if (!conversa.exists) {
+                this.refDest.set({
+                  userKey: user,
+                  unreadMsgs: true,
+                  numUnreadMsgs: 1,
+                  lastMessage: this.proccessLastMsg(translated),
+                  dateLastMessage: newMessage.date,
+                  contactName: userData.phone,
+                  contactPhoto: userData.profile_img_url
+                })
+              } else {
+                const { numUnreadMsgs } = conversa.data()
+                this.refDest.update({
+                  numUnreadMsgs: numUnreadMsgs + 1,
+                  unreadMsgs: true,
+                  lastMessage: this.proccessLastMsg(translated),
+                  dateLastMessage: newMessage.date
+                })
+              }
+            })
+            this.refDest
+              .collection("messages")
+              .add({
+                content: newMessage.content,
+                date: newMessage.date,
+                contentTranslated: translated,
+                source: "2"
+              })
+              .then(() => true)
+              .catch(error => error)
+          })
+        })
 
-    this.setState({ messageText: "", isValueNull: true })
+      this.setState({ messageText: "", isValueNull: true })
+    }
   }
 
   render() {
@@ -145,7 +213,7 @@ export default class Conversas extends Component {
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <ChatHeader
           userName={destUser.contactName}
-          userPhoto={destUser.profile_img_url}
+          userPhoto={destUser.contactPhoto}
           navigation={navigation}
         />
         <View style={styles.chatContainer}>
