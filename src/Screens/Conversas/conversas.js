@@ -56,16 +56,26 @@ export default class Conversas extends Component {
         const contacts = JSON.parse(contactsResponse)
         const conversas = []
         querySnapshot.forEach(doc => {
+          let find = false
+          const { contactPhoto, contactName } = doc.data()
           contacts.forEach(contact => {
             if (contact.key === doc.id) {
               conversas.push({
                 contact,
                 key: doc.id,
-                profileImage: contact.profile_img_url,
+                contactPhoto,
                 contactName: contact.contactName
               })
+              find = true
             }
           })
+          if (find === false) {
+            conversas.push({
+              key: doc.id,
+              contactPhoto,
+              contactName
+            })
+          }
         })
         this.setState({ conversas })
       })
@@ -148,10 +158,10 @@ export default class Conversas extends Component {
             return (
               <ListItem
                 onPress={() => {
-                  this.goToChat(item.contact)
+                  this.goToChat(item)
                 }}
                 onLongPress={() => {
-                  this.confirmDelete(item.contact)
+                  this.confirmDelete(item)
                 }}
                 style={styles.conversa}
                 subtitle={
@@ -170,7 +180,7 @@ export default class Conversas extends Component {
                   </View>
                 }
                 leftAvatar={{
-                  source: { uri: item.profileImage },
+                  source: { uri: item.contactPhoto },
                   size: "medium"
                 }}
               />
