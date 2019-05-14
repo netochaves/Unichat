@@ -82,15 +82,6 @@ export default class Conversas extends Component {
 
   handleBackPress = () => {
     const { navigation } = this.props
-    // const resetAction = StackActions.reset({
-    //   index: 0,
-    //   key: null,
-    //   actions: [
-    //     NavigationActions.navigate({
-    //       routeName: "Conversas"
-    //     })
-    //   ]
-    // })
     navigation.goBack()
     return true
   }

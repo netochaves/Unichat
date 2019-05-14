@@ -85,17 +85,6 @@ export default class Conversas extends Component {
 
   goToChat = item => {
     const { navigation } = this.props
-    // const resetAction = StackActions.reset({
-    //   index: 0,
-    //   key: null,
-    //   actions: [
-    //     NavigationActions.navigate({
-    //       routeName: "ChatScreen",
-    //       params: { item }
-    //     })
-    //   ]
-    // })
-    // navigation.dispatch(resetAction)
     navigation.navigate("ChatScreen", { item })
   }
 

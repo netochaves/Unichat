@@ -5,19 +5,6 @@ import { Avatar, Icon } from "react-native-elements"
 
 const chatHeader = props => {
   const { userName, userPhoto, navigation } = props
-  // const goBack = () => {
-  //   const resetAction = StackActions.reset({
-  //     index: 0,
-  //     key: null,
-  //     actions: [
-  //       NavigationActions.navigate({
-  //         routeName: "Conversas"
-  //       })
-  //     ]
-  //   })
-  //   navigation.dispatch(resetAction)
-  // }
-
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
