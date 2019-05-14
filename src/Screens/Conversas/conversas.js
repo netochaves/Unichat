@@ -52,14 +52,14 @@ export default class Conversas extends Component {
   }
 
   getData = async () => {
+    this.unsubscribe = this.ref.collection("conversas").onSnapshot(querySnapshot => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
       const contacts = JSON.parse(contactsResponse)
-      this.unsubscribe = this.ref
-        .collection("conversas")
-        .onSnapshot(querySnapshot => {
           const conversas = []
           querySnapshot.forEach(doc => {
+            let find = false
             contacts.forEach(contact => {
+              const { contactPhoto, contactName } = doc.data()
               if (contact.key === doc.id) {
                 const {
                   numUnreadMsgs,
@@ -70,15 +70,27 @@ export default class Conversas extends Component {
                 conversas.push({
                   contact,
                   key: doc.id,
-                  profileImage: contact.profile_img_url,
+                  contactPhoto,
                   contactName: contact.contactName,
                   unreadMsgs,
                   numUnreadMsgs,
                   lastMessage,
                   dateLastMessage
                 })
+                find = true
               }
             })
+            if (find === false) {
+              conversas.push({
+                key: doc.id,
+                contactPhoto,
+                contactName,
+                unreadMsgs,
+                numUnreadMsgs,
+                lastMessage,
+                dateLastMessage
+              })
+            }
           })
           this.setState({ conversas })
         })
@@ -179,10 +191,10 @@ export default class Conversas extends Component {
             return (
               <ListItem
                 onPress={() => {
-                  this.goToChat(item.contact)
+                  this.goToChat(item)
                 }}
                 onLongPress={() => {
-                  this.confirmDelete(item.contact)
+                  this.confirmDelete(item)
                 }}
                 style={styles.conversa}
                 subtitle={
@@ -207,7 +219,7 @@ export default class Conversas extends Component {
                   </View>
                 }
                 leftAvatar={{
-                  source: { uri: item.profileImage },
+                  source: { uri: item.contactPhoto },
                   size: "medium"
                 }}
               />

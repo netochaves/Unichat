@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { Component } from "react"
 
 import { View, StyleSheet, StatusBar, BackHandler } from "react-native"
@@ -24,6 +25,7 @@ export default class Conversas extends Component {
       messageText: "",
       messages: [],
       user: firebase.auth().currentUser.uid,
+      userData: null,
       isValueNull: true,
       destUser: navigation.getParam("item")
     }
@@ -41,6 +43,22 @@ export default class Conversas extends Component {
       .doc(destUser.key)
       .collection("conversas")
       .doc(user)
+    
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(user)
+      .get()
+      .then(us => {
+        const { phone, profile_img_url } = us.data()
+        this.setState({ userData: { phone, profile_img_url } })
+      })
+
+    TranslatorConfiguration.setConfig(
+      ProviderTypes.Google,
+      "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
+      "en"
+    )
   }
 
   componentDidMount() {
@@ -112,7 +130,9 @@ export default class Conversas extends Component {
             unreadMsgs: false,
             numUnreadMsgs: 0,
             lastMessage: this.proccessLastMsg(newMessage.content),
-            dateLastMessage: newMessage.date
+            dateLastMessage: newMessage.date,
+            contactName: destUser.contactName,
+            contactPhoto: destUser.contactPhoto
           })
         } else {
           this.ref.update({
@@ -153,7 +173,9 @@ export default class Conversas extends Component {
                   unreadMsgs: true,
                   numUnreadMsgs: 1,
                   lastMessage: this.proccessLastMsg(translated),
-                  dateLastMessage: newMessage.date
+                  dateLastMessage: newMessage.date,
+                  contactName: userData.phone,
+                  contactPhoto: userData.profile_img_url
                 })
               } else {
                 const { numUnreadMsgs } = conversa.data()
@@ -191,7 +213,7 @@ export default class Conversas extends Component {
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <ChatHeader
           userName={destUser.contactName}
-          userPhoto={destUser.profile_img_url}
+          userPhoto={destUser.contactPhoto}
           navigation={navigation}
         />
         <View style={styles.chatContainer}>

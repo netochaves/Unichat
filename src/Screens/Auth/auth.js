@@ -103,7 +103,7 @@ export default class Auth extends Component {
                       ...contactFromPhone,
                       contactName,
                       key: doc.id,
-                      profile_img_url
+                      contactPhoto: profile_img_url
                     })
                   }
                 }
