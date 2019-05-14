@@ -4,93 +4,101 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Switch
 } from "react-native"
 import { Icon } from "react-native-elements"
 
 const configBody = () => {
   return (
     <ScrollView>
-    <View style={styles.elevationBody}>
-      <View style={styles.innerBody}>
-        <Text style={styles.touchableStyleTitle}>Conta</Text>
-        <Text style={styles.line} />
+      <View style={styles.elevationBody}>
+        <View style={styles.innerBody}>
+          <Text style={styles.touchableStyleTitle}>Conta</Text>
+          <Text style={styles.line} />
 
-        <TouchableOpacity style={styles.touchableIcon}>
-          <Icon name="language" size={28} color="#007AFF" />
-          <Text style={styles.touchableStyle}>Idiomas</Text>
-          <Icon 
-            name="chevron-right" 
-            size={28} 
-            color="gray" 
-            type="evilicon" />
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.touchableIcon}>
-          <Icon name="person" size={28} color="#c6056c" />
-          <Text style={styles.touchableStyle}>Perfil</Text>
-          <Icon 
-            name="chevron-right" 
-            size={28} 
-            color="gray" 
-            type="evilicon" />
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.touchableIcon}>
-          <Icon 
-            name="notifications" 
-            size={28} 
-            color="#ef2390" />
-          <Text style={styles.touchableStyle}>Notificação</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.touchableIcon}>
+            <Icon name="language" size={28} color="#007AFF" />
+            <Text style={styles.touchableStyle}>Idiomas</Text>
+            <View style={styles.chevronStyle}>
+              <Icon 
+                name="chevron-right" 
+                size={28} 
+                color="gray" 
+                type="evilicon" />
+            </View>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.touchableIcon}>
+            <Icon name="person" size={28} color="#c6056c" />
+            <Text style={styles.touchableStyle}>Perfil</Text>
+            <View style={styles.chevronStyle}>
+              <Icon 
+                name="chevron-right" 
+                size={28} 
+                color="gray" 
+                type="evilicon" />
+            </View>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.touchableIcon}>
+            <Icon 
+              name="notifications" 
+              size={28} 
+              color="#ef2390" />
+            <Text style={styles.touchableStyle}>Notificação</Text>
+            <View style={styles.chevronStyle}>
+              <Switch />
+            </ View>
+          </TouchableOpacity>
 
-        <Text style={styles.touchableStyleTitle}>Aplicativo</Text>
-        <Text style={styles.line} />
+          <Text style={styles.touchableStyleTitle}>Aplicativo</Text>
+          <Text style={styles.line} />
 
-        <TouchableOpacity style={styles.touchableIcon}>
-          <Icon 
-            name="chat" 
-            size={28} 
-            color="#e542f4" />
-          <Text style={styles.touchableStyle}> Enviar Feedback</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.touchableIcon}>
-          <Icon 
-            name="share" 
-            size={28} 
-            color="#14d2e8" />
-          <Text style={styles.touchableStyle}>Compartilhar App</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.touchableIcon}>
-          <Icon 
-            name="star" 
-            size={28} 
-            color="#deea2e" />
-          <Text style={styles.touchableStyle}>Avaliar App</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.touchableIcon}>
-          <Icon 
-            name="notifications" 
-            size={28} 
-            color="#25e01f" />
-          <Text style={styles.touchableStyle}>Política de Privacidade</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.touchableIcon}>
-          <Icon 
-            name="info" 
-            size={28} 
-            color="#ef9739" />
-          <Text style={styles.touchableStyle}>Sobre</Text>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity>
-          <Text style={styles.touchableStyleExit}>Excluir Conta</Text>
-        </TouchableOpacity>
-    </View> 
+          <TouchableOpacity style={styles.touchableIcon}>
+            <Icon 
+              name="chat" 
+              size={28} 
+              color="#e542f4" />
+            <Text style={styles.touchableStyle}> Enviar Feedback</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.touchableIcon}>
+            <Icon 
+              name="share" 
+              size={28} 
+              color="#14d2e8" />
+            <Text style={styles.touchableStyle}>Compartilhar App</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.touchableIcon}>
+            <Icon 
+              name="star" 
+              size={28} 
+              color="#deea2e" />
+            <Text style={styles.touchableStyle}>Avaliar App</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.touchableIcon}>
+            <Icon 
+              name="notifications" 
+              size={28} 
+              color="#25e01f" />
+            <Text style={styles.touchableStyle}>Política de Privacidade</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.touchableIcon}>
+            <Icon 
+              name="info" 
+              size={28} 
+              color="#ef9739" />
+            <Text style={styles.touchableStyle}>Sobre</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity>
+            <Text style={styles.touchableStyleExit}>Excluir Conta</Text>
+          </TouchableOpacity>
+      </View> 
     </ScrollView>
   )
 }
@@ -109,6 +117,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 30
   },
+  chevronStyle: {
+    flex: 1,
+    marginRight: 10,
+    alignItems: "flex-end"
+  },  
   touchableIcon: {
     flexDirection: "row",
     alignItems: "center"
