@@ -8,7 +8,10 @@ const chatHeader = props => {
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
-        <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.back}
+          onPress={() => navigation.goBack()}
+        >
           <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
         </TouchableOpacity>
         <Avatar

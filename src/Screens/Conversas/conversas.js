@@ -54,32 +54,34 @@ export default class Conversas extends Component {
   getData = async () => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
       const contacts = JSON.parse(contactsResponse)
-      this.unsubscribe = this.ref.collection("conversas").onSnapshot(querySnapshot => {
-        const conversas = []
-        querySnapshot.forEach(doc => {
-          contacts.forEach(contact => {
-            if (contact.key === doc.id) {
-              const {
-                numUnreadMsgs,
-                unreadMsgs,
-                lastMessage,
-                dateLastMessage
-              } = doc.data()
-              conversas.push({
-                contact,
-                key: doc.id,
-                profileImage: contact.profile_img_url,
-                contactName: contact.contactName,
-                unreadMsgs,
-                numUnreadMsgs,
-                lastMessage,
-                dateLastMessage
-              })
-            }
+      this.unsubscribe = this.ref
+        .collection("conversas")
+        .onSnapshot(querySnapshot => {
+          const conversas = []
+          querySnapshot.forEach(doc => {
+            contacts.forEach(contact => {
+              if (contact.key === doc.id) {
+                const {
+                  numUnreadMsgs,
+                  unreadMsgs,
+                  lastMessage,
+                  dateLastMessage
+                } = doc.data()
+                conversas.push({
+                  contact,
+                  key: doc.id,
+                  profileImage: contact.profile_img_url,
+                  contactName: contact.contactName,
+                  unreadMsgs,
+                  numUnreadMsgs,
+                  lastMessage,
+                  dateLastMessage
+                })
+              }
+            })
           })
+          this.setState({ conversas })
         })
-        this.setState({ conversas })
-      })
     })
   }
 
@@ -142,7 +144,7 @@ export default class Conversas extends Component {
       textDate = getTime(date)
     } else if (atualDate.getDate() - date.getDate() === 1) {
       textDate = "Ontem"
-    } else if (atualDate.getDate() - date.getDate() >= 7) {
+    } else if (atualDate.getDate() - date.getDate() >= 2) {
       textDate = `${date
         .getDate()
         .toString()}/${date
