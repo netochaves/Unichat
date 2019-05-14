@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   configInfo: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 22,
     textAlign: "center",
     backgroundColor: "#fff",
   }
