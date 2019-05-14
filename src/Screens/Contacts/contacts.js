@@ -6,7 +6,6 @@ import {
   FlatList,
   StyleSheet,
   ToastAndroid,
-  PermissionsAndroid,
   TouchableOpacity
 } from "react-native"
 import { ListItem, Avatar } from "react-native-elements"
@@ -36,7 +35,7 @@ export default class Contatos extends Component {
 
   storeData = async contactsFromPhone => {
     const contactsAux = []
-    this.ref.get().then(querySnapshot => {
+    this.ref.get().then(async querySnapshot => {
       querySnapshot.forEach(doc => {
         contactsFromPhone.forEach(contactFromPhone => {
           const contactName = `${contactFromPhone.givenName} ${
@@ -64,31 +63,29 @@ export default class Contatos extends Component {
           }
         })
       })
-      return AsyncStorage.setItem("@contacts", JSON.stringify(contactsAux))
+      AsyncStorage.setItem("@contacts", JSON.stringify(contactsAux)).then(
+        () => {
+          this.getData()
+        }
+      )
     })
   }
 
   syncronize = () => {
-    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-      title: "Contacts",
-      message: "This app would like to view your contacts."
-    }).then(() => {
-      Contacts.getAll((err, contacts) => {
-        if (err === "denied") {
-          // error
-        } else {
-          this.storeData(contacts)
-        }
-        this.getData()
-      })
+    Contacts.getAll((err, contacts) => {
+      if (err === "denied") {
+        // error
+      } else {
+        this.storeData(contacts)
+      }
+      ToastAndroid.showWithGravityAndOffset(
+        "Sincronização concluida",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        50
+      )
     })
-    ToastAndroid.showWithGravityAndOffset(
-      "Sincronização concluida",
-      ToastAndroid.LONG,
-      ToastAndroid.BOTTOM,
-      25,
-      50
-    )
   }
 
   render() {
