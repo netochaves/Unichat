@@ -51,9 +51,9 @@ export default class Conversas extends Component {
   }
 
   getData = async () => {
-    AsyncStorage.getItem("@contacts").then(contactsResponse => {
-      const contacts = JSON.parse(contactsResponse)
-      this.ref.collection("conversas").onSnapshot(querySnapshot => {
+    this.ref.collection("conversas").onSnapshot(querySnapshot => {
+      AsyncStorage.getItem("@contacts").then(contactsResponse => {
+        const contacts = JSON.parse(contactsResponse)
         const conversas = []
         querySnapshot.forEach(doc => {
           contacts.forEach(contact => {
@@ -94,17 +94,23 @@ export default class Conversas extends Component {
 
   deleteChat = item => {
     const { conversas } = this.state
-    
+
     conversas.map(conversa => {
-      if(conversa.key === item.key) {
-        this.ref.collection("conversas").doc(item.key).collection("messages")
-        .get()
-        .then(snapshot => {
-          snapshot.docs.forEach(docs => {
-            docs.ref.delete()
+      if (conversa.key === item.key) {
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
+          .collection("messages")
+          .get()
+          .then(snapshot => {
+            snapshot.docs.forEach(docs => {
+              docs.ref.delete()
+            })
           })
-        })
-        this.ref.collection("conversas").doc(item.key).delete()
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
+          .delete()
       }
       return true
     })
