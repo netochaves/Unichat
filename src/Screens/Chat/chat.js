@@ -41,12 +41,6 @@ export default class Conversas extends Component {
       .doc(destUser.key)
       .collection("conversas")
       .doc(user)
-
-    TranslatorConfiguration.setConfig(
-      ProviderTypes.Google,
-      "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
-      "en"
-    )
   }
 
   componentDidMount() {
@@ -57,19 +51,19 @@ export default class Conversas extends Component {
       .onSnapshot(querySnapshot => {
         const messages = []
         querySnapshot.forEach(doc => {
-            const { content, contentTranslated, date, source } = doc.data()
-            messages.push({
-              key: doc.id,
-              content,
-              contentTranslated,
-              date: date.toDate(),
-              source
-            })
-            this.ref.get().then(conversa => {
-              if (conversa.exists) {
-                this.ref.update({ unreadMsgs: false, numUnreadMsgs: 0 })
-              }
-            })
+          const { content, contentTranslated, date, source } = doc.data()
+          messages.push({
+            key: doc.id,
+            content,
+            contentTranslated,
+            date: date.toDate(),
+            source
+          })
+          this.ref.get().then(conversa => {
+            if (conversa.exists) {
+              this.ref.update({ unreadMsgs: false, numUnreadMsgs: 0 })
+            }
+          })
         })
         this.setState({ messages })
       })
@@ -137,39 +131,52 @@ export default class Conversas extends Component {
         })
         .then(() => true)
         .catch(error => error)
-
-      const translator = TranslatorFactory.createTranslator()
-      translator.translate(messageText, "en").then(translated => {
-        this.refDest.get().then(doc => {
-          if (!doc.exists) {
-            this.refDest.set({
-              userKey: user,
-              unreadMsgs: true,
-              numUnreadMsgs: 1,
-              lastMessage: this.proccessLastMsg(translated),
-              dateLastMessage: newMessage.date
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(destUser.key)
+        .get()
+        .then(doc => {
+          // eslint-disable-next-line camelcase
+          const { language_code } = doc.data()
+          TranslatorConfiguration.setConfig(
+            ProviderTypes.Google,
+            "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
+            language_code
+          )
+          const translator = TranslatorFactory.createTranslator()
+          translator.translate(messageText, language_code).then(translated => {
+            this.refDest.get().then(conversa => {
+              if (!conversa.exists) {
+                this.refDest.set({
+                  userKey: user,
+                  unreadMsgs: true,
+                  numUnreadMsgs: 1,
+                  lastMessage: this.proccessLastMsg(translated),
+                  dateLastMessage: newMessage.date
+                })
+              } else {
+                const { numUnreadMsgs } = conversa.data()
+                this.refDest.update({
+                  numUnreadMsgs: numUnreadMsgs + 1,
+                  unreadMsgs: true,
+                  lastMessage: this.proccessLastMsg(translated),
+                  dateLastMessage: newMessage.date
+                })
+              }
             })
-          } else {
-            const { numUnreadMsgs } = doc.data()
-            this.refDest.update({
-              numUnreadMsgs: numUnreadMsgs + 1,
-              unreadMsgs: true,
-              lastMessage: this.proccessLastMsg(translated),
-              dateLastMessage: newMessage.date
-            })
-          }
-        })
-        this.refDest
-          .collection("messages")
-          .add({
-            content: newMessage.content,
-            date: newMessage.date,
-            contentTranslated: translated,
-            source: "2"
+            this.refDest
+              .collection("messages")
+              .add({
+                content: newMessage.content,
+                date: newMessage.date,
+                contentTranslated: translated,
+                source: "2"
+              })
+              .then(() => true)
+              .catch(error => error)
           })
-          .then(() => true)
-          .catch(error => error)
-      })
+        })
 
       this.setState({ messageText: "", isValueNull: true })
     }
