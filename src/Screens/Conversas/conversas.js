@@ -10,7 +10,6 @@ import {
   BackHandler,
   Alert
 } from "react-native"
-import { StackActions, NavigationActions } from "react-navigation"
 import { ListItem, Icon } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
@@ -33,8 +32,6 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
-    const { navigation } = this.props
-    Alert.alert("Testando apenas", navigation.state.routeName)
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.ref.get().then(doc => {
       this.setState({
@@ -47,6 +44,7 @@ export default class Conversas extends Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+    this.unsubscribe()
   }
 
   handleBackPress = () => {
@@ -56,7 +54,7 @@ export default class Conversas extends Component {
   getData = async () => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
       const contacts = JSON.parse(contactsResponse)
-      this.ref.collection("conversas").onSnapshot(querySnapshot => {
+      this.unsubscribe = this.ref.collection("conversas").onSnapshot(querySnapshot => {
         const conversas = []
         querySnapshot.forEach(doc => {
           contacts.forEach(contact => {
@@ -87,17 +85,18 @@ export default class Conversas extends Component {
 
   goToChat = item => {
     const { navigation } = this.props
-    const resetAction = StackActions.reset({
-      index: 0,
-      key: null,
-      actions: [
-        NavigationActions.navigate({
-          routeName: "ChatScreen",
-          params: { item }
-        })
-      ]
-    })
-    navigation.dispatch(resetAction)
+    // const resetAction = StackActions.reset({
+    //   index: 0,
+    //   key: null,
+    //   actions: [
+    //     NavigationActions.navigate({
+    //       routeName: "ChatScreen",
+    //       params: { item }
+    //     })
+    //   ]
+    // })
+    // navigation.dispatch(resetAction)
+    navigation.navigate("ChatScreen", { item })
   }
 
   confirmDelete = item => {

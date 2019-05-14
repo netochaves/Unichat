@@ -1,12 +1,11 @@
 import React, { Component } from "react"
 
-import { View, StyleSheet, StatusBar, BackHandler, Alert } from "react-native"
+import { View, StyleSheet, StatusBar, BackHandler } from "react-native"
 import {
   ProviderTypes,
   TranslatorConfiguration,
   TranslatorFactory
 } from "react-native-power-translator"
-import { StackActions, NavigationActions } from "react-navigation"
 import firebase from "react-native-firebase"
 import ChatInput from "../../Components/Chat/chatInput"
 import ChatHeader from "../../Components/Chat/chatHeader"
@@ -26,8 +25,7 @@ export default class Conversas extends Component {
       messages: [],
       user: firebase.auth().currentUser.uid,
       isValueNull: true,
-      destUser: navigation.getParam("item"),
-      isMounted: true
+      destUser: navigation.getParam("item")
     }
     const { user, destUser } = this.state
     this.ref = firebase
@@ -52,10 +50,6 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
-    const { navigation } = this.props
-    const { isMounted } = this.state
-    Alert.alert("Testando apenas", navigation.state.routeName)
-
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe = this.ref
       .collection("messages")
@@ -63,7 +57,6 @@ export default class Conversas extends Component {
       .onSnapshot(querySnapshot => {
         const messages = []
         querySnapshot.forEach(doc => {
-          if (doc.exists) {
             const { content, contentTranslated, date, source } = doc.data()
             messages.push({
               key: doc.id,
@@ -72,14 +65,11 @@ export default class Conversas extends Component {
               date: date.toDate(),
               source
             })
-          }
-          if (isMounted) {
             this.ref.get().then(conversa => {
               if (conversa.exists) {
                 this.ref.update({ unreadMsgs: false, numUnreadMsgs: 0 })
               }
             })
-          }
         })
         this.setState({ messages })
       })
@@ -87,21 +77,21 @@ export default class Conversas extends Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+    this.unsubscribe()
   }
 
   handleBackPress = () => {
     const { navigation } = this.props
-    const resetAction = StackActions.reset({
-      index: 0,
-      key: null,
-      actions: [
-        NavigationActions.navigate({
-          routeName: "Conversas"
-        })
-      ]
-    })
-    this.setState({ isMounted: false })
-    navigation.dispatch(resetAction)
+    // const resetAction = StackActions.reset({
+    //   index: 0,
+    //   key: null,
+    //   actions: [
+    //     NavigationActions.navigate({
+    //       routeName: "Conversas"
+    //     })
+    //   ]
+    // })
+    navigation.goBack()
     return true
   }
 
