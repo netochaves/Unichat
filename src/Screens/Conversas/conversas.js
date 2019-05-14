@@ -52,21 +52,24 @@ export default class Conversas extends Component {
   }
 
   getData = async () => {
-    this.unsubscribe = this.ref.collection("conversas").onSnapshot(querySnapshot => {
-    AsyncStorage.getItem("@contacts").then(contactsResponse => {
-      const contacts = JSON.parse(contactsResponse)
+    this.unsubscribe = this.ref
+      .collection("conversas")
+      .onSnapshot(querySnapshot => {
+        AsyncStorage.getItem("@contacts").then(contactsResponse => {
+          const contacts = JSON.parse(contactsResponse)
           const conversas = []
           querySnapshot.forEach(doc => {
             let find = false
+            const {
+              numUnreadMsgs,
+              unreadMsgs,
+              lastMessage,
+              dateLastMessage,
+              contactPhoto,
+              contactName
+            } = doc.data()
             contacts.forEach(contact => {
-              const { contactPhoto, contactName } = doc.data()
               if (contact.key === doc.id) {
-                const {
-                  numUnreadMsgs,
-                  unreadMsgs,
-                  lastMessage,
-                  dateLastMessage
-                } = doc.data()
                 conversas.push({
                   contact,
                   key: doc.id,
@@ -94,7 +97,7 @@ export default class Conversas extends Component {
           })
           this.setState({ conversas })
         })
-    })
+      })
   }
 
   goToChat = item => {

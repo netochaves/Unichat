@@ -43,7 +43,7 @@ export default class Conversas extends Component {
       .doc(destUser.key)
       .collection("conversas")
       .doc(user)
-    
+
     firebase
       .firestore()
       .collection("users")
@@ -113,7 +113,7 @@ export default class Conversas extends Component {
   }
 
   sendMessage = () => {
-    const { destUser, user, messageText } = this.state
+    const { destUser, user, messageText, userData } = this.state
     if (messageText === "") {
       this.setState({ isValueNull: true })
     } else {
