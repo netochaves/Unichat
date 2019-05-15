@@ -44,6 +44,8 @@ export default class Conversas extends Component {
       .collection("conversas")
       .doc(user)
 
+    this.refDestDatabase = firebase.database().ref(`users/${destUser.key}`)
+
     firebase
       .firestore()
       .collection("users")
@@ -215,6 +217,7 @@ export default class Conversas extends Component {
           userName={destUser.contactName}
           userPhoto={destUser.contactPhoto}
           navigation={navigation}
+          refDestDatabase={this.refDestDatabase}
         />
         <View style={styles.chatContainer}>
           <ChatContainer messages={messages} />

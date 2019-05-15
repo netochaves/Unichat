@@ -33,7 +33,7 @@ export default class PerfilSettings extends Component {
       eMail: "",
       profileImageUrl: "",
       disabled: true,
-      uploading: false,
+      uploading: false
     }
   }
 
@@ -54,6 +54,15 @@ export default class PerfilSettings extends Component {
     const { navigation } = this.props
     const user = firebase.auth().currentUser
     const { userName, eMail, code, profileImageUrl } = this.state
+
+    firebase
+      .database()
+      .ref(`users/${user.uid}`)
+      .set({
+        online: true,
+        lastSeen: ""
+      })
+
     firebase
       .firestore()
       .collection("users")
@@ -71,7 +80,7 @@ export default class PerfilSettings extends Component {
   uploadphotos = () => {
     const user = firebase.auth().currentUser
     const { img } = this.state
-    this.setState({uploading: true})
+    this.setState({ uploading: true })
 
     firebase
       .storage()
@@ -80,7 +89,7 @@ export default class PerfilSettings extends Component {
       .on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => {
         let state = {}
         state = {
-          ...state,
+          ...state
         }
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
           state = {
@@ -137,7 +146,11 @@ export default class PerfilSettings extends Component {
               />
             )}
             {uploading && (
-              <ActivityIndicator size={64} color="#6AC3FB" style={styles.loadingIcon} />
+              <ActivityIndicator
+                size={64}
+                color="#6AC3FB"
+                style={styles.loadingIcon}
+              />
             )}
           </TouchableOpacity>
           <TouchableOpacity
@@ -178,12 +191,14 @@ export default class PerfilSettings extends Component {
             ))}
           </Picker>
         </View>
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={this.confirmPerfilSettings}
-          disabled={disabled}>
-          <LinearGradient 
-            colors={disabled ? ["#9b9fa5", "#9b9fa5"] : ["#547BF0", "#6AC3FB"]} 
-            style={styles.buttonEnable}>
+          disabled={disabled}
+        >
+          <LinearGradient
+            colors={disabled ? ["#9b9fa5", "#9b9fa5"] : ["#547BF0", "#6AC3FB"]}
+            style={styles.buttonEnable}
+          >
             <Text style={styles.textButton}>Cadastrar</Text>
           </LinearGradient>
         </TouchableOpacity>
