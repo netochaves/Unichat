@@ -60,7 +60,7 @@ const configBody = () => {
               name="chat" 
               size={28} 
               color="#e542f4" />
-            <Text style={styles.touchableStyle}> Enviar Feedback</Text>
+            <Text style={styles.touchableStyle}>Enviar Feedback</Text>
           </TouchableOpacity>
           
           <TouchableOpacity style={styles.touchableIcon}>
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     marginLeft: 30,
     marginRight: 30,
-    borderRadius: 40,
+    borderRadius: 10,
   },
   innerBody: {
     marginTop: 10,
@@ -124,10 +124,13 @@ const styles = StyleSheet.create({
   },  
   touchableIcon: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 10
   },
   touchableStyle: {
     fontFamily: "OpenSans",
+    fontSize: 18,
+    marginLeft: 10,
   },
   touchableStyleExit: {
     backgroundColor: "red",
