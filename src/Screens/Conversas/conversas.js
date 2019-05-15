@@ -14,6 +14,7 @@ import { ListItem, Icon } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
+import getTime from "~/functions/getTime"
 
 export default class Conversas extends Component {
   constructor() {
@@ -23,7 +24,6 @@ export default class Conversas extends Component {
       myName: "",
       myPicture: null
     }
-    this.lastMessage = null
 
     this.ref = firebase
       .firestore()
@@ -44,6 +44,7 @@ export default class Conversas extends Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+    this.unsubscribe()
   }
 
   handleBackPress = () => {
@@ -51,25 +52,52 @@ export default class Conversas extends Component {
   }
 
   getData = async () => {
-    AsyncStorage.getItem("@contacts").then(contactsResponse => {
-      const contacts = JSON.parse(contactsResponse)
-      this.ref.collection("conversas").onSnapshot(querySnapshot => {
-        const conversas = []
-        querySnapshot.forEach(doc => {
-          contacts.forEach(contact => {
-            if (contact.key === doc.id) {
+    this.unsubscribe = this.ref
+      .collection("conversas")
+      .onSnapshot(querySnapshot => {
+        AsyncStorage.getItem("@contacts").then(contactsResponse => {
+          const contacts = JSON.parse(contactsResponse)
+          const conversas = []
+          querySnapshot.forEach(doc => {
+            let find = false
+            const {
+              numUnreadMsgs,
+              unreadMsgs,
+              lastMessage,
+              dateLastMessage,
+              contactPhoto,
+              contactName
+            } = doc.data()
+            contacts.forEach(contact => {
+              if (contact.key === doc.id) {
+                conversas.push({
+                  contact,
+                  key: doc.id,
+                  contactPhoto,
+                  contactName: contact.contactName,
+                  unreadMsgs,
+                  numUnreadMsgs,
+                  lastMessage,
+                  dateLastMessage
+                })
+                find = true
+              }
+            })
+            if (find === false) {
               conversas.push({
-                contact,
                 key: doc.id,
-                profileImage: contact.profile_img_url,
-                contactName: contact.contactName
+                contactPhoto,
+                contactName,
+                unreadMsgs,
+                numUnreadMsgs,
+                lastMessage,
+                dateLastMessage
               })
             }
           })
+          this.setState({ conversas })
         })
-        this.setState({ conversas })
       })
-    })
   }
 
   goToChat = item => {
@@ -94,17 +122,23 @@ export default class Conversas extends Component {
 
   deleteChat = item => {
     const { conversas } = this.state
-    
+
     conversas.map(conversa => {
-      if(conversa.key === item.key) {
-        this.ref.collection("conversas").doc(item.key).collection("messages")
-        .get()
-        .then(snapshot => {
-          snapshot.docs.forEach(docs => {
-            docs.ref.delete()
+      if (conversa.key === item.key) {
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
+          .collection("messages")
+          .get()
+          .then(snapshot => {
+            snapshot.docs.forEach(docs => {
+              docs.ref.delete()
+            })
           })
-        })
-        this.ref.collection("conversas").doc(item.key).delete()
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
+          .delete()
       }
       return true
     })
@@ -116,6 +150,24 @@ export default class Conversas extends Component {
   }
 
   search = () => {}
+
+  parseTime = dateNanoScds => {
+    const date = dateNanoScds.toDate()
+    const atualDate = firebase.database().getServerTime()
+    let textDate = ""
+    if (atualDate.getDate() - date.getDate() === 0) {
+      textDate = getTime(date)
+    } else if (atualDate.getDate() - date.getDate() === 1) {
+      textDate = "Ontem"
+    } else if (atualDate.getDate() - date.getDate() >= 2) {
+      textDate = `${date
+        .getDate()
+        .toString()}/${date
+        .getMonth()
+        .toString()}/${date.getFullYear().toString()}`
+    }
+    return textDate
+  }
 
   render() {
     const { conversas, myName, myPicture } = this.state
@@ -142,10 +194,10 @@ export default class Conversas extends Component {
             return (
               <ListItem
                 onPress={() => {
-                  this.goToChat(item.contact)
+                  this.goToChat(item)
                 }}
                 onLongPress={() => {
-                  this.confirmDelete(item.contact)
+                  this.confirmDelete(item)
                 }}
                 style={styles.conversa}
                 subtitle={
@@ -153,18 +205,24 @@ export default class Conversas extends Component {
                     <Text style={styles.name}>{item.contactName}</Text>
                     <Text style={styles.lastMsg}>{item.lastMessage}</Text>
                     <View style={styles.rightInformation}>
-                      <Text style={styles.data}>{item.lastMessage}</Text>
-                      <LinearGradient
-                        colors={["#547BF0", "#6AC3FB"]}
-                        style={styles.cont}
-                      >
-                        <Text style={styles.unread}>{item.unread}</Text>
-                      </LinearGradient>
+                      <Text style={styles.data}>
+                        {this.parseTime(item.dateLastMessage)}
+                      </Text>
+                      {item.unreadMsgs && (
+                        <LinearGradient
+                          colors={["#547BF0", "#6AC3FB"]}
+                          style={styles.cont}
+                        >
+                          <Text style={styles.unread}>
+                            {item.numUnreadMsgs}
+                          </Text>
+                        </LinearGradient>
+                      )}
                     </View>
                   </View>
                 }
                 leftAvatar={{
-                  source: { uri: item.profileImage },
+                  source: { uri: item.contactPhoto },
                   size: "medium"
                 }}
               />
