@@ -90,7 +90,7 @@ const configBody = () => {
 const styles = StyleSheet.create({
   elevationBody: {
     flex: 1,
-    elevation: 2,
+    elevation: 5,
     marginTop: 30,
     marginBottom: 30,
     marginLeft: 30,
