@@ -39,6 +39,7 @@ export default class MessageInput extends Component {
         <TextInput
           style={[newStyle]}
           value={value}
+          maxHeight={90}
           onChangeText={onChangeHandler}
           placeholder="Escreva uma mensagem"
           autoComplete="off"
