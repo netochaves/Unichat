@@ -12,6 +12,7 @@ import Verification from "~/Screens/Verification/verification"
 import Chat from "~/Screens/Chat/chat"
 import Contatos from "~/Screens/Contacts/contacts"
 import Conversas from "~/Screens/Conversas/conversas"
+import Settings from "~/Screens/Config/config"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
 
@@ -52,7 +53,7 @@ const tabBarNavigator = createMaterialTopTabNavigator(
     },
 
     SettingsScreen: {
-      screen: Contatos,
+      screen: Settings,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
           <Icon name="md-settings" size={28} type="ionicon" color={tintColor} />
@@ -122,6 +123,12 @@ const appStackNavigator = createStackNavigator(
     },
     ChatScreen: {
       screen: Chat,
+      navigationOptions: {
+        header: null
+      }
+    },
+    SettingsScreen: {
+      screen: tabBarNavigator,
       navigationOptions: {
         header: null
       }
