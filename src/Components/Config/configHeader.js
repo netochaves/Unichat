@@ -1,10 +1,6 @@
 import React from "react"
 
-import {
-  View,
-  StyleSheet,
-  Text,
-} from "react-native"
+import { View, StyleSheet, Text } from "react-native"
 
 const configHeader = () => {
   return (
@@ -29,13 +25,13 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 15,
     marginRight: 10,
-    flexDirection: "row",
+    flexDirection: "row"
   },
   configInfo: {
     flex: 1,
     fontSize: 22,
     textAlign: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
   }
 })
 
