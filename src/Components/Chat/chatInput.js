@@ -8,6 +8,7 @@ import {
   TouchableOpacity
 } from "react-native"
 import Icon from "react-native-vector-icons/Feather"
+import { ScrollView } from "react-native-gesture-handler"
 
 const { width: WIDTH } = Dimensions.get("window")
 
@@ -39,6 +40,7 @@ export default class MessageInput extends Component {
         <TextInput
           style={[newStyle]}
           value={value}
+          maxHeight={90}
           onChangeText={onChangeHandler}
           placeholder="Escreva uma mensagem"
           autoComplete="off"
