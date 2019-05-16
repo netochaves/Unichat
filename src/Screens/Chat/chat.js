@@ -11,6 +11,7 @@ import firebase from "react-native-firebase"
 import ChatInput from "../../Components/Chat/chatInput"
 import ChatHeader from "../../Components/Chat/chatHeader"
 import ChatContainer from "../../Components/Chat/chatContainer"
+import getTime from "~/functions/getTime"
 
 export default class Conversas extends Component {
   static navigationOptions = {
@@ -27,7 +28,8 @@ export default class Conversas extends Component {
       user: firebase.auth().currentUser.uid,
       userData: null,
       isValueNull: true,
-      destUser: navigation.getParam("item")
+      destUser: navigation.getParam("item"),
+      status: ""
     }
     const { user, destUser } = this.state
     this.ref = firebase
@@ -44,7 +46,10 @@ export default class Conversas extends Component {
       .collection("conversas")
       .doc(user)
 
-    this.refDestDatabase = firebase.database().ref(`users/${destUser.key}`)
+    this.userDest = firebase
+      .firestore()
+      .collection("users")
+      .doc(destUser.key)
 
     firebase
       .firestore()
@@ -65,6 +70,9 @@ export default class Conversas extends Component {
 
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
+    this.unsubscribeDest = this.userDest.onSnapshot(() => {
+      this.getTime()
+    })
     this.unsubscribe = this.ref
       .collection("messages")
       .orderBy("date", "asc")
@@ -206,8 +214,46 @@ export default class Conversas extends Component {
     }
   }
 
+  parseTime = dateNanoScds => {
+    const date = dateNanoScds.toDate()
+    const atualDate = firebase.database().getServerTime()
+    let textDate = ""
+    if (atualDate.getDate() - date.getDate() === 0) {
+      textDate = `Visto por último hoje às ${getTime(date)}`
+    } else if (atualDate.getDate() - date.getDate() === 1) {
+      textDate = `Visto por último ontem às ${getTime(date)}`
+    } else if (atualDate.getDate() - date.getDate() >= 2) {
+      let day = ""
+      let month = ""
+      const year = date.getFullYear().toString()
+      if (date.getDate() < 10) {
+        day = `0${date.getDate().toString()}`
+      } else {
+        day = date.getDate().toString()
+      }
+      if (date.getMonth() < 10) {
+        month = `0${date.getMonth().toString()}`
+      } else {
+        month = date.getMonth().toString()
+      }
+      textDate = `Visto por último em ${day}/${month.toString()}/${year}`
+    }
+    return textDate
+  }
+
+  getTime = () => {
+    this.userDest.get().then(doc => {
+      if (doc.data().online === true) {
+        this.setState({ status: "Online" })
+      } else {
+        const date = doc.data().lastSeen
+        this.setState({ status: this.parseTime(date) })
+      }
+    })
+  }
+
   render() {
-    const { messages, messageText, isValueNull, destUser } = this.state
+    const { messages, messageText, isValueNull, destUser, status } = this.state
     const { navigation } = this.props
     // firebase.auth().signOut()
     return (
@@ -217,7 +263,7 @@ export default class Conversas extends Component {
           userName={destUser.contactName}
           userPhoto={destUser.contactPhoto}
           navigation={navigation}
-          refDestDatabase={this.refDestDatabase}
+          status={status}
         />
         <View style={styles.chatContainer}>
           <ChatContainer messages={messages} />

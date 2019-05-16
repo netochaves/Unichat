@@ -56,14 +56,6 @@ export default class PerfilSettings extends Component {
     const { userName, eMail, code, profileImageUrl } = this.state
 
     firebase
-      .database()
-      .ref(`users/${user.uid}`)
-      .set({
-        online: true,
-        lastSeen: ""
-      })
-
-    firebase
       .firestore()
       .collection("users")
       .doc(user.uid)
@@ -72,7 +64,9 @@ export default class PerfilSettings extends Component {
         username: userName,
         email: eMail,
         language_code: code,
-        profile_img_url: profileImageUrl
+        profile_img_url: profileImageUrl,
+        online: true,
+        lastSeen: ""
       })
     navigation.navigate("Conversas")
   }

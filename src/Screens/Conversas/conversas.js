@@ -34,12 +34,9 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
-    firebase
-      .database()
-      .ref(`users/${firebase.auth().currentUser.uid}`)
-      .update({
-        online: true
-      })
+    this.ref.update({
+      online: true
+    })
     AppState.addEventListener("change", this.handleAppStateChange)
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.ref.get().then(doc => {
@@ -52,26 +49,22 @@ export default class Conversas extends Component {
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener("change", this.handleAppStateChange)
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe()
   }
 
   handleAppStateChange = nextAppState => {
     const { appState } = this.state
-    const userStatusRef = firebase
-      .database()
-      .ref(`users/${firebase.auth().currentUser.uid}`)
 
     if (appState.match(/inactive|background/) && nextAppState === "active") {
-      userStatusRef.update({
+      this.ref.update({
         online: true
       })
     } else if (
       appState.match(/inative|active/) &&
       nextAppState === "background"
     ) {
-      userStatusRef.update({
+      this.ref.update({
         online: false,
         lastSeen: firebase.database().getServerTime()
       })
