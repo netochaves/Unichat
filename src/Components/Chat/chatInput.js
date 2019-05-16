@@ -8,7 +8,6 @@ import {
   TouchableOpacity
 } from "react-native"
 import Icon from "react-native-vector-icons/Feather"
-import { ScrollView } from "react-native-gesture-handler"
 
 const { width: WIDTH } = Dimensions.get("window")
 
