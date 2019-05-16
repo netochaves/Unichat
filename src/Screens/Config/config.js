@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React from "react"
 import {
   View,
   StyleSheet
@@ -6,22 +6,13 @@ import {
 import ConfigHeader from "~/Components/Config/configHeader"
 import ConfigBody from "~/Components/Config/configBody"
 
-export default class Config extends Component {
-  constructor() {
-    super()
-    this.state = {
-
-    }
-  }
-
-  render() {
-    return (
-      <View style={styles.content}>
-        <ConfigHeader />
-        <ConfigBody />
-      </ View>
-    )
-  }
+const Config = () => {
+  return (
+    <View style={styles.content}>
+      <ConfigHeader />
+      <ConfigBody />
+    </ View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -30,3 +21,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4F5F8"
   }
 })
+
+export default Config
