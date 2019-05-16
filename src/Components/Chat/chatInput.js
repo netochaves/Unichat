@@ -39,6 +39,7 @@ export default class MessageInput extends Component {
         <TextInput
           style={[newStyle]}
           value={value}
+          maxHeight={90}
           onChangeText={onChangeHandler}
           placeholder="Escreva uma mensagem"
           autoComplete="off"
@@ -48,7 +49,11 @@ export default class MessageInput extends Component {
             this.updtSize(e.nativeEvent.contentSize.height)
           }
         />
-        <TouchableOpacity onPress={onPress} disabled={isValueNull}>
+        <TouchableOpacity
+          onPress={onPress}
+          disabled={isValueNull}
+          style={styles.sendbutton}
+        >
           <View style={styles.CircleShapeView}>
             <Icon style={styles.icon} name="send" size={22} color="#fff" />
           </View>
@@ -83,5 +88,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 5,
     left: 2
+  },
+  sendbutton: {
+    alignSelf: "center",
+    bottom: 5
   }
 })
