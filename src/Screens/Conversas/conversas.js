@@ -16,6 +16,7 @@ import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
 import getTime from "~/functions/getTime"
+import NetInfo from "@react-native-community/netinfo"
 
 export default class Conversas extends Component {
   constructor() {
@@ -37,6 +38,10 @@ export default class Conversas extends Component {
     this.ref.update({
       online: true
     })
+    NetInfo.isConnected.addEventListener(
+      "connectionChange",
+      this.handleConnectivityChange
+    )
     AppState.addEventListener("change", this.handleAppStateChange)
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.ref.get().then(doc => {
@@ -51,6 +56,14 @@ export default class Conversas extends Component {
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe()
+  }
+
+  handleConnectivityChange = isConnected => {
+    if (isConnected === true) {
+      this.ref.update({
+        online: true
+      })
+    }
   }
 
   handleAppStateChange = nextAppState => {
