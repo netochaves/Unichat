@@ -1,24 +1,27 @@
 import React from "react"
 
-import { View, TextInput, StyleSheet } from "react-native"
+import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native"
 import { Icon } from "react-native-elements"
 
 const Components = props => {
-  const { searchHandler, text } = props
+  const { onChangeText, value, onBackPressHandler } = props
   return (
     <View style={styles.container}>
       <View style={styles.itens}>
-        <Icon
-          containerStyle={styles.arrowIcon}
-          name="arrowleft"
-          type="antdesign"
-          color="#00aced"
-        />
+        <TouchableOpacity onPress={onBackPressHandler}>
+          <Icon
+            containerStyle={styles.arrowIcon}
+            name="arrowleft"
+            type="antdesign"
+            color="#00aced"
+          />
+        </TouchableOpacity>
+
         <TextInput
           style={styles.input}
-          onChangeText={searchHandler}
+          onChangeText={onChangeText}
           placeholder="Pesquisar..."
-          value={text}
+          value={value}
         />
       </View>
     </View>
