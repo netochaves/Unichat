@@ -238,40 +238,43 @@ export default class Conversas extends Component {
           data={conversas}
           renderItem={({ item }) => {
             return (
-              <ListItem
+              <TouchableOpacity
                 onPress={() => {
                   this.goToChat(item)
                 }}
                 onLongPress={() => {
                   this.confirmDelete(item)
                 }}
-                style={styles.conversa}
-                subtitle={
-                  <View style={styles.containerSub}>
-                    <Text style={styles.name}>{item.contactName}</Text>
-                    <Text style={styles.lastMsg}>{item.lastMessage}</Text>
-                    <View style={styles.rightInformation}>
-                      <Text style={styles.data}>
-                        {this.parseTime(item.dateLastMessage)}
-                      </Text>
-                      {item.unreadMsgs && (
-                        <LinearGradient
-                          colors={["#547BF0", "#6AC3FB"]}
-                          style={styles.cont}
-                        >
-                          <Text style={styles.unread}>
-                            {item.numUnreadMsgs}
-                          </Text>
-                        </LinearGradient>
-                      )}
+              >
+                <ListItem
+                  style={styles.conversa}
+                  subtitle={
+                    <View style={styles.containerSub}>
+                      <Text style={styles.name}>{item.contactName}</Text>
+                      <Text style={styles.lastMsg}>{item.lastMessage}</Text>
+                      <View style={styles.rightInformation}>
+                        <Text style={styles.data}>
+                          {this.parseTime(item.dateLastMessage)}
+                        </Text>
+                        {item.unreadMsgs && (
+                          <LinearGradient
+                            colors={["#547BF0", "#6AC3FB"]}
+                            style={styles.cont}
+                          >
+                            <Text style={styles.unread}>
+                              {item.numUnreadMsgs}
+                            </Text>
+                          </LinearGradient>
+                        )}
+                      </View>
                     </View>
-                  </View>
-                }
-                leftAvatar={{
-                  source: { uri: item.contactPhoto },
-                  size: "medium"
-                }}
-              />
+                  }
+                  leftAvatar={{
+                    source: { uri: item.contactPhoto },
+                    size: "medium"
+                  }}
+                />
+              </TouchableOpacity>
             )
           }}
           keyExtractor={i => i.key}
