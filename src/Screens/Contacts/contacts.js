@@ -12,13 +12,17 @@ import { ListItem, Avatar } from "react-native-elements"
 import Contacts from "react-native-contacts"
 import AsyncStorage from "@react-native-community/async-storage"
 import firebase from "react-native-firebase"
-import ContactHeader from "../../Components/Contacts/contactHeader"
+import ContactHeader from "~/Components/Contacts/contactHeader"
+import SearchBar from "~/Components/SearchBar"
 
 export default class Contatos extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      contacts: []
+      isSerchable: false,
+      text: "",
+      contacts: [],
+      arrayholder: []
     }
     this.ref = firebase.firestore().collection("users")
   }
@@ -29,7 +33,10 @@ export default class Contatos extends Component {
 
   getData = async () => {
     AsyncStorage.getItem("@contacts").then(contactsResponse => {
-      this.setState({ contacts: JSON.parse(contactsResponse) })
+      this.setState({
+        contacts: JSON.parse(contactsResponse),
+        arrayholder: JSON.parse(contactsResponse)
+      })
     })
   }
 
@@ -88,14 +95,49 @@ export default class Contatos extends Component {
     })
   }
 
-  render() {
+  searchFilterFunction = text => {
+    this.setState({ text })
     const { contacts } = this.state
+    const newContacts = contacts.filter(item => {
+      const contact = `${item.contactName.toUpperCase()}`
+      const textData = text.toUpperCase()
+      return contact.indexOf(textData) > -1
+    })
+    this.setState({ arrayholder: newContacts })
+  }
+
+  backPressHandler = () => {
+    this.setState(prevState => ({
+      arrayholder: prevState.contacts,
+      isSerchable: false,
+      text: ""
+    }))
+  }
+
+  render() {
+    const { arrayholder, text, isSerchable } = this.state
     const { navigation } = this.props
+    let toolbar
+    if (isSerchable)
+      toolbar = (
+        <SearchBar
+          onChangeText={t => this.searchFilterFunction(t)}
+          value={text}
+          onBackPressHandler={this.backPressHandler}
+        />
+      )
+    else
+      toolbar = (
+        <ContactHeader
+          syncronize={this.syncronize}
+          onPressSearch={() => this.setState({ isSerchable: true })}
+        />
+      )
     return (
       <View style={styles.container}>
-        <ContactHeader syncronize={this.syncronize} />
+        {toolbar}
         <FlatList
-          data={contacts.sort((a, b) => a.givenName.localeCompare(b))}
+          data={arrayholder.sort((a, b) => a.givenName.localeCompare(b))}
           renderItem={({ item }) => {
             return (
               <TouchableOpacity

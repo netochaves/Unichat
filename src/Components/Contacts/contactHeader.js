@@ -4,21 +4,23 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableNativeFeedback,
+  TouchableOpacity,
   Dimensions
 } from "react-native"
 import { Icon } from "react-native-elements"
 
 const contactsHeader = props => {
-  const { syncronize } = props
+  const { syncronize, onPressSearch } = props
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
         <Text style={styles.contactsInfo}>Contatos</Text>
         <View style={styles.Icon}>
-          <Icon name="search1" color="#00aced" type="antdesign" />
+          <TouchableOpacity onPress={onPressSearch}>
+            <Icon name="search1" color="#00aced" type="antdesign" />
+          </TouchableOpacity>
         </View>
-        <TouchableNativeFeedback>
+        <TouchableOpacity>
           <Icon
             containerStyle={styles.syncIcon}
             name="sync"
@@ -26,7 +28,7 @@ const contactsHeader = props => {
             type="material"
             onPress={syncronize}
           />
-        </TouchableNativeFeedback>
+        </TouchableOpacity>
       </View>
     </View>
   )
@@ -51,7 +53,7 @@ const styles = StyleSheet.create({
   },
   contactsInfo: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 22,
     textAlign: "center",
     backgroundColor: "#fff"
   },
