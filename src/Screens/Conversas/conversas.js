@@ -8,13 +8,15 @@ import {
   Image,
   TouchableOpacity,
   BackHandler,
-  Alert
+  Alert,
+  AppState
 } from "react-native"
 import { ListItem, Icon } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
 import getTime from "~/functions/getTime"
+import NetInfo from "@react-native-community/netinfo"
 
 export default class Conversas extends Component {
   constructor() {
@@ -22,7 +24,8 @@ export default class Conversas extends Component {
     this.state = {
       conversas: [],
       myName: "",
-      myPicture: null
+      myPicture: null,
+      appState: AppState.currentState
     }
 
     this.ref = firebase
@@ -32,6 +35,14 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
+    this.ref.update({
+      online: true
+    })
+    NetInfo.isConnected.addEventListener(
+      "connectionChange",
+      this.handleConnectivityChange
+    )
+    AppState.addEventListener("change", this.handleAppStateChange)
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.ref.get().then(doc => {
       this.setState({
@@ -45,6 +56,41 @@ export default class Conversas extends Component {
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe()
+  }
+
+  handleConnectivityChange = isConnected => {
+    if (isConnected === true) {
+      const { appState } = this.state
+      if (appState === "active") {
+        this.ref.update({
+          online: true
+        })
+      } else if (appState === "background") {
+        this.ref.update({
+          online: false,
+          lastSeen: firebase.database().getServerTime()
+        })
+      }
+    }
+  }
+
+  handleAppStateChange = nextAppState => {
+    const { appState } = this.state
+
+    if (appState.match(/inactive|background/) && nextAppState === "active") {
+      this.ref.update({
+        online: true
+      })
+    } else if (
+      appState.match(/inative|active/) &&
+      nextAppState === "background"
+    ) {
+      this.ref.update({
+        online: false,
+        lastSeen: firebase.database().getServerTime()
+      })
+    }
+    this.setState({ appState: nextAppState })
   }
 
   handleBackPress = () => {
@@ -192,40 +238,43 @@ export default class Conversas extends Component {
           data={conversas}
           renderItem={({ item }) => {
             return (
-              <ListItem
+              <TouchableOpacity
                 onPress={() => {
                   this.goToChat(item)
                 }}
                 onLongPress={() => {
                   this.confirmDelete(item)
                 }}
-                style={styles.conversa}
-                subtitle={
-                  <View style={styles.containerSub}>
-                    <Text style={styles.name}>{item.contactName}</Text>
-                    <Text style={styles.lastMsg}>{item.lastMessage}</Text>
-                    <View style={styles.rightInformation}>
-                      <Text style={styles.data}>
-                        {this.parseTime(item.dateLastMessage)}
-                      </Text>
-                      {item.unreadMsgs && (
-                        <LinearGradient
-                          colors={["#547BF0", "#6AC3FB"]}
-                          style={styles.cont}
-                        >
-                          <Text style={styles.unread}>
-                            {item.numUnreadMsgs}
-                          </Text>
-                        </LinearGradient>
-                      )}
+              >
+                <ListItem
+                  style={styles.conversa}
+                  subtitle={
+                    <View style={styles.containerSub}>
+                      <Text style={styles.name}>{item.contactName}</Text>
+                      <Text style={styles.lastMsg}>{item.lastMessage}</Text>
+                      <View style={styles.rightInformation}>
+                        <Text style={styles.data}>
+                          {this.parseTime(item.dateLastMessage)}
+                        </Text>
+                        {item.unreadMsgs && (
+                          <LinearGradient
+                            colors={["#547BF0", "#6AC3FB"]}
+                            style={styles.cont}
+                          >
+                            <Text style={styles.unread}>
+                              {item.numUnreadMsgs}
+                            </Text>
+                          </LinearGradient>
+                        )}
+                      </View>
                     </View>
-                  </View>
-                }
-                leftAvatar={{
-                  source: { uri: item.contactPhoto },
-                  size: "medium"
-                }}
-              />
+                  }
+                  leftAvatar={{
+                    source: { uri: item.contactPhoto },
+                    size: "medium"
+                  }}
+                />
+              </TouchableOpacity>
             )
           }}
           keyExtractor={i => i.key}
