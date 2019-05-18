@@ -19,6 +19,7 @@ const Components = props => {
         <TextInput
           style={styles.input}
           onChangeText={onChangeText}
+          autoFocus
           placeholder="Pesquisar..."
           value={value}
         />
