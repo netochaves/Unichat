@@ -19,7 +19,7 @@ const getTime = date => {
   if (minutes < 10) {
     minutes = 0 + minutes.toString()
   }
-  return `${hour.toString()} : ${minutes.toString()} ${TimeType.toString()}`
+  return `${hour.toString()}:${minutes.toString()} ${TimeType.toString()}`
 }
 
 export default getTime
