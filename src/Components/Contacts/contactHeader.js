@@ -16,10 +16,7 @@ const contactsHeader = props => {
       <View style={styles.headerContent}>
         <Text style={styles.contactsInfo}>Contatos</Text>
         <View style={styles.Icon}>
-          <Icon
-            name="search1"
-            color="#00aced"
-            type="antdesign" />
+          <Icon name="search1" color="#00aced" type="antdesign" />
         </View>
         <TouchableNativeFeedback>
           <Icon
@@ -28,7 +25,7 @@ const contactsHeader = props => {
             color="#00aced"
             type="material"
             onPress={syncronize}
-            />
+          />
         </TouchableNativeFeedback>
       </View>
     </View>
@@ -48,23 +45,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginBottom: 15,
     marginTop: 15,
-    marginLeft: ((comprimento) / 6),
+    marginLeft: comprimento / 6,
     marginRight: 10,
-    flexDirection: "row",
+    flexDirection: "row"
   },
   contactsInfo: {
     flex: 1,
     fontSize: 20,
     textAlign: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
   },
   Icon: {
     justifyContent: "center",
     marginRight: 10,
-    marginLeft: 10,
+    marginLeft: 10
   },
   syncIcon: {
-    justifyContent: "center",
+    justifyContent: "center"
   }
 })
 
