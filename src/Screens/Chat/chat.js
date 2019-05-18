@@ -99,6 +99,7 @@ export default class Conversas extends Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+    this.unsubscribeDest()
     this.unsubscribe()
   }
 

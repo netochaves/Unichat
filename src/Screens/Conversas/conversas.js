@@ -60,9 +60,17 @@ export default class Conversas extends Component {
 
   handleConnectivityChange = isConnected => {
     if (isConnected === true) {
-      this.ref.update({
-        online: true
-      })
+      const { appState } = this.state
+      if (appState === "active") {
+        this.ref.update({
+          online: true
+        })
+      } else if (appState === "background") {
+        this.ref.update({
+          online: false,
+          lastSeen: firebase.database().getServerTime()
+        })
+      }
     }
   }
 
