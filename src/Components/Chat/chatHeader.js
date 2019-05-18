@@ -4,7 +4,8 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native"
 import { Avatar, Icon } from "react-native-elements"
 
 const chatHeader = props => {
-  const { userName, userPhoto, navigation } = props
+  const { userName, userPhoto, navigation, status } = props
+
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
@@ -22,7 +23,7 @@ const chatHeader = props => {
         />
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{userName}</Text>
-          <Text style={styles.lastSeen}>Visto por ultimos às 8:10pm</Text>
+          <Text style={styles.lastSeen}>{status}</Text>
         </View>
         <Icon
           containerStyle={styles.moreInfo}
