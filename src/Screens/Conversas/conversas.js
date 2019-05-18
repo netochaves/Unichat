@@ -17,14 +17,18 @@ import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
 import getTime from "~/functions/getTime"
 import NetInfo from "@react-native-community/netinfo"
+import SearchBar from "~/Components/SearchBar"
 
 export default class Conversas extends Component {
   constructor() {
     super()
     this.state = {
       conversas: [],
+      isSerchable: false,
+      arrayholder: [],
       myName: "",
       myPicture: null,
+      text: "",
       appState: AppState.currentState
     }
 
@@ -141,7 +145,7 @@ export default class Conversas extends Component {
               })
             }
           })
-          this.setState({ conversas })
+          this.setState({ conversas, arrayholder: conversas })
         })
       })
   }
@@ -215,27 +219,59 @@ export default class Conversas extends Component {
     return textDate
   }
 
+  searchFilterFunction = text => {
+    this.setState({ text })
+    const { conversas } = this.state
+    const newConversas = conversas.filter(item => {
+      const contact = `${item.contactName.toUpperCase()}`
+      const textData = text.toUpperCase()
+      return contact.indexOf(textData) > -1
+    })
+    this.setState({ arrayholder: newConversas })
+  }
+
+  backPressHandler = () => {
+    this.setState(prevState => ({
+      arrayholder: prevState.conversas,
+      isSerchable: false,
+      text: ""
+    }))
+  }
+
   render() {
-    const { conversas, myName, myPicture } = this.state
-    return (
-      <View style={styles.container}>
+    const { myName, myPicture, isSerchable, text, arrayholder } = this.state
+    let toolbar
+    if (isSerchable)
+      toolbar = (
+        <SearchBar
+          onChangeText={t => this.searchFilterFunction(t)}
+          value={text}
+          onBackPressHandler={this.backPressHandler}
+        />
+      )
+    else
+      toolbar = (
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <Image source={{ uri: myPicture }} style={styles.myPicture} />
             <Text style={styles.conversasInfo}>{myName}</Text>
             <TouchableOpacity
               onPress={() => {
-                this.search()
+                this.setState({ isSerchable: true })
               }}
             >
-              <View style={styles.searchIcon}>
+              <View style={styles.searchIcon} on>
                 <Icon name="search1" color="#00aced" type="antdesign" />
               </View>
             </TouchableOpacity>
           </View>
         </View>
+      )
+    return (
+      <View style={styles.container}>
+        {toolbar}
         <FlatList
-          data={conversas}
+          data={arrayholder}
           renderItem={({ item }) => {
             return (
               <TouchableOpacity
