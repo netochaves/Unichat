@@ -16,10 +16,10 @@ const Components = props => {
             color="#00aced"
           />
         </TouchableOpacity>
-
         <TextInput
           style={styles.input}
           onChangeText={onChangeText}
+          autoFocus
           placeholder="Pesquisar..."
           value={value}
         />
