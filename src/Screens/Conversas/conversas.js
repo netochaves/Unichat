@@ -39,6 +39,7 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
+    const { navigation } = this.props
     this.ref.update({
       online: true
     })
@@ -55,10 +56,18 @@ export default class Conversas extends Component {
       })
     })
     this.getData()
+    this.willBlur = navigation.addListener("willBlur", () => {
+      this.setState(prevState => ({
+        arrayholder: prevState.conversas,
+        isSerchable: false,
+        text: ""
+      }))
+    })
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+    this.willBlur.remove()
     this.unsubscribe()
   }
 
