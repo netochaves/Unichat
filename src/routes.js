@@ -13,6 +13,7 @@ import Chat from "~/Screens/Chat/chat"
 import Contatos from "~/Screens/Contacts/contacts"
 import Conversas from "~/Screens/Conversas/conversas"
 import Settings from "~/Screens/Config/config"
+import EditPerfil from "~/Screens/EditPerfil/editperfil"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
 
@@ -129,6 +130,12 @@ const appStackNavigator = createStackNavigator(
     },
     SettingsScreen: {
       screen: tabBarNavigator,
+      navigationOptions: {
+        header: null
+      }
+    },
+    EditPerfilScreen: {
+      screen: EditPerfil,
       navigationOptions: {
         header: null
       }

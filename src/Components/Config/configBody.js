@@ -9,7 +9,8 @@ import {
 } from "react-native"
 import { Icon } from "react-native-elements"
 
-const configBody = () => {
+const configBody = props => {
+  const { navigation } = props
   return (
     <View style={styles.elevationBody}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -30,7 +31,12 @@ const configBody = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.touchableIcon}>
+          <TouchableOpacity
+            style={styles.touchableIcon}
+            onPress={() => {
+              navigation.navigate("EditPerfilScreen")
+            }}
+          >
             <Icon name="person" size={28} color="#c6056c" />
             <Text style={styles.touchableStyle}>Perfil</Text>
             <View style={styles.chevronStyle}>
