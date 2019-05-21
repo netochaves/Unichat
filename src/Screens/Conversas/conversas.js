@@ -48,10 +48,10 @@ export default class Conversas extends Component {
     )
     AppState.addEventListener("change", this.handleAppStateChange)
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
-    this.ref.get().then(doc => {
+    this.listener = this.ref.onSnapshot(querySnapshot => {
       this.setState({
-        myName: doc.data().username,
-        myPicture: doc.data().profile_img_url
+        myName: querySnapshot.data().username,
+        myPicture: querySnapshot.data().profile_img_url
       })
     })
     this.getData()
@@ -60,6 +60,7 @@ export default class Conversas extends Component {
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe()
+    this.listener()
   }
 
   handleConnectivityChange = isConnected => {
