@@ -68,6 +68,11 @@ export default class Conversas extends Component {
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
     this.willBlur.remove()
+    this.setState(prevState => ({
+      arrayholder: prevState.conversas,
+      isSerchable: false,
+      text: ""
+    }))
     this.unsubscribe()
   }
 
@@ -323,6 +328,7 @@ export default class Conversas extends Component {
             )
           }}
           keyExtractor={i => i.key}
+          keyboardShouldPersistTaps="always"
         />
         <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
           <TouchableOpacity
