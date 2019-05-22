@@ -183,6 +183,7 @@ export default class Contatos extends Component {
           }}
           keyExtractor={i => i.recordID}
           onEndThreshold={0}
+          keyboardShouldPersistTaps="always"
         />
       </View>
     )
