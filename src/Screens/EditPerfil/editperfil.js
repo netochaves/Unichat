@@ -9,13 +9,13 @@ import {
   BackHandler,
   TouchableOpacity,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  TextInput
 } from "react-native"
 import firebase from "react-native-firebase"
 import LinearGradient from "react-native-linear-gradient"
 import { Icon } from "react-native-elements"
 import ImagePicker from "react-native-image-picker"
-import { TextInput } from "react-native-gesture-handler"
 
 export default class Conversas extends Component {
   constructor() {
@@ -25,16 +25,17 @@ export default class Conversas extends Component {
         uri: null
       },
       myName: null,
-      uploading: false,
-      disabled: false,
-      profileImageUrl: "",
-      editName: false,
-      editEmail: false,
       email: "",
       phone: "",
+      uploading: false,
+      disabled: false,
+      editName: false,
+      editEmail: false,
       emailTemp: "",
       nameTemp: ""
     }
+
+    this.user = firebase.auth().currentUser
 
     this.ref = firebase
       .firestore()
@@ -49,7 +50,6 @@ export default class Conversas extends Component {
         const { profile_img_url, username, email, phone } = doc.data()
         this.setState({
           myImage: { uri: profile_img_url },
-          profileImageUrl: profile_img_url,
           myName: username,
           email,
           phone
@@ -64,35 +64,20 @@ export default class Conversas extends Component {
 
   handleBackPress = () => {
     const { navigation } = this.props
-    navigation.navigate("SettingsScreen")
+    const { disabled } = this.state
+    if (!disabled) {
+      navigation.navigate("SettingsScreen")
+    }
     return true
   }
 
-  confirmUpdatePerfilSettings = () => {
-    const { navigation } = this.props
-    const user = firebase.auth().currentUser
-    const { myName, profileImageUrl, email } = this.state
-
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(user.uid)
-      .update({
-        username: myName,
-        email,
-        profile_img_url: profileImageUrl
-      })
-    navigation.navigate("SettingsScreen")
-  }
-
   uploadphotos = () => {
-    const user = firebase.auth().currentUser
     const { myImage } = this.state
     this.setState({ uploading: true, disabled: true })
 
     firebase
       .storage()
-      .ref(`profile_pics/${user.uid}`)
+      .ref(`profile_pics/${this.user.uid}`)
       .putFile(myImage.path)
       .on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => {
         let state = {}
@@ -102,12 +87,19 @@ export default class Conversas extends Component {
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
           state = {
             disabled: false,
-            uploading: false,
-            profileImageUrl: snapshot.downloadURL
+            uploading: false
           }
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(this.user.uid)
+            .update({
+              profile_img_url: snapshot.downloadURL
+            })
         }
-
-        this.setState(state)
+        setTimeout(() => {
+          this.setState(state)
+        }, 1000)
       })
   }
 
@@ -148,12 +140,27 @@ export default class Conversas extends Component {
 
   confirmName = () => {
     const { nameTemp } = this.state
-    this.setState({ myName: nameTemp, editName: false })
+    this.setState({ editName: false, myName: nameTemp })
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(this.user.uid)
+      .update({
+        username: nameTemp
+      })
   }
 
   confirmEmail = () => {
     const { emailTemp } = this.state
-    this.setState({ email: emailTemp, editEmail: false })
+    this.setState({ editEmail: false, email: emailTemp })
+
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(this.user.uid)
+      .update({
+        email: emailTemp
+      })
   }
 
   previewImage = () => {
@@ -164,12 +171,10 @@ export default class Conversas extends Component {
   }
 
   render() {
-    const { navigation } = this.props
     const {
       myImage,
       myName,
       uploading,
-      disabled,
       editName,
       editEmail,
       email,
@@ -183,7 +188,7 @@ export default class Conversas extends Component {
           <View style={styles.headerContent}>
             <TouchableOpacity
               style={styles.back}
-              onPress={() => navigation.navigate("SettingsScreen")}
+              onPress={this.handleBackPress}
             >
               <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
             </TouchableOpacity>
@@ -305,19 +310,6 @@ export default class Conversas extends Component {
             <Text style={styles.rotulo}>Telefone</Text>
             <Text style={styles.label}>{phone}</Text>
           </View>
-          <TouchableOpacity
-            onPress={this.confirmUpdatePerfilSettings}
-            disabled={disabled}
-          >
-            <LinearGradient
-              colors={
-                disabled ? ["#9b9fa5", "#9b9fa5"] : ["#547BF0", "#6AC3FB"]
-              }
-              style={styles.button}
-            >
-              <Text style={styles.textButton}>Confirmar</Text>
-            </LinearGradient>
-          </TouchableOpacity>
         </View>
       </View>
     )
@@ -401,19 +393,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 40,
     width: 40
-  },
-  textButton: {
-    alignSelf: "center",
-    fontSize: 20,
-    color: "white"
-  },
-  button: {
-    height: 60,
-    borderRadius: 20,
-    justifyContent: "center",
-    marginLeft: 40,
-    marginRight: 40,
-    marginTop: 50
   },
   loadingIcon: {
     position: "absolute",

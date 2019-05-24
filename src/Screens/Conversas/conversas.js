@@ -67,14 +67,14 @@ export default class Conversas extends Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+    this.unsubscribe()
+    this.listener()
     this.willBlur.remove()
     this.setState(prevState => ({
       arrayholder: prevState.conversas,
       isSerchable: false,
       text: ""
     }))
-    this.unsubscribe()
-    this.listener()
   }
 
   handleConnectivityChange = isConnected => {
