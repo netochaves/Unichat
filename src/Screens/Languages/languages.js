@@ -14,8 +14,9 @@ export default class Languages extends Component {
     super()
     this.state = {
       dataSource: [],
-      currentLanguageCode: ""
+      currentLanguageName: ""
     }
+    this.user = firebase.auth().currentUser
 
     this.ref = firebase
       .firestore()
@@ -29,30 +30,51 @@ export default class Languages extends Component {
     })
 
     this.ref.get().then(doc => {
-      this.setState({
-        currentLanguageCode: doc.data().language_code
-      })
+      this.updateLanguageName(doc.data().language_code)
+    })
+  }
+
+  changeLanguage = item => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(this.user.uid)
+      .update({ language_code: item.code })
+
+    this.updateLanguageName(item.code)
+  }
+
+  updateLanguageName = code => {
+    const { dataSource } = this.state
+    dataSource.map(languages => {
+      if (languages.code === code) {
+        this.setState({
+          currentLanguageName: languages.name
+        })
+      }
+      return true
     })
   }
 
   render() {
-    const { currentLanguageCode, dataSource } = this.state
+    const { currentLanguageName, dataSource } = this.state
     return (
-      <View>
-        <View>
+      <View style={styles.container}>
+        <View style={styles.headerTitle}>
+          <Text style={styles.headerText}>Idioma atual</Text>
+          <Text style={styles.itemTextHeader}>{currentLanguageName}</Text>
           <Text style={styles.headerText}>Selecione um idioma</Text>
         </View>
-        <View>
-          <Text style={styles.headerText}>Idioma atual</Text>
-          <Text style={styles.itemText}>{currentLanguageCode}</Text>
-        </View>
-        <View>
+        <View style={styles.container}>
           <FlatList
             data={dataSource}
             keyExtractor={item => item.id}
             renderItem={({ item }) => {
               return (
-                <TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  onPress={() => this.changeLanguage(item)}
+                >
                   <Text style={styles.itemText}>{item.name}</Text>
                 </TouchableOpacity>
               )
@@ -65,10 +87,34 @@ export default class Languages extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F4F5F8"
+  },
+  itemTextHeader: {
+    backgroundColor: "#fff",
+    fontSize: 18,
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingBottom: 10
+  },
   itemText: {
     fontSize: 18
   },
+  headerTitle: {
+    backgroundColor: "#F4F5F8"
+  },
   headerText: {
-    fontSize: 24
+    fontSize: 24,
+    alignSelf: "center",
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+  buttonStyle: {
+    backgroundColor: "#fff",
+    marginBottom: 2,
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingBottom: 10
   }
 })
