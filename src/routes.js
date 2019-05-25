@@ -13,6 +13,7 @@ import Chat from "~/Screens/Chat/chat"
 import Contatos from "~/Screens/Contacts/contacts"
 import Conversas from "~/Screens/Conversas/conversas"
 import Settings from "~/Screens/Config/config"
+import Languages from "~/Screens/Languages/languages"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
 
@@ -132,6 +133,9 @@ const appStackNavigator = createStackNavigator(
       navigationOptions: {
         header: null
       }
+    },
+    LanguagesScreen: {
+      screen: Languages
     }
   },
   {
