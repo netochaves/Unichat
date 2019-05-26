@@ -29,6 +29,18 @@ export default class Contatos extends Component {
 
   componentDidMount() {
     this.getData()
+    const { navigation } = this.props
+    this.willBlur = navigation.addListener("willBlur", () => {
+      this.setState(prevState => ({
+        arrayholder: prevState.contacts,
+        isSerchable: false,
+        text: ""
+      }))
+    })
+  }
+
+  componentWillUnmount() {
+    this.willBlur.remove()
   }
 
   getData = async () => {
@@ -171,6 +183,7 @@ export default class Contatos extends Component {
           }}
           keyExtractor={i => i.recordID}
           onEndThreshold={0}
+          keyboardShouldPersistTaps="always"
         />
       </View>
     )
