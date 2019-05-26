@@ -40,6 +40,26 @@ export default class Conversas extends Component {
 
   componentDidMount() {
     const { navigation } = this.props
+
+    firebase
+      .notifications()
+      .getInitialNotification()
+      .then(notificationOpen => {
+        if (notificationOpen) {
+          const { notification } = notificationOpen
+          const { conversaId } = notification.data
+          this.ref
+            .collection("conversas")
+            .doc(conversaId)
+            .get()
+            .then(doc => {
+              const key = doc.id
+              const item = { key, ...doc.data() }
+              navigation.navigate("ChatScreen", { item })
+            })
+        }
+      })
+
     this.ref.update({
       online: true
     })
