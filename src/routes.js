@@ -135,7 +135,13 @@ const appStackNavigator = createStackNavigator(
       }
     },
     LanguagesScreen: {
-      screen: Languages
+      screen: Languages,
+      navigationOptions: {
+        title: "Tela de Idiomas",
+        headerTitleStyle: {
+          fontWeight: "normal"
+        }
+      }
     }
   },
   {

@@ -1,11 +1,14 @@
+/* eslint-disable react-native/split-platform-components */
 import React, { Component } from "react"
 import {
   View,
   Text,
   FlatList,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  ToastAndroid
 } from "react-native"
+import { CheckBox } from "react-native-elements"
 import firebase from "react-native-firebase"
 import data from "~/assets/languages/languages.json"
 
@@ -14,7 +17,9 @@ export default class Languages extends Component {
     super()
     this.state = {
       dataSource: [],
-      currentLanguageName: ""
+      currentLanguageName: "",
+      checkBoxIndex: -1,
+      checkBox: true
     }
     this.user = firebase.auth().currentUser
 
@@ -34,7 +39,7 @@ export default class Languages extends Component {
     })
   }
 
-  changeLanguage = item => {
+  changeLanguage = (item, index) => {
     firebase
       .firestore()
       .collection("users")
@@ -42,14 +47,16 @@ export default class Languages extends Component {
       .update({ language_code: item.code })
 
     this.updateLanguageName(item.code)
+    ToastAndroid.show("Idioma alterado com sucesso!", ToastAndroid.SHORT)
   }
 
   updateLanguageName = code => {
     const { dataSource } = this.state
-    dataSource.map(languages => {
+    dataSource.map((languages, index) => {
       if (languages.code === code) {
         this.setState({
-          currentLanguageName: languages.name
+          currentLanguageName: languages.name,
+          checkBoxIndex: index
         })
       }
       return true
@@ -57,7 +64,12 @@ export default class Languages extends Component {
   }
 
   render() {
-    const { currentLanguageName, dataSource } = this.state
+    const {
+      currentLanguageName,
+      dataSource,
+      checkBox,
+      checkBoxIndex
+    } = this.state
     return (
       <View style={styles.container}>
         <View style={styles.headerTitle}>
@@ -69,13 +81,23 @@ export default class Languages extends Component {
           <FlatList
             data={dataSource}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => {
+            extraData={this.state}
+            renderItem={({ item, index }) => {
               return (
                 <TouchableOpacity
                   style={styles.buttonStyle}
-                  onPress={() => this.changeLanguage(item)}
+                  onPress={() => this.changeLanguage(item, index)}
                 >
                   <Text style={styles.itemText}>{item.name}</Text>
+                  <View style={styles.checkBoxView}>
+                    <CheckBox
+                      checkedColor="#00aced"
+                      size={28}
+                      checkedIcon="check-circle"
+                      uncheckedIcon="circle-o"
+                      checked={index === checkBoxIndex ? checkBox : !checkBox}
+                    />
+                  </View>
                 </TouchableOpacity>
               )
             }}
@@ -93,28 +115,34 @@ const styles = StyleSheet.create({
   },
   itemTextHeader: {
     backgroundColor: "#fff",
-    fontSize: 18,
-    paddingTop: 10,
-    paddingLeft: 10,
-    paddingBottom: 10
+    fontSize: 20,
+    paddingTop: 15,
+    paddingLeft: 20,
+    paddingBottom: 15
   },
   itemText: {
-    fontSize: 18
+    fontSize: 20
   },
   headerTitle: {
     backgroundColor: "#F4F5F8"
   },
   headerText: {
-    fontSize: 24,
-    alignSelf: "center",
+    fontSize: 26,
+    alignSelf: "flex-start",
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
+    paddingLeft: 20
   },
   buttonStyle: {
     backgroundColor: "#fff",
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 2,
-    paddingTop: 10,
-    paddingLeft: 10,
-    paddingBottom: 10
+    paddingLeft: 20
+  },
+  checkBoxView: {
+    flex: 1,
+    paddingRight: 10,
+    alignItems: "flex-end"
   }
 })
