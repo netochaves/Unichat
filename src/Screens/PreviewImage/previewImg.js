@@ -3,7 +3,11 @@ import React, { Component } from "react"
 import { View, StyleSheet, Image, BackHandler } from "react-native"
 
 export default class PerfilSettings extends Component {
-  static navigationoptions = {}
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam("name")
+    }
+  }
 
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
@@ -24,7 +28,7 @@ export default class PerfilSettings extends Component {
     const img = navigation.getParam("img")
     return (
       <View style={styles.container}>
-        <Image source={img} style={styles.img} resizeMode="contain" />
+        <Image source={{ uri: img }} style={styles.img} resizeMode="contain" />
       </View>
     )
   }

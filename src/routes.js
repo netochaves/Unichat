@@ -99,9 +99,6 @@ const appStackNavigator = createStackNavigator(
     },
     PreviewImage: {
       screen: PreviewImage,
-      navigationOptions: {
-        header: null
-      }
     },
     VerificationScreen: {
       screen: Verification,
