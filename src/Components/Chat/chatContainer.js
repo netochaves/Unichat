@@ -1,7 +1,6 @@
 import React from "react"
 
 import { View } from "react-native"
-import shortid from "shortid"
 import { ScrollView } from "react-native-gesture-handler"
 import getTime from "~/functions/getTime"
 import Message from "../mensagem"
@@ -22,7 +21,7 @@ const Chat = props => {
         {messages.map(message => {
           return (
             <Message
-              key={shortid.generate()}
+              key={message.key}
               content={
                 message.source === "1"
                   ? message.content

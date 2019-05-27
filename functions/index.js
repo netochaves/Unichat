@@ -21,7 +21,7 @@ return (exports.sendPushNotification = functions.firestore
       })
       .catch(error => console.log(error))
 
-    const { contactName } = data
+    const { contactName, contactPhoto } = data
     if (source === "2") {
       const payload = {
         data: {
@@ -29,10 +29,11 @@ return (exports.sendPushNotification = functions.firestore
         },
         notification: {
           title: contactName,
-          body: content,
+          body: contentTranslated,
           sound: "default",
           android_channel_id: "main-channel",
-          collapseKey: "unichat"
+          collapseKey: "unichat",
+          group: "unichat"
         }
       }
 

@@ -38,27 +38,25 @@ export default class Conversas extends Component {
       .doc(firebase.auth().currentUser.uid)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { navigation } = this.props
-
-    firebase
+    const notificationOpen = await firebase
       .notifications()
       .getInitialNotification()
-      .then(notificationOpen => {
-        if (notificationOpen) {
-          const { notification } = notificationOpen
-          const { conversaId } = notification.data
-          this.ref
-            .collection("conversas")
-            .doc(conversaId)
-            .get()
-            .then(doc => {
-              const key = doc.id
-              const item = { key, ...doc.data() }
-              navigation.navigate("ChatScreen", { item })
-            })
-        }
-      })
+    if (notificationOpen) {
+      const { notification } = notificationOpen
+      const { conversaId } = notification.data
+      notification.android.setGroup("unichat")
+      this.ref
+        .collection("conversas")
+        .doc(conversaId)
+        .get()
+        .then(doc => {
+          const key = doc.id
+          const item = { key, ...doc.data() }
+          navigation.navigate("ChatScreen", { item })
+        })
+    }
 
     this.ref.update({
       online: true
@@ -93,6 +91,7 @@ export default class Conversas extends Component {
       isSerchable: false,
       text: ""
     }))
+    this.removeNotificationOpenedListener()
     this.unsubscribe()
   }
 
