@@ -11,10 +11,10 @@ const Chat = props => {
       <FlatList
         data={messages}
         inverted
+        keyExtractor={item => item.key}
         renderItem={({ item }) => {
           return (
             <Message
-              key={item.key}
               content={
                 item.source === "1" ? item.content : item.contentTranslated
               }
