@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   Keyboard
 } from "react-native"
+import AsyncStorage from "@react-native-community/async-storage"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
 import shortid from "shortid"
@@ -78,6 +79,9 @@ export default class PerfilSettings extends Component {
         })
       }
     })
+
+    await AsyncStorage.setItem("@username", userName)
+    await AsyncStorage.setItem("@profileImageUrl", profileImageUrl)
 
     navigation.navigate("Conversas")
   }

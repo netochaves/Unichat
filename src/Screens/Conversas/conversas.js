@@ -39,6 +39,10 @@ export default class Conversas extends Component {
   }
 
   async componentDidMount() {
+    const username = await AsyncStorage.getItem("@username")
+    const profileImageUrl = await AsyncStorage.getItem("@profileImageUrl")
+    this.setState({ myName: username, myPicture: profileImageUrl })
+
     const { navigation } = this.props
     const notificationOpen = await firebase
       .notifications()
@@ -57,7 +61,6 @@ export default class Conversas extends Component {
           navigation.navigate("ChatScreen", { item })
         })
     }
-
     this.ref.update({
       online: true
     })
@@ -67,12 +70,7 @@ export default class Conversas extends Component {
     )
     AppState.addEventListener("change", this.handleAppStateChange)
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
-    this.ref.get().then(doc => {
-      this.setState({
-        myName: doc.data().username,
-        myPicture: doc.data().profile_img_url
-      })
-    })
+
     this.getData()
     this.willBlur = navigation.addListener("willBlur", () => {
       this.setState(prevState => ({
