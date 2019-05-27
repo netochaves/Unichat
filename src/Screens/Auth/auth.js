@@ -123,9 +123,22 @@ export default class Auth extends Component {
     return true
   }
 
-  confirmPhone = () => {
-    const { phoneNumber } = this.state
+  parsePhone = () => {
+    const { countryCode, phoneNumber } = this.state
 
+    const fullNumber =
+      countryCode +
+      phoneNumber
+        .replace("(", "")
+        .replace(")", "")
+        .replace(" ", "")
+        .replace("-", "")
+
+    return fullNumber
+  }
+
+  confirmPhone = () => {
+    const phoneNumber = this.parsePhone()
     Alert.alert(
       "Confirmar",
       `O número ${phoneNumber} está correto?`,
@@ -141,7 +154,7 @@ export default class Auth extends Component {
   }
 
   signIn = () => {
-    const { phoneNumber } = this.state
+    const phoneNumber = this.parsePhone()
 
     firebase
       .auth()
@@ -168,7 +181,7 @@ export default class Auth extends Component {
       .replace(/(\d{4})(\d)/, "$1-$2")
       .replace(/(\d{4})-(\d)(\d{4})/, "$1$2-$3")
       .replace(/(-\d{4})\d+?$/, "$1")
-    this.setState({ phoneNumber: maskedInput })
+    this.setState({ phoneNumber: maskedInput, notValid: false })
   }
 
   render() {
