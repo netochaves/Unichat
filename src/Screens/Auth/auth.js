@@ -14,7 +14,6 @@ import {
   PermissionsAndroid
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
-import { TextInputMask } from "react-native-masked-text"
 import firebase from "react-native-firebase"
 import shortid from "shortid"
 import AsyncStorage from "@react-native-community/async-storage"
@@ -34,7 +33,7 @@ export default class Auth extends Component {
     this.state = {
       countries: [],
       countryCode: "",
-      phoneNumber: null,
+      phoneNumber: "",
       notValid: true,
       loading: true
     }
@@ -124,9 +123,22 @@ export default class Auth extends Component {
     return true
   }
 
-  confirmPhone = () => {
-    const { phoneNumber } = this.state
+  parsePhone = () => {
+    const { countryCode, phoneNumber } = this.state
 
+    const fullNumber =
+      countryCode +
+      phoneNumber
+        .replace("(", "")
+        .replace(")", "")
+        .replace(" ", "")
+        .replace("-", "")
+
+    return fullNumber
+  }
+
+  confirmPhone = () => {
+    const phoneNumber = this.parsePhone()
     Alert.alert(
       "Confirmar",
       `O número ${phoneNumber} está correto?`,
@@ -142,7 +154,7 @@ export default class Auth extends Component {
   }
 
   signIn = () => {
-    const { phoneNumber } = this.state
+    const phoneNumber = this.parsePhone()
 
     firebase
       .auth()
@@ -162,8 +174,24 @@ export default class Auth extends Component {
       })
   }
 
+  inputPhone = text => {
+    const maskedInput = text
+      .replace(/\D/g, "")
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{4})(\d)/, "$1-$2")
+      .replace(/(\d{4})-(\d)(\d{4})/, "$1$2-$3")
+      .replace(/(-\d{4})\d+?$/, "$1")
+    this.setState({ phoneNumber: maskedInput, notValid: false })
+  }
+
   render() {
-    const { countries, countryCode, loading, notValid } = this.state
+    const {
+      countries,
+      countryCode,
+      loading,
+      notValid,
+      phoneNumber
+    } = this.state
 
     if (loading) return null
     return (
@@ -195,22 +223,12 @@ export default class Auth extends Component {
         </View>
         <View style={styles.textInputView}>
           <TextInput style={styles.countryTextInput} value={countryCode} />
-          <TextInputMask
+          <TextInput
+            keyboardType="phone-pad"
             style={styles.textInputStyle}
-            refInput={ref => {
-              this.input = ref
-            }}
-            type="cel-phone"
-            options={{
-              maskType: "BRL",
-              withDDD: true,
-              dddMask: "(99)"
-            }}
+            value={phoneNumber}
             onChangeText={text => {
-              this.setState({
-                phoneNumber: `${countryCode}${text}`,
-                notValid: false
-              })
+              this.inputPhone(text)
             }}
           />
         </View>
