@@ -28,9 +28,10 @@ export default class Conversas extends Component {
       arrayholder: [],
       myName: "",
       myPicture: null,
-      text: "",
-      appState: AppState.currentState
+      text: ""
     }
+
+    this.appState = AppState.currentState
 
     this.ref = firebase
       .firestore()
@@ -89,18 +90,16 @@ export default class Conversas extends Component {
       isSerchable: false,
       text: ""
     }))
-    this.removeNotificationOpenedListener()
     this.unsubscribe()
   }
 
   handleConnectivityChange = isConnected => {
     if (isConnected === true) {
-      const { appState } = this.state
-      if (appState === "active") {
+      if (this.appState === "active") {
         this.ref.update({
           online: true
         })
-      } else if (appState === "background") {
+      } else if (this.appState === "background") {
         this.ref.update({
           online: false,
           lastSeen: firebase.database().getServerTime()
@@ -110,14 +109,15 @@ export default class Conversas extends Component {
   }
 
   handleAppStateChange = nextAppState => {
-    const { appState } = this.state
-
-    if (appState.match(/inactive|background/) && nextAppState === "active") {
+    if (
+      this.appState.match(/inactive|background/) &&
+      nextAppState === "active"
+    ) {
       this.ref.update({
         online: true
       })
     } else if (
-      appState.match(/inative|active/) &&
+      this.appState.match(/inative|active/) &&
       nextAppState === "background"
     ) {
       this.ref.update({
@@ -125,7 +125,7 @@ export default class Conversas extends Component {
         lastSeen: firebase.database().getServerTime()
       })
     }
-    this.setState({ appState: nextAppState })
+    this.appState = nextAppState
   }
 
   handleBackPress = () => {
