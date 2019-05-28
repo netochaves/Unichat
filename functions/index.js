@@ -5,6 +5,7 @@ admin.initializeApp(functions.config().firebase)
 
 return (exports.sendPushNotification = functions.firestore
   .document("users/{userId}/conversas/{conversaId}/messages/{messageId}")
+  // eslint-disable-next-line consistent-return
   .onCreate(async (snap, context) => {
     const { userId, conversaId } = context.params
     const { contentTranslated, content, source } = snap.data()
