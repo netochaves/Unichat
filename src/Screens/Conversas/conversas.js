@@ -39,13 +39,30 @@ export default class Conversas extends Component {
       .doc(firebase.auth().currentUser.uid)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.listener = this.ref.onSnapshot(async () => {
       const username = await AsyncStorage.getItem("@username")
       const profileImageUrl = await AsyncStorage.getItem("@profileImageUrl")
       this.setState({ myName: username, myPicture: profileImageUrl })
     })
     const { navigation } = this.props
+    const notificationOpen = await firebase
+      .notifications()
+      .getInitialNotification()
+    if (notificationOpen) {
+      const { notification } = notificationOpen
+      const { conversaId } = notification.data
+      notification.android.setGroup("unichat")
+      this.ref
+        .collection("conversas")
+        .doc(conversaId)
+        .get()
+        .then(doc => {
+          const key = doc.id
+          const item = { key, ...doc.data() }
+          navigation.navigate("ChatScreen", { item })
+        })
+    }
     this.ref.update({
       online: true
     })

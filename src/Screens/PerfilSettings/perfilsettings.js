@@ -36,6 +36,12 @@ export default class PerfilSettings extends Component {
       disabled: true,
       uploading: false
     }
+    this.user = firebase.auth().currentUser
+    this.fcm = firebase.messaging()
+    this.ref = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.user.uid)
   }
 
   componentDidMount() {
@@ -53,24 +59,29 @@ export default class PerfilSettings extends Component {
 
   confirmPerfilSettings = async () => {
     const { userName, eMail, code, profileImageUrl } = this.state
+    const { navigation } = this.props
+    await this.fcm.requestPermission()
+
+    this.fcm.hasPermission().then(enabled => {
+      if (enabled) {
+        this.fcm.getToken().then(token => {
+          this.ref.set({
+            pushToken: token,
+            phone: this.user.phoneNumber,
+            username: userName,
+            email: eMail,
+            language_code: code,
+            profile_img_url: profileImageUrl,
+            online: true,
+            lastSeen: ""
+          })
+        })
+      }
+    })
+
     await AsyncStorage.setItem("@username", userName)
     await AsyncStorage.setItem("@profileImageUrl", profileImageUrl)
-    const { navigation } = this.props
-    const user = firebase.auth().currentUser
 
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(user.uid)
-      .set({
-        phone: user.phoneNumber,
-        username: userName,
-        email: eMail,
-        language_code: code,
-        profile_img_url: profileImageUrl,
-        online: true,
-        lastSeen: ""
-      })
     navigation.navigate("Conversas")
   }
 
