@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   TextInput
 } from "react-native"
+import AsyncStorage from "@react-native-community/async-storage"
 import firebase from "react-native-firebase"
 import LinearGradient from "react-native-linear-gradient"
 import { Icon } from "react-native-elements"
@@ -59,6 +60,7 @@ export default class Conversas extends Component {
   }
 
   componentWillUnmount() {
+    this.setState({ uploading: false })
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
   }
 
@@ -73,33 +75,27 @@ export default class Conversas extends Component {
 
   uploadphotos = () => {
     const { myImage } = this.state
-    this.setState({ uploading: true, disabled: true })
+    this.setState({ uploading: true })
+    const { navigation } = this.props
 
     firebase
       .storage()
       .ref(`profile_pics/${this.user.uid}`)
       .putFile(myImage.path)
-      .on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => {
-        let state = {}
-        state = {
-          ...state
-        }
+      .on(firebase.storage.TaskEvent.STATE_CHANGED, async snapshot => {
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-          state = {
-            disabled: false,
-            uploading: false
+          if (navigation.isFocused()) {
+            this.setState({ uploading: false })
           }
-          firebase
-            .firestore()
-            .collection("users")
-            .doc(this.user.uid)
-            .update({
-              profile_img_url: snapshot.downloadURL
-            })
         }
-        setTimeout(() => {
-          this.setState(state)
-        }, 1000)
+        await AsyncStorage.setItem("@profileImageUrl", snapshot.downloadURL)
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(this.user.uid)
+          .update({
+            profile_img_url: snapshot.downloadURL
+          })
       })
   }
 
@@ -138,7 +134,7 @@ export default class Conversas extends Component {
     this.setState({ editEmail: false })
   }
 
-  confirmName = () => {
+  confirmName = async () => {
     const { nameTemp } = this.state
     this.setState({ editName: false, myName: nameTemp })
     firebase
@@ -148,6 +144,7 @@ export default class Conversas extends Component {
       .update({
         username: nameTemp
       })
+    await AsyncStorage.setItem("@username", nameTemp)
   }
 
   confirmEmail = () => {

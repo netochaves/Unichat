@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   Keyboard
 } from "react-native"
+import AsyncStorage from "@react-native-community/async-storage"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
 import shortid from "shortid"
@@ -50,10 +51,12 @@ export default class PerfilSettings extends Component {
     return true
   }
 
-  confirmPerfilSettings = () => {
+  confirmPerfilSettings = async () => {
+    const { userName, eMail, code, profileImageUrl } = this.state
+    await AsyncStorage.setItem("@username", userName)
+    await AsyncStorage.setItem("@profileImageUrl", profileImageUrl)
     const { navigation } = this.props
     const user = firebase.auth().currentUser
-    const { userName, eMail, code, profileImageUrl } = this.state
 
     firebase
       .firestore()
