@@ -58,8 +58,9 @@ export default class PerfilSettings extends Component {
   }
 
   confirmPerfilSettings = async () => {
-    const { navigation } = this.props
     const { userName, eMail, code, profileImageUrl } = this.state
+    const { navigation } = this.props
+    const user = firebase.auth().currentUser
 
     await this.fcm.requestPermission()
 
@@ -132,7 +133,7 @@ export default class PerfilSettings extends Component {
   previewImage = () => {
     const { navigation } = this.props
     const { img } = this.state
-    navigation.navigate("PreviewImage", { img })
+    navigation.navigate("PreviewImage", { img, isLoggedin: false })
   }
 
   render() {

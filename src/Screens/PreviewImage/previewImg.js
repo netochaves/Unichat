@@ -3,7 +3,11 @@ import React, { Component } from "react"
 import { View, StyleSheet, Image, BackHandler } from "react-native"
 
 export default class PerfilSettings extends Component {
-  static navigationoptions = {}
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam("name")
+    }
+  }
 
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
@@ -22,11 +26,17 @@ export default class PerfilSettings extends Component {
   render() {
     const { navigation } = this.props
     const img = navigation.getParam("img")
-    return (
-      <View style={styles.container}>
-        <Image source={img} style={styles.img} resizeMode="contain" />
-      </View>
-    )
+    const isLoggedIn = navigation.getParam("isLoggedIn")
+    let image
+
+    if (isLoggedIn) {
+      image = (
+        <Image source={{ uri: img }} style={styles.img} resizeMode="contain" />
+      )
+    } else {
+      image = <Image source={img} style={styles.img} resizeMode="contain" />
+    }
+    return <View style={styles.container}>{image}</View>
   }
 }
 

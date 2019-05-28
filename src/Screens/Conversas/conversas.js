@@ -40,10 +40,11 @@ export default class Conversas extends Component {
   }
 
   async componentDidMount() {
-    const username = await AsyncStorage.getItem("@username")
-    const profileImageUrl = await AsyncStorage.getItem("@profileImageUrl")
-    this.setState({ myName: username, myPicture: profileImageUrl })
-
+    this.listener = this.ref.onSnapshot(async () => {
+      const username = await AsyncStorage.getItem("@username")
+      const profileImageUrl = await AsyncStorage.getItem("@profileImageUrl")
+      this.setState({ myName: username, myPicture: profileImageUrl })
+    })
     const { navigation } = this.props
     const notificationOpen = await firebase
       .notifications()
@@ -71,7 +72,6 @@ export default class Conversas extends Component {
     )
     AppState.addEventListener("change", this.handleAppStateChange)
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
-
     this.getData()
     this.willBlur = navigation.addListener("willBlur", () => {
       this.setState(prevState => ({
@@ -84,13 +84,14 @@ export default class Conversas extends Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+    this.unsubscribe()
+    this.listener()
     this.willBlur.remove()
     this.setState(prevState => ({
       arrayholder: prevState.conversas,
       isSerchable: false,
       text: ""
     }))
-    this.unsubscribe()
   }
 
   handleConnectivityChange = isConnected => {

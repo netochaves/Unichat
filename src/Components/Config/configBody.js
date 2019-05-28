@@ -35,7 +35,12 @@ const configBody = props => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.touchableIcon}>
+          <TouchableOpacity
+            style={styles.touchableIcon}
+            onPress={() => {
+              navigation.navigate("EditPerfilScreen")
+            }}
+          >
             <Icon name="person" size={28} color="#c6056c" />
             <Text style={styles.touchableStyle}>Perfil</Text>
             <View style={styles.chevronStyle}>
