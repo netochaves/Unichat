@@ -60,8 +60,6 @@ export default class PerfilSettings extends Component {
   confirmPerfilSettings = async () => {
     const { userName, eMail, code, profileImageUrl } = this.state
     const { navigation } = this.props
-    const user = firebase.auth().currentUser
-
     await this.fcm.requestPermission()
 
     this.fcm.hasPermission().then(enabled => {
