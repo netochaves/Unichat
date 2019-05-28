@@ -22,7 +22,18 @@ const chatHeader = props => {
           size={40}
         />
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>{userName}</Text>
+          <Text
+            style={styles.userName}
+            onPress={() =>
+              navigation.navigate("PreviewImage", {
+                img: userPhoto,
+                name: userName,
+                isLoggedIn: true
+              })
+            }
+          >
+            {userName}
+          </Text>
           <Text style={styles.lastSeen}>{status}</Text>
         </View>
         <Icon

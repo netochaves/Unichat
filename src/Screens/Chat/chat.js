@@ -75,7 +75,7 @@ export default class Conversas extends Component {
     })
     this.unsubscribe = this.ref
       .collection("messages")
-      .orderBy("date", "asc")
+      .orderBy("date", "desc")
       .onSnapshot(querySnapshot => {
         const messages = []
         querySnapshot.forEach(doc => {
