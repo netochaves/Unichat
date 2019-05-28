@@ -3,11 +3,12 @@ import { View, StyleSheet } from "react-native"
 import ConfigHeader from "~/Components/Config/configHeader"
 import ConfigBody from "~/Components/Config/configBody"
 
-const Config = () => {
+const Config = props => {
+  const { navigation } = props
   return (
     <View style={styles.content}>
       <ConfigHeader />
-      <ConfigBody />
+      <ConfigBody navigation={navigation} />
     </View>
   )
 }

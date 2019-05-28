@@ -1,418 +1,134 @@
 [
-	{
-		"name": "Africâner",
-		"code": "af"
-	},
-	{
-		"name": "Albanês",
-		"code": "sq"
-	},
-	{
-		"name": "Amárico",
-		"code": "am"
-	},
-	{
-		"name": "Árabe",
-		"code": "ar"
-	},
-	{
-		"name": "Armênio",
-		"code": "hy"
-	},
-	{
-		"name": "Azerbaijano",
-		"code": "az"
-	},
-	{
-		"name": "Basco",
-		"code": "eu"
-	},
-	{
-		"name": "Bielo-russo",
-		"code": "be"
-	},
-	{
-		"name": "Bengalês",
-		"code": "bn"
-	},
-	{
-		"name": "Bósnio",
-		"code": "bs"
-	},
-	{
-		"name": "Búlgaro",
-		"code": "bg"
-	},
-	{
-		"name": "Catalão",
-		"code": "ca"
-	},
-	{
-		"name": "Cebuano",
-		"code": "ceb"
-	},
-	{
-		"name": "Chinês (simplificado)",
-		"code": "zh-CN"
-	},
-	{
-		"name": "Chinês (tradicional)",
-		"code": "zh-TW"
-	},
-	{
-		"name": "Córsico",
-		"code": "co"
-	},
-	{
-		"name": "Croata",
-		"code": "hr"
-	},
-	{
-		"name": "Tcheco",
-		"code": "cs"
-	},
-	{
-		"name": "Dinamarquês",
-		"code": "da"
-	},
-	{
-		"name": "Holandês",
-		"code": "nl"
-	},
-	{
-		"name": "Inglês",
-		"code": "en"
-	},
-	{
-		"name": "Esperanto",
-		"code": "eo"
-	},
-	{
-		"name": "Estoniano",
-		"code": "et"
-	},
-	{
-		"name": "Finlandês",
-		"code": "fi"
-	},
-	{
-		"name": "Francês",
-		"code": "fr"
-	},
-	{
-		"name": "Frísio",
-		"code": "fy"
-	},
-	{
-		"name": "Galego",
-		"code": "gl"
-	},
-	{
-		"name": "Georgiano",
-		"code": "ka"
-	},
-	{
-		"name": "Alemão",
-		"code": "de"
-	},
-	{
-		"name": "Grego",
-		"code": "el"
-	},
-	{
-		"name": "Guzerate",
-		"code": "gu"
-	},
-	{
-		"name": "Creole haitiano",
-		"code": "ht"
-	},
-	{
-		"name": "Hauçá",
-		"code": "ha"
-	},
-	{
-		"name": "Havaiano",
-		"code": "haw"
-	},
-	{
-		"name": "Hebraico",
-		"code": "he**"
-	},
-	{
-		"name": "Hindi",
-		"code": "hi"
-	},
-	{
-		"name": "Hmong",
-		"code": "hmn"
-	},
-	{
-		"name": "Húngaro",
-		"code": "hu"
-	},
-	{
-		"name": "Islandês",
-		"code": "is"
-	},
-	{
-		"name": "Igbo",
-		"code": "ig"
-	},
-	{
-		"name": "Indonésio",
-		"code": "id"
-	},
-	{
-		"name": "Irlandês",
-		"code": "ga"
-	},
-	{
-		"name": "Italiano",
-		"code": "it"
-	},
-	{
-		"name": "Japonês",
-		"code": "ja"
-	},
-	{
-		"name": "Javanês",
-		"code": "jw"
-	},
-	{
-		"name": "Canará",
-		"code": "kn"
-	},
-	{
-		"name": "Cazaque",
-		"code": "kk"
-	},
-	{
-		"name": "Khmer",
-		"code": "km"
-	},
-	{
-		"name": "Coreano",
-		"code": "ko"
-	},
-	{
-		"name": "Curdo",
-		"code": "ku"
-	},
-	{
-		"name": "Quirguiz",
-		"code": "ky"
-	},
-	{
-		"name": "Laosiano",
-		"code": "lo"
-	},
-	{
-		"name": "Latim",
-		"code": "la"
-	},
-	{
-		"name": "Letão",
-		"code": "lv"
-	},
-	{
-		"name": "Lituano",
-		"code": "lt"
-	},
-	{
-		"name": "Luxemburguês",
-		"code": "lb"
-	},
-	{
-		"name": "Macedônio",
-		"code": "mk"
-	},
-	{
-		"name": "Malgaxe",
-		"code": "mg"
-	},
-	{
-		"name": "Malaio",
-		"code": "ms"
-	},
-	{
-		"name": "Malaiala",
-		"code": "ml"
-	},
-	{
-		"name": "Maltês",
-		"code": "mt"
-	},
-	{
-		"name": "Maori",
-		"code": "mi"
-	},
-	{
-		"name": "Marati",
-		"code": "mr"
-	},
-	{
-		"name": "Mongol",
-		"code": "mn"
-	},
-	{
-		"name": "Myanmar (birmanês)",
-		"code": "my"
-	},
-	{
-		"name": "Nepalês",
-		"code": "ne"
-	},
-	{
-		"name": "Norueguês",
-		"code": "no"
-	},
-	{
-		"name": "Nianja (Chichewa)",
-		"code": "ny"
-	},
-	{
-		"name": "Pashto",
-		"code": "ps"
-	},
-	{
-		"name": "Persa",
-		"code": "fa"
-	},
-	{
-		"name": "Polonês",
-		"code": "pl"
-	},
-	{
-		"name": "Português (Portugal, Brasil)",
-		"code": "pt"
-	},
-	{
-		"name": "Punjabi",
-		"code": "pa"
-	},
-	{
-		"name": "Romeno",
-		"code": "ro"
-	},
-	{
-		"name": "Russo",
-		"code": "ru"
-	},
-	{
-		"name": "Samoano",
-		"code": "sm"
-	},
-	{
-		"name": "Gaélico escocês",
-		"code": "gd"
-	},
-	{
-		"name": "Sérvio",
-		"code": "sr"
-	},
-	{
-		"name": "Sesoto",
-		"code": "st"
-	},
-	{
-		"name": "Xona",
-		"code": "sn"
-	},
-	{
-		"name": "Sindi",
-		"code": "sd"
-	},
-	{
-		"name": "Sinhala (cingalês)",
-		"code": "si"
-	},
-	{
-		"name": "Eslovaco",
-		"code": "sk"
-	},
-	{
-		"name": "Esloveno",
-		"code": "sl"
-	},
-	{
-		"name": "Somali",
-		"code": "so"
-	},
-	{
-		"name": "Espanhol",
-		"code": "es"
-	},
-	{
-		"name": "Sundanês",
-		"code": "su"
-	},
-	{
-		"name": "Suaíli",
-		"code": "sw"
-	},
-	{
-		"name": "Sueco",
-		"code": "sv"
-	},
-	{
-		"name": "Tagalo (filipino)",
-		"code": "tl"
-	},
-	{
-		"name": "Tajique",
-		"code": "tg"
-	},
-	{
-		"name": "Tâmil",
-		"code": "ta"
-	},
-	{
-		"name": "Télugo",
-		"code": "te"
-	},
-	{
-		"name": "Tailandês",
-		"code": "th"
-	},
-	{
-		"name": "Turco",
-		"code": "tr"
-	},
-	{
-		"name": "Ucraniano",
-		"code": "uk"
-	},
-	{
-		"name": "Urdu",
-		"code": "ur"
-	},
-	{
-		"name": "Usbeque",
-		"code": "uz"
-	},
-	{
-		"name": "Vietnamita",
-		"code": "vi"
-	},
-	{
-		"name": "Galês",
-		"code": "cy"
-	},
-	{
-		"name": "Xhosa",
-		"code": "xh"
-	},
-	{
-		"name": "Ídiche",
-		"code": "yi"
-	},
-	{
-		"name": "Iorubá",
-		"code": "yo"
-	},
-	{
-		"name": "Zulu",
-		"code": "zu"
-	}
+  { "id": "5ce9a814d20c4645bf8fa09e", "name": "Africâner", "code": "af" },
+  { "id": "5ce9a81453f2c2ca84e190e9", "name": "Albanês", "code": "sq" },
+  { "id": "5ce9a8146f4374af46e4eea5", "name": "Alemão", "code": "de" },
+  { "id": "5ce9a8143b2509bffdcf4f15", "name": "Amárico", "code": "am" },
+  { "id": "5ce9a81419cadc2346f07aef", "name": "Árabe", "code": "ar" },
+  { "id": "5ce9a8148d8c00b00dab9ea2", "name": "Armênio", "code": "hy" },
+  { "id": "5ce9a814e1fc8730e07a40be", "name": "Azerbaijano", "code": "az" },
+  { "id": "5ce9a814325e536f4fea3164", "name": "Basco", "code": "eu" },
+  { "id": "5ce9a814e0977c7c5a68de84", "name": "Bengalês", "code": "bn" },
+  { "id": "5ce9a81475217cf1fa59fe1f", "name": "Bielo-russo", "code": "be" },
+  { "id": "5ce9a8147e206359e3750397", "name": "Bósnio", "code": "bs" },
+  { "id": "5ce9a8141f1c9e0ff2414754", "name": "Búlgaro", "code": "bg" },
+  { "id": "5ce9a8146047990bef459e0f", "name": "Canará", "code": "kn" },
+  { "id": "5ce9a814347d5b59223bedc9", "name": "Catalão", "code": "ca" },
+  { "id": "5ce9a8146a2a23f7c2849db3", "name": "Cazaque", "code": "kk" },
+  { "id": "5ce9a814321b2e3769f7b1ea", "name": "Cebuano", "code": "ceb" },
+  {
+    "id": "5ce9a814ed2ddac087fb6bbc",
+    "name": "Chinês (simplificado)",
+    "code": "zh-CN"
+  },
+  {
+    "id": "5ce9a814598c9f1fdaa2abcc",
+    "name": "Chinês (tradicional)",
+    "code": "zh-TW"
+  },
+  { "id": "5ce9a8142fda10eebc193b18", "name": "Coreano", "code": "ko" },
+  { "id": "5ce9a81434c37ef5e664d989", "name": "Creole haitiano", "code": "ht" },
+  { "id": "5ce9a814d30c535ffd52e055", "name": "Croata", "code": "hr" },
+  { "id": "5ce9a8147d07e50c38c96ceb", "name": "Curdo", "code": "ku" },
+  { "id": "5ce9a814e279a3cb73b32a6d", "name": "Córsico", "code": "co" },
+  { "id": "5ce9a8140a8d309a1901f3be", "name": "Dinamarquês", "code": "da" },
+  { "id": "5ce9a814969263d3862ac486", "name": "Eslovaco", "code": "sk" },
+  { "id": "5ce9a814f099c9da7c7ad971", "name": "Esloveno", "code": "sl" },
+  { "id": "5ce9a8142eab49e4c71dfa7e", "name": "Espanhol", "code": "es" },
+  { "id": "5ce9a814ba19d3584ced8e7f", "name": "Esperanto", "code": "eo" },
+  { "id": "5ce9a814617213ab90b7f177", "name": "Estoniano", "code": "et" },
+  { "id": "5ce9a814537d29d0a06b257d", "name": "Finlandês", "code": "fi" },
+  { "id": "5ce9a81457201aa55d3c7498", "name": "Francês", "code": "fr" },
+  { "id": "5ce9a814c19569b1ac20a1c6", "name": "Frísio", "code": "fy" },
+  { "id": "5ce9a8140ddef839eca34503", "name": "Galego", "code": "gl" },
+  { "id": "5ce9a814006d1ec89763826e", "name": "Galês", "code": "cy" },
+  { "id": "5ce9a8147a6f37ce1155467b", "name": "Gaélico escocês", "code": "gd" },
+  { "id": "5ce9a81432d6345d995d01b5", "name": "Georgiano", "code": "ka" },
+  { "id": "5ce9a814fb49a5edb74012bb", "name": "Grego", "code": "el" },
+  { "id": "5ce9a8141aa5587e221a32d8", "name": "Guzerate", "code": "gu" },
+  { "id": "5ce9a814182244dc2453f03a", "name": "Hauçá", "code": "ha" },
+  { "id": "5ce9a8141b6532ba0a9acdcf", "name": "Havaiano", "code": "haw" },
+  { "id": "5ce9a814f23c325dd1895d18", "name": "Hebraico", "code": "he**" },
+  { "id": "5ce9a8143e666d61f042eb8e", "name": "Hindi", "code": "hi" },
+  { "id": "5ce9a814e2c097e81c2e0426", "name": "Hmong", "code": "hmn" },
+  { "id": "5ce9a814cb08a800216a9338", "name": "Holandês", "code": "nl" },
+  { "id": "5ce9a81493d8037294af743d", "name": "Húngaro", "code": "hu" },
+  { "id": "5ce9a8143224c133e2cc91fa", "name": "Igbo", "code": "ig" },
+  { "id": "5ce9a814029fe7bda574b282", "name": "Ídiche", "code": "yi" },
+  { "id": "5ce9a8143cb07bb1b581364b", "name": "Indonésio", "code": "id" },
+  { "id": "5ce9a814203f9285ee66d5ba", "name": "Inglês", "code": "en" },
+  { "id": "5ce9a814e66fd70c681bb2d3", "name": "Iorubá", "code": "yo" },
+  { "id": "5ce9a814f621381f0a1a3f57", "name": "Irlandês", "code": "ga" },
+  { "id": "5ce9a814e2b3f3825d487ed7", "name": "Islandês", "code": "is" },
+  { "id": "5ce9a8147e0239c5e609d6e5", "name": "Italiano", "code": "it" },
+  { "id": "5ce9a814b3471809127cceac", "name": "Japonês", "code": "ja" },
+  { "id": "5ce9a8146f16fdc2f06134ac", "name": "Javanês", "code": "jw" },
+  { "id": "5ce9a81478a731d038515709", "name": "Khmer", "code": "km" },
+  { "id": "5ce9a814c9f3e8f4a4ac6589", "name": "Laosiano", "code": "lo" },
+  { "id": "5ce9a814fe72d28f47d25f91", "name": "Latim", "code": "la" },
+  { "id": "5ce9a814b09a61b3cb7a3546", "name": "Letão", "code": "lv" },
+  { "id": "5ce9a8149c55afeed3ddc377", "name": "Lituano", "code": "lt" },
+  { "id": "5ce9a8146318084718b32555", "name": "Luxemburguês", "code": "lb" },
+  { "id": "5ce9a81441fef0b2d6874505", "name": "Macedônio", "code": "mk" },
+  { "id": "5ce9a814760db3c356a29f05", "name": "Malaiala", "code": "ml" },
+  { "id": "5ce9a81433bdd8929fce86e5", "name": "Malaio", "code": "ms" },
+  { "id": "5ce9a814b401d7fd85797ed2", "name": "Malgaxe", "code": "mg" },
+  { "id": "5ce9a814a1988fdca0dedbb4", "name": "Maltês", "code": "mt" },
+  { "id": "5ce9a814280e10324a3aaa67", "name": "Maori", "code": "mi" },
+  { "id": "5ce9a814fe880ecefae9793f", "name": "Marati", "code": "mr" },
+  { "id": "5ce9a814ecdfc8486c85941e", "name": "Mongol", "code": "mn" },
+  {
+    "id": "5ce9a814bb42a090436fb998",
+    "name": "Myanmar (birmanês)",
+    "code": "my"
+  },
+  { "id": "5ce9a8148392f4955202ae26", "name": "Nepalês", "code": "ne" },
+  {
+    "id": "5ce9a8145a1f61341bb8a30a",
+    "name": "Nianja (Chichewa)",
+    "code": "ny"
+  },
+  { "id": "5ce9a814ba0c2d227bf5fd82", "name": "Norueguês", "code": "no" },
+  { "id": "5ce9a8149954963d8e594b0a", "name": "Pashto", "code": "ps" },
+  { "id": "5ce9a814ce2b007bf10374e4", "name": "Persa", "code": "fa" },
+  { "id": "5ce9a81452573c4e74313006", "name": "Polonês", "code": "pl" },
+  {
+    "id": "5ce9a814b6dbf4ff36b7f119",
+    "name": "Português (Portugal, Brasil)",
+    "code": "pt"
+  },
+  { "id": "5ce9a814044a21798c12dddb", "name": "Punjabi", "code": "pa" },
+  { "id": "5ce9a814ac458773360d6769", "name": "Quirguiz", "code": "ky" },
+  { "id": "5ce9a814fb26a569ba7ccbb9", "name": "Romeno", "code": "ro" },
+  { "id": "5ce9a81483ab195daf2803a1", "name": "Russo", "code": "ru" },
+  { "id": "5ce9a814a9287f8b1f4c3bc9", "name": "Samoano", "code": "sm" },
+  { "id": "5ce9a814b2f80d44497f5722", "name": "Sesoto", "code": "st" },
+  { "id": "5ce9a8149655f90cb0a9283b", "name": "Sindi", "code": "sd" },
+  {
+    "id": "5ce9a8143754646bc23f36b2",
+    "name": "Sinhala (cingalês)",
+    "code": "si"
+  },
+  { "id": "5ce9a814d882779edb402e3e", "name": "Somali", "code": "so" },
+  { "id": "5ce9a814b75eb02fad8e5409", "name": "Suaíli", "code": "sw" },
+  { "id": "5ce9a8149d0b915a666c169b", "name": "Sueco", "code": "sv" },
+  { "id": "5ce9a814884bb04ca971eb38", "name": "Sundanês", "code": "su" },
+  { "id": "5ce9a814235254d12f43cd3a", "name": "Sérvio", "code": "sr" },
+  {
+    "id": "5ce9a8143bbc438f9a63c2e2",
+    "name": "Tagalo (filipino)",
+    "code": "tl"
+  },
+  { "id": "5ce9a8140eb276bc385942e2", "name": "Tailandês", "code": "th" },
+  { "id": "5ce9a814626fdad069ff410b", "name": "Tajique", "code": "tg" },
+  { "id": "5ce9a814dffb3defe4723946", "name": "Tcheco", "code": "cs" },
+  { "id": "5ce9a814d0b8eba73de638e5", "name": "Turco", "code": "tr" },
+  { "id": "5ce9a814acf223b8dcb57387", "name": "Tâmil", "code": "ta" },
+  { "id": "5ce9a8147fdab5a3ce6e0fa3", "name": "Télugo", "code": "te" },
+  { "id": "5ce9a8141bde6985aec5be7d", "name": "Ucraniano", "code": "uk" },
+  { "id": "5ce9a8145bcd15bb74bc0f25", "name": "Urdu", "code": "ur" },
+  { "id": "5ce9a8149f954d712530b8c8", "name": "Usbeque", "code": "uz" },
+  { "id": "5ce9a814193f57a18d73bb4b", "name": "Vietnamita", "code": "vi" },
+  { "id": "5ce9a8147d2f99ac1cbf084d", "name": "Xhosa", "code": "xh" },
+  { "id": "5ce9a814e5ebe395d753b7a1", "name": "Xona", "code": "sn" },
+  { "id": "5ce9a814490b6db324cfa99c", "name": "Zulu", "code": "zu" }
 ]
