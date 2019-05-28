@@ -9,15 +9,20 @@ import {
 } from "react-native"
 import { Icon } from "react-native-elements"
 
-const configBody = () => {
+const configBody = props => {
+  const { navigation } = props
   return (
     <View style={styles.elevationBody}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.innerBody}>
           <Text style={styles.touchableStyleTitle}>Conta</Text>
           <Text style={styles.line} />
-
-          <TouchableOpacity style={styles.touchableIcon}>
+          <TouchableOpacity
+            style={styles.touchableIcon}
+            onPress={() => {
+              navigation.navigate("LanguagesScreen")
+            }}
+          >
             <Icon name="language" size={28} color="#007AFF" />
             <Text style={styles.touchableStyle}>Idiomas</Text>
             <View style={styles.chevronStyle}>
