@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { PureComponent } from "react"
 import { Svg, Path } from "react-native-svg"
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import { moderateScale } from "react-native-size-matters"
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default class Mensagem extends Component {
+export default class Mensagem extends PureComponent {
   constructor() {
     super()
     this.state = {
