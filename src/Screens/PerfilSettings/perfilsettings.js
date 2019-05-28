@@ -117,7 +117,7 @@ export default class PerfilSettings extends Component {
   previewImage = () => {
     const { navigation } = this.props
     const { img } = this.state
-    navigation.navigate("PreviewImage", { img })
+    navigation.navigate("PreviewImage", { img, isLoggedin: false })
   }
 
   render() {
