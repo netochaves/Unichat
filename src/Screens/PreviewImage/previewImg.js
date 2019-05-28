@@ -26,11 +26,17 @@ export default class PerfilSettings extends Component {
   render() {
     const { navigation } = this.props
     const img = navigation.getParam("img")
-    return (
-      <View style={styles.container}>
+    const isLoggedIn = navigation.getParam("isLoggedIn")
+    let image
+
+    if (isLoggedIn) {
+      image = (
         <Image source={{ uri: img }} style={styles.img} resizeMode="contain" />
-      </View>
-    )
+      )
+    } else {
+      image = <Image source={img} style={styles.img} resizeMode="contain" />
+    }
+    return <View style={styles.container}>{image}</View>
   }
 }
 

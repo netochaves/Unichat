@@ -27,7 +27,8 @@ const chatHeader = props => {
             onPress={() =>
               navigation.navigate("PreviewImage", {
                 img: userPhoto,
-                name: userName
+                name: userName,
+                isLoggedIn: true
               })
             }
           >
