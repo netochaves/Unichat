@@ -15,19 +15,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "393633194087-mm9u0f8plndqtmag2ptllfplpu0s0onp.apps.googleusercontent.com",
+          "client_id": "393633194087-j99palqhich6sg1suq1207dng9hivd8f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.unichat",
-            "certificate_hash": "6ac8e79d4fe6b5ec2087b526e956df29f51b7b5c"
+            "certificate_hash": "b191d3934829ad45140292a2c27d4518c968c40d"
           }
         },
         {
-          "client_id": "393633194087-q30i9dca6th1l9h5emmc26j5a3ll2fg9.apps.googleusercontent.com",
+          "client_id": "393633194087-bn02tlpd5g1tl5jhmn69atg0512b9f6n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.unichat",
-            "certificate_hash": "56afd0c3a898a23ce8ebb892c6ac2b0a46648163"
+            "certificate_hash": "556e893307c94312d0bbc91acec442feba4137a1"
+          }
+        },
+        {
+          "client_id": "393633194087-pt8egjp8vkms1s1ao5oi5cmc94p0s5j1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unichat",
+            "certificate_hash": "56801f5171bfce3aaf860539a87fd121c63e2273"
           }
         },
         {
@@ -39,11 +47,19 @@
           }
         },
         {
-          "client_id": "393633194087-pt8egjp8vkms1s1ao5oi5cmc94p0s5j1.apps.googleusercontent.com",
+          "client_id": "393633194087-q30i9dca6th1l9h5emmc26j5a3ll2fg9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.unichat",
-            "certificate_hash": "56801f5171bfce3aaf860539a87fd121c63e2273"
+            "certificate_hash": "56afd0c3a898a23ce8ebb892c6ac2b0a46648163"
+          }
+        },
+        {
+          "client_id": "393633194087-mm9u0f8plndqtmag2ptllfplpu0s0onp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unichat",
+            "certificate_hash": "6ac8e79d4fe6b5ec2087b526e956df29f51b7b5c"
           }
         },
         {

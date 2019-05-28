@@ -3,6 +3,7 @@ package com.unichat;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.imagepicker.ImagePickerPackage;
@@ -20,6 +21,8 @@ import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 import io.invertase.firebase.database.RNFirebaseDatabasePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,22 +37,11 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-            new AsyncStoragePackage(),
-            new ReactNativeContacts(),
-            new ImagePickerPackage(),
-            new RNTextInputMaskPackage(),
-            new LinearGradientPackage(),
-            new VectorIconsPackage(),
-            new RNFirebasePackage(),
-            new RNFirebaseAuthPackage(),
-            new RNFirebaseFirestorePackage(),
-            new SvgPackage(),
-            new RNGestureHandlerPackage(),
-            new RNFirebaseStoragePackage(),
-            new RNFirebaseDatabasePackage()
-      );
+      return Arrays.<ReactPackage>asList(new MainReactPackage(), new NetInfoPackage(), new AsyncStoragePackage(),
+          new ReactNativeContacts(), new ImagePickerPackage(), new RNTextInputMaskPackage(),
+          new LinearGradientPackage(), new VectorIconsPackage(), new RNFirebasePackage(), new RNFirebaseAuthPackage(),
+          new RNFirebaseFirestorePackage(), new SvgPackage(), new RNGestureHandlerPackage(),
+          new RNFirebaseStoragePackage(), new RNFirebaseDatabasePackage(), new RNFirebaseMessagingPackage(), new RNFirebaseNotificationsPackage());
     }
 
     @Override

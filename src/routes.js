@@ -1,5 +1,4 @@
 import React from "react"
-
 import {
   createAppContainer,
   createStackNavigator,
@@ -12,6 +11,9 @@ import Verification from "~/Screens/Verification/verification"
 import Chat from "~/Screens/Chat/chat"
 import Contatos from "~/Screens/Contacts/contacts"
 import Conversas from "~/Screens/Conversas/conversas"
+import Settings from "~/Screens/Config/config"
+import EditPerfil from "~/Screens/EditPerfil/editperfil"
+import Languages from "~/Screens/Languages/languages"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
 
@@ -52,7 +54,7 @@ const tabBarNavigator = createMaterialTopTabNavigator(
     },
 
     SettingsScreen: {
-      screen: Contatos,
+      screen: Settings,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
           <Icon name="md-settings" size={28} type="ionicon" color={tintColor} />
@@ -98,9 +100,6 @@ const appStackNavigator = createStackNavigator(
     },
     PreviewImage: {
       screen: PreviewImage,
-      navigationOptions: {
-        header: null
-      }
     },
     VerificationScreen: {
       screen: Verification,
@@ -124,6 +123,27 @@ const appStackNavigator = createStackNavigator(
       screen: Chat,
       navigationOptions: {
         header: null
+      }
+    },
+    SettingsScreen: {
+      screen: tabBarNavigator,
+      navigationOptions: {
+        header: null
+      }
+    },
+    EditPerfilScreen: {
+      screen: EditPerfil,
+      navigationOptions: {
+        header: null
+      }
+    },
+    LanguagesScreen: {
+      screen: Languages,
+      navigationOptions: {
+        title: "Tela de Idiomas",
+        headerTitleStyle: {
+          fontWeight: "normal"
+        }
       }
     }
   },

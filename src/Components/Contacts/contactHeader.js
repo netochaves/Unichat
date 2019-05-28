@@ -4,32 +4,31 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableNativeFeedback,
+  TouchableOpacity,
   Dimensions
 } from "react-native"
 import { Icon } from "react-native-elements"
 
 const contactsHeader = props => {
-  const { syncronize } = props
+  const { syncronize, onPressSearch } = props
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
         <Text style={styles.contactsInfo}>Contatos</Text>
         <View style={styles.Icon}>
-          <Icon
-            name="search1"
-            color="#00aced"
-            type="antdesign" />
+          <TouchableOpacity onPress={onPressSearch}>
+            <Icon name="search1" color="#00aced" type="antdesign" />
+          </TouchableOpacity>
         </View>
-        <TouchableNativeFeedback>
+        <TouchableOpacity>
           <Icon
             containerStyle={styles.syncIcon}
             name="sync"
             color="#00aced"
             type="material"
             onPress={syncronize}
-            />
-        </TouchableNativeFeedback>
+          />
+        </TouchableOpacity>
       </View>
     </View>
   )
@@ -48,23 +47,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginBottom: 15,
     marginTop: 15,
-    marginLeft: ((comprimento) / 6),
+    marginLeft: comprimento / 6,
     marginRight: 10,
-    flexDirection: "row",
+    flexDirection: "row"
   },
   contactsInfo: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 22,
     textAlign: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
   },
   Icon: {
     justifyContent: "center",
     marginRight: 10,
-    marginLeft: 10,
+    marginLeft: 10
   },
   syncIcon: {
-    justifyContent: "center",
+    justifyContent: "center"
   }
 })
 
