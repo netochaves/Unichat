@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ToastAndroid
 } from "react-native"
+import LanguagesHeader from "~/Components/Languages/languagesHeader"
 import { CheckBox } from "react-native-elements"
 import firebase from "react-native-firebase"
 import data from "~/assets/languages/languages.json"
@@ -72,6 +73,7 @@ export default class Languages extends Component {
     } = this.state
     return (
       <View style={styles.container}>
+        <LanguagesHeader />
         <View style={styles.headerTitle}>
           <Text style={styles.headerText}>Idioma atual</Text>
           <Text style={styles.itemTextHeader}>{currentLanguageName}</Text>

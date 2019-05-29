@@ -1,0 +1,38 @@
+import React from "react"
+
+import { View, StyleSheet, Text } from "react-native"
+
+const languagesHeader = () => {
+  return (
+    <View style={styles.header}>
+      <View style={styles.headerContent}>
+        <Text style={styles.languagesInfo}>Idiomas</Text>
+      </View>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: "#fff",
+    elevation: 5,
+    marginTop: 0,
+    fontFamily: "OpenSans"
+  },
+  headerContent: {
+    backgroundColor: "#fff",
+    marginBottom: 15,
+    marginTop: 15,
+    marginLeft: 15,
+    marginRight: 10,
+    flexDirection: "row"
+  },
+  languagesInfo: {
+    flex: 1,
+    fontSize: 22,
+    textAlign: "center",
+    backgroundColor: "#fff"
+  }
+})
+
+export default languagesHeader
