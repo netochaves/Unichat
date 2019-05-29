@@ -89,7 +89,7 @@ export default class Mensagem extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      key: "",
+      chave: "",
       content: "",
       date: "",
       source: "",
@@ -107,29 +107,29 @@ export default class Mensagem extends PureComponent {
   }
 
   componentDidMount() {
-    const { key, content, date, source, original } = this.props
+    const { chave, content, date, source, original } = this.props
 
-    this.setState({ key, content, date, source, original })
+    this.setState({ chave, content, date, source, original })
   }
 
-  alterarIdioma = key => {
+  alterarIdioma = chave => {
     const { content, original } = this.state
 
     this.ref
-      .doc(key)
+      .doc(chave)
       .get()
       .then(doc => {
         const { isChanged } = doc.data()
-        if (isChanged){
-          this.ref.doc(key).update({
+        if (isChanged) {
+          this.ref.doc(chave).update({
             content: original,
-            contentTranstalet: content,
+            contentTranslated: content,
             isChanged: false
           })
         } else {
-          this.ref.doc(key).update({
+          this.ref.doc(chave).update({
             content: original,
-            contentTranstalet: content,
+            contentTranslated: content,
             isChanged: true
           })
         }
@@ -137,10 +137,10 @@ export default class Mensagem extends PureComponent {
   }
 
   verLinguaOriginal = () => {
-    const { key } = this.state
+    const { chave } = this.state
 
     this.ref
-      .doc(key)
+      .doc(chave)
       .get()
       .then(doc => {
         const { isChanged } = doc.data()
@@ -149,7 +149,7 @@ export default class Mensagem extends PureComponent {
             "Confirmar",
             "Deseja ver a tradução da mensagem?",
             [
-              { text: "Sim", onPress: () => this.alterarIdioma(key) },
+              { text: "Sim", onPress: () => this.alterarIdioma(chave) },
               { text: "Não" }
             ],
             { cancelable: false }
@@ -159,16 +159,13 @@ export default class Mensagem extends PureComponent {
             "Confirmar",
             "Deseja ver a mensagem na linguagem original?",
             [
-              { text: "Sim", onPress: () => this.alterarIdioma(key) },
+              { text: "Sim", onPress: () => this.alterarIdioma(chave) },
               { text: "Não" }
             ],
             { cancelable: false }
           )
         }
-        
       })
-
-
   }
 
   render() {

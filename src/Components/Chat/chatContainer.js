@@ -15,7 +15,7 @@ const Chat = props => {
         renderItem={({ item }) => {
           return (
             <Message
-              key={item.key}
+              chave={item.key}
               destUserUid={destUserUid}
               content={
                 item.source === "1" ? item.content : item.contentTranslated
