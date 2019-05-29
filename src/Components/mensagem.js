@@ -2,7 +2,9 @@ import React, { PureComponent } from "react"
 import { Svg, Path } from "react-native-svg"
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import { moderateScale } from "react-native-size-matters"
+import getColor from "~/functions/getColor"
 
+const cor = getColor()
 const styles = StyleSheet.create({
   // Estilo para a mensagem do remetente
   remet: {
@@ -31,6 +33,7 @@ const styles = StyleSheet.create({
     right: 5
   },
   textRemet: {
+    fontFamily: "Open Sans",
     fontSize: 14,
     color: "white"
   },
@@ -41,7 +44,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignItems: "center"
   },
-
+  
   // Estilo para a mensagem do destinatario
   dest: {
     flexDirection: "row",
@@ -63,6 +66,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     padding: 10
   },
+  nomeRemetente: {
+    fontFamily: "Open Sans",
+    fontSize: 12,
+    fontWeight: "bold",
+    color: cor
+  },
   arrowDest: {
     elevation: 5,
     position: "absolute",
@@ -70,6 +79,7 @@ const styles = StyleSheet.create({
     left: 5
   },
   textDest: {
+    fontFamily: "Open Sans",
     fontSize: 14,
     color: "black"
   },
@@ -91,14 +101,15 @@ export default class Mensagem extends PureComponent {
       content: "",
       date: "",
       source: "",
-      original: ""
+      original: "",
+      nomeRemetente: null
     }
   }
 
   componentDidMount() {
-    const { content, date, source, original } = this.props
+    const { content, date, source, original, nomeRemetente } = this.props
 
-    this.setState({ content, date, source, original })
+    this.setState({ content, date, source, original, nomeRemetente })
   }
 
   verLinguaOriginal = () => {
@@ -115,7 +126,7 @@ export default class Mensagem extends PureComponent {
   }
 
   render() {
-    const { content, date, source } = this.state
+    const { content, date, source, nomeRemetente } = this.state
     let message
     // Remetente
     if (source === "1") {
@@ -169,6 +180,11 @@ export default class Mensagem extends PureComponent {
               </Svg>
             </View>
             <View style={styles.boxDest}>
+              {nomeRemetente && (
+                <View>
+                  <Text style={styles.nomeRemetente}>{nomeRemetente}</Text>
+                </View>
+              )}
               <Text style={styles.textDest}>{content}</Text>
             </View>
           </TouchableOpacity>
