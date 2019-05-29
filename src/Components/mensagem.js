@@ -114,7 +114,8 @@ export default class Mensagem extends PureComponent {
 
   alterarIdioma = chave => {
     const { content, original } = this.state
-
+    const translated = content
+    const noTranslated = original
     this.ref
       .doc(chave)
       .get()
@@ -122,17 +123,18 @@ export default class Mensagem extends PureComponent {
         const { isChanged } = doc.data()
         if (isChanged) {
           this.ref.doc(chave).update({
-            content: original,
-            contentTranslated: content,
+            content: translated,
+            contentTranslated: noTranslated,
             isChanged: false
           })
         } else {
           this.ref.doc(chave).update({
-            content: original,
-            contentTranslated: content,
+            content: translated,
+            contentTranslated: noTranslated,
             isChanged: true
           })
         }
+        this.setState({ content: noTranslated, original: translated })
       })
   }
 
