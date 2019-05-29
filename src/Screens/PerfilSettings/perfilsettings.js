@@ -73,7 +73,8 @@ export default class PerfilSettings extends Component {
             language_code: code,
             profile_img_url: profileImageUrl,
             online: true,
-            lastSeen: ""
+            lastSeen: "",
+            notifications: true
           })
         })
       }
