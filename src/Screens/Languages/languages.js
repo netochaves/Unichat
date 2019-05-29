@@ -40,7 +40,7 @@ export default class Languages extends Component {
     })
   }
 
-  changeLanguage = (item, index) => {
+  changeLanguage = item => {
     firebase
       .firestore()
       .collection("users")
@@ -88,7 +88,7 @@ export default class Languages extends Component {
               return (
                 <TouchableOpacity
                   style={styles.buttonStyle}
-                  onPress={() => this.changeLanguage(item, index)}
+                  onPress={() => this.changeLanguage(item)}
                 >
                   <Text style={styles.itemText}>{item.name}</Text>
                   <View style={styles.checkBoxView}>
