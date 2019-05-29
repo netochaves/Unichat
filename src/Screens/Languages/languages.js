@@ -6,7 +6,8 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  ToastAndroid
+  ToastAndroid,
+  BackHandler
 } from "react-native"
 import LanguagesHeader from "~/Components/Languages/languagesHeader"
 import { CheckBox } from "react-native-elements"
@@ -20,7 +21,8 @@ export default class Languages extends Component {
       dataSource: [],
       currentLanguageName: "",
       checkBoxIndex: -1,
-      checkBox: true
+      checkBox: true,
+      disabled: false
     }
     this.user = firebase.auth().currentUser
 
@@ -31,6 +33,8 @@ export default class Languages extends Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
+
     this.setState({
       dataSource: data
     })
@@ -38,6 +42,19 @@ export default class Languages extends Component {
     this.ref.get().then(doc => {
       this.updateLanguageName(doc.data().language_code)
     })
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+  }
+
+  handleBackPress = () => {
+    const { navigation } = this.props
+    const { disabled } = this.state
+    if (!disabled) {
+      navigation.navigate("SettingsScreen")
+    }
+    return true
   }
 
   changeLanguage = item => {
@@ -71,9 +88,11 @@ export default class Languages extends Component {
       checkBox,
       checkBoxIndex
     } = this.state
+    const { navigation } = this.props
+
     return (
       <View style={styles.container}>
-        <LanguagesHeader />
+        <LanguagesHeader navigation={navigation} />
         <View style={styles.headerTitle}>
           <Text style={styles.headerText}>Idioma atual</Text>
           <Text style={styles.itemTextHeader}>{currentLanguageName}</Text>
