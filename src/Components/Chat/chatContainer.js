@@ -15,6 +15,7 @@ const Chat = props => {
         renderItem={({ item }) => {
           return (
             <Message
+              nomeRemetente={null}
               content={
                 item.source === "1" ? item.content : item.contentTranslated
               }
