@@ -14,6 +14,7 @@ import Conversas from "~/Screens/Conversas/conversas"
 import Settings from "~/Screens/Config/config"
 import EditPerfil from "~/Screens/EditPerfil/editperfil"
 import Languages from "~/Screens/Languages/languages"
+import About from "~/Screens/About/about"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
 
@@ -99,7 +100,7 @@ const appStackNavigator = createStackNavigator(
       }
     },
     PreviewImage: {
-      screen: PreviewImage,
+      screen: PreviewImage
     },
     VerificationScreen: {
       screen: Verification,
@@ -144,6 +145,12 @@ const appStackNavigator = createStackNavigator(
         headerTitleStyle: {
           fontWeight: "normal"
         }
+      }
+    },
+    AboutScreen: {
+      screen: About,
+      navigationOptions: {
+        header: null
       }
     }
   },
