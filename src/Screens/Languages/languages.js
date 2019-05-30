@@ -113,10 +113,11 @@ export default class Languages extends Component {
                   <View style={styles.checkBoxView}>
                     <CheckBox
                       checkedColor="#00aced"
-                      size={28}
+                      size={26}
                       checkedIcon="check-circle"
                       uncheckedIcon="circle-o"
                       checked={index === checkBoxIndex ? checkBox : !checkBox}
+                      onPress={() => this.changeLanguage(item)}
                     />
                   </View>
                 </TouchableOpacity>
@@ -136,19 +137,19 @@ const styles = StyleSheet.create({
   },
   itemTextHeader: {
     backgroundColor: "#fff",
-    fontSize: 20,
+    fontSize: 18,
     paddingTop: 15,
     paddingLeft: 20,
     paddingBottom: 15
   },
   itemText: {
-    fontSize: 20
+    fontSize: 18
   },
   headerTitle: {
     backgroundColor: "#F4F5F8"
   },
   headerText: {
-    fontSize: 26,
+    fontSize: 24,
     alignSelf: "flex-start",
     paddingTop: 10,
     paddingBottom: 10,
