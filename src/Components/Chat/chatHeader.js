@@ -1,7 +1,8 @@
 import React from "react"
 
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native"
+import { View, StyleSheet, Text } from "react-native"
 import { Avatar, Icon } from "react-native-elements"
+import Touchable from "react-native-platform-touchable"
 
 const chatHeader = props => {
   const { userName, userPhoto, navigation, status } = props
@@ -9,18 +10,21 @@ const chatHeader = props => {
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
-        <TouchableOpacity
+        <Touchable
+          background={Touchable.Ripple("black", true)}
           style={styles.back}
           onPress={() => navigation.goBack()}
         >
-          <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
-        </TouchableOpacity>
-        <Avatar
-          containerStyle={styles.avatar}
-          rounded
-          source={{ uri: userPhoto }}
-          size={40}
-        />
+          <View style={styles.backButton}>
+            <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
+            <Avatar
+              containerStyle={styles.avatar}
+              rounded
+              source={{ uri: userPhoto }}
+              size={40}
+            />
+          </View>
+        </Touchable>
         <View style={styles.userInfo}>
           <Text
             style={styles.userName}
@@ -78,6 +82,11 @@ const styles = StyleSheet.create({
   },
   back: {
     justifyContent: "center"
+  },
+  backButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   }
 })
 
