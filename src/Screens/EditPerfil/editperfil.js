@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   TextInput
 } from "react-native"
+import Touchable from "react-native-platform-touchable"
 import AsyncStorage from "@react-native-community/async-storage"
 import firebase from "react-native-firebase"
 import LinearGradient from "react-native-linear-gradient"
@@ -183,12 +184,13 @@ export default class Conversas extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               style={styles.back}
               onPress={this.handleBackPress}
             >
               <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
-            </TouchableOpacity>
+            </Touchable>
             <Text style={styles.perfilInfo}>Perfil</Text>
           </View>
         </View>
@@ -286,22 +288,24 @@ export default class Conversas extends Component {
           <View style={styles.editBox}>
             <Text style={styles.rotulo}>Nome</Text>
             <Text style={styles.label}>{myName}</Text>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               style={styles.iconName}
               onPress={this.handleEditName}
             >
               <Icon name="create" iconStyle={{ color: "#616161" }} />
-            </TouchableOpacity>
+            </Touchable>
           </View>
           <View style={styles.editBox}>
             <Text style={styles.rotulo}>Email</Text>
             <Text style={styles.label}>{email}</Text>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               style={styles.iconName}
               onPress={this.handleEditEmail}
             >
               <Icon name="create" iconStyle={{ color: "#616161" }} />
-            </TouchableOpacity>
+            </Touchable>
           </View>
           <View style={styles.editBox}>
             <Text style={styles.rotulo}>Telefone</Text>
@@ -449,7 +453,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   back: {
+    // position: "absolute",
     justifyContent: "center"
+    // height: 40,
+    // width: 40
   },
   editNameContainer: {
     elevation: 6,

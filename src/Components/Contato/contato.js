@@ -10,7 +10,7 @@ const Contato = props => {
   return (
     <Touchable
       style={styles.button}
-      background={Touchable.Ripple("black")}
+      background={Touchable.SelectableBackground()}
       onPress={() => onPress(item)}
     >
       <View style={styles.contato}>

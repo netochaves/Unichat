@@ -11,7 +11,7 @@ const chatHeader = props => {
     <View style={styles.header}>
       <View style={styles.headerContent}>
         <Touchable
-          background={Touchable.Ripple("black", true)}
+          background={Touchable.SelectableBackgroundBorderless()}
           style={styles.back}
           onPress={() => navigation.goBack()}
         >

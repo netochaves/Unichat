@@ -13,7 +13,7 @@ const contactsHeader = props => {
         <View style={styles.Icon}>
           <Touchable
             onPress={onPressSearch}
-            background={Touchable.Ripple("black", true)}
+            background={Touchable.SelectableBackgroundBorderless()}
           >
             <Icon name="search1" color="#00aced" type="antdesign" />
           </Touchable>
@@ -21,7 +21,7 @@ const contactsHeader = props => {
         <View style={styles.Icon}>
           <Touchable
             onPress={syncronize}
-            background={Touchable.Ripple("black", true)}
+            background={Touchable.SelectableBackgroundBorderless()}
           >
             <Icon name="sync" color="#00aced" type="material" />
           </Touchable>

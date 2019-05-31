@@ -268,7 +268,7 @@ export default class Conversas extends Component {
             <Image source={{ uri: myPicture }} style={styles.myPicture} />
             <Text style={styles.conversasInfo}>{myName}</Text>
             <Touchable
-              background={Touchable.Ripple("black", true)}
+              background={Touchable.SelectableBackgroundBorderless()}
               onPress={() => {
                 this.setState({ isSerchable: true })
               }}
@@ -303,6 +303,7 @@ export default class Conversas extends Component {
         />
         <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
           <Touchable
+            background={Touchable.Ripple("black", true)}
             onPress={() => {
               this.newConversa()
             }}

@@ -31,7 +31,7 @@ const conversa = props => {
   return (
     <Touchable
       style={styles.button}
-      background={Touchable.Ripple("black")}
+      background={Touchable.SelectableBackground()}
       onPress={() => onPress(item)}
       onLongPress={() => onLongPress(item)}
     >
