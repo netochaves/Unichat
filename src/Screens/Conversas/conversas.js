@@ -6,11 +6,11 @@ import {
   StyleSheet,
   Text,
   Image,
-  TouchableOpacity,
   BackHandler,
   Alert,
   AppState
 } from "react-native"
+import Touchable from "react-native-platform-touchable"
 import Conversa from "~/Components/Conversa/conversa"
 import { Icon } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
@@ -267,7 +267,8 @@ export default class Conversas extends Component {
           <View style={styles.headerContent}>
             <Image source={{ uri: myPicture }} style={styles.myPicture} />
             <Text style={styles.conversasInfo}>{myName}</Text>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.Ripple("blue")}
               onPress={() => {
                 this.setState({ isSerchable: true })
               }}
@@ -275,7 +276,7 @@ export default class Conversas extends Component {
               <View style={styles.searchIcon} on>
                 <Icon name="search1" color="#00aced" type="antdesign" />
               </View>
-            </TouchableOpacity>
+            </Touchable>
           </View>
         </View>
       )
@@ -286,29 +287,28 @@ export default class Conversas extends Component {
           data={arrayholder}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity
-                onPress={() => {
-                  this.goToChat(item)
+              <Conversa
+                item={item}
+                onPress={param => {
+                  this.goToChat(param)
                 }}
-                onLongPress={() => {
-                  this.confirmDelete(item)
+                onLongPress={param => {
+                  this.confirmDelete(param)
                 }}
-              >
-                <Conversa item={item} />
-              </TouchableOpacity>
+              />
             )
           }}
           keyExtractor={i => i.key}
           keyboardShouldPersistTaps="always"
         />
         <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-          <TouchableOpacity
+          <Touchable
             onPress={() => {
               this.newConversa()
             }}
           >
             <Icon name="plus" color="white" type="antdesign" />
-          </TouchableOpacity>
+          </Touchable>
         </LinearGradient>
       </View>
     )

@@ -5,9 +5,10 @@ import LinearGradient from "react-native-linear-gradient"
 import getTime from "~/functions/getTime"
 import firebase from "react-native-firebase"
 import { Avatar } from "react-native-elements"
+import Touchable from "react-native-platform-touchable"
 
 const conversa = props => {
-  const { item } = props
+  const { item, onPress, onLongPress } = props
 
   const parseTime = dateNanoScds => {
     const date = dateNanoScds.toDate()
@@ -28,35 +29,44 @@ const conversa = props => {
   }
 
   return (
-    <View style={styles.conversa}>
-      <Avatar
-        containerStyle={styles.avatar}
-        rounded
-        source={{ uri: item.contactPhoto }}
-        size={60}
-      />
-      <View style={styles.mainInformation}>
-        <Text style={styles.name}>{item.contactName}</Text>
-        <Text style={styles.lastMsg}>{item.lastMessage}</Text>
+    <Touchable
+      style={styles.button}
+      background={Touchable.Ripple("black")}
+      onPress={() => onPress(item)}
+      onLongPress={() => onLongPress(item)}
+    >
+      <View style={styles.conversa}>
+        <Avatar
+          containerStyle={styles.avatar}
+          rounded
+          source={{ uri: item.contactPhoto }}
+          size={60}
+        />
+        <View style={styles.mainInformation}>
+          <Text style={styles.name}>{item.contactName}</Text>
+          <Text style={styles.lastMsg}>{item.lastMessage}</Text>
+        </View>
+        <View style={styles.rightInformation}>
+          <Text style={styles.data}>{parseTime(item.dateLastMessage)}</Text>
+          {item.unreadMsgs && (
+            <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.cont}>
+              <Text style={styles.unread}>{item.numUnreadMsgs}</Text>
+            </LinearGradient>
+          )}
+        </View>
       </View>
-      <View style={styles.rightInformation}>
-        <Text style={styles.data}>{parseTime(item.dateLastMessage)}</Text>
-        {item.unreadMsgs && (
-          <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.cont}>
-            <Text style={styles.unread}>{item.numUnreadMsgs}</Text>
-          </LinearGradient>
-        )}
-      </View>
-    </View>
+    </Touchable>
   )
 }
 
 const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "white",
+    marginBottom: 1
+  },
   conversa: {
     flexDirection: "row",
-    width: "100%",
-    backgroundColor: "#FFF",
-    marginBottom: 1
+    width: "100%"
   },
   avatar: {
     marginTop: 10,
