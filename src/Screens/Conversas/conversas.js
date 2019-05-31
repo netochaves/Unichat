@@ -46,6 +46,22 @@ export default class Conversas extends Component {
       this.setState({ myName: username, myPicture: profileImageUrl })
     })
     const { navigation } = this.props
+
+    const username = await AsyncStorage.getItem("@username")
+    const profileImageUrl = await AsyncStorage.getItem("@profileImageUrl")
+    this.setState({ myName: username, myPicture: profileImageUrl })
+
+    const channel = new firebase.notifications.Android.Channel(
+      "unichat",
+      "Unichat channel",
+      firebase.notifications.Android.Importance.Max
+    )
+      .setDescription("My app channel")
+      .setVibrationPattern([500])
+      .setLockScreenVisibility(firebase.notifications.Android.Visibility.Public)
+
+    firebase.notifications().android.createChannel(channel)
+
     const notificationOpen = await firebase
       .notifications()
       .getInitialNotification()
@@ -53,6 +69,11 @@ export default class Conversas extends Component {
       const { notification } = notificationOpen
       const { conversaId } = notification.data
       notification.android.setGroup("unichat")
+      notification.android.setPriority(
+        firebase.notifications.Android.Priority.High
+      )
+      notification.android.setChannelId("unichat")
+      notification.android.setVibrate([500])
       this.ref
         .collection("conversas")
         .doc(conversaId)

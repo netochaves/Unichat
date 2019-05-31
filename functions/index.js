@@ -33,9 +33,12 @@ return (exports.sendPushNotification = functions.firestore
           title: contactName,
           body: contentTranslated,
           sound: "default",
-          android_channel_id: "main-channel",
-          collapseKey: "unichat",
-          group: "unichat"
+          priority: "high",
+          icon: "icon",
+          android_channel_id: "unichat",
+          large_icon: "icon",
+          show_in_foreground: "true",
+          content_available: "true"
         }
       }
 
