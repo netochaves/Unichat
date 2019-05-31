@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     marginRight: 60,
     marginTop: 15,
     marginBottom: 15,
-    marginLeft: 10
+    marginLeft: 15
   },
   name: {
     position: "absolute",

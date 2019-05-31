@@ -8,7 +8,7 @@ import {
   ToastAndroid,
   TouchableOpacity
 } from "react-native"
-import { ListItem, Avatar } from "react-native-elements"
+import Contato from "~/Components/Contato/contato"
 import Contacts from "react-native-contacts"
 import AsyncStorage from "@react-native-community/async-storage"
 import firebase from "react-native-firebase"
@@ -155,29 +155,7 @@ export default class Contatos extends Component {
               <TouchableOpacity
                 onPress={() => navigation.navigate("ChatScreen", { item })}
               >
-                <ListItem
-                  style={styles.contact}
-                  title={item.contactName}
-                  subtitle={
-                    item.phoneNumbers.length > 0
-                      ? item.phoneNumbers[0].number
-                      : null
-                  }
-                  leftAvatar={
-                    item.contactPhoto === "" ? (
-                      <Avatar
-                        rounded
-                        icon={{ name: "user", type: "font-awesome" }}
-                        size="medium"
-                      />
-                    ) : (
-                      {
-                        source: { uri: item.contactPhoto },
-                        size: "medium"
-                      }
-                    )
-                  }
-                />
+                <Contato item={item} />
               </TouchableOpacity>
             )
           }}
@@ -194,9 +172,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F4F5F8"
-  },
-  contact: {
-    backgroundColor: "#F4F5F8",
-    marginBottom: 1
   }
 })
