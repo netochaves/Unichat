@@ -11,11 +11,11 @@ import {
   Alert,
   AppState
 } from "react-native"
-import { ListItem, Icon } from "react-native-elements"
+import Conversa from "~/Components/Conversa/conversa"
+import { Icon } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
-import getTime from "~/functions/getTime"
 import NetInfo from "@react-native-community/netinfo"
 import SearchBar from "~/Components/SearchBar"
 
@@ -231,26 +231,6 @@ export default class Conversas extends Component {
     navigation.navigate("ContactsScreen")
   }
 
-  search = () => {}
-
-  parseTime = dateNanoScds => {
-    const date = dateNanoScds.toDate()
-    const atualDate = firebase.database().getServerTime()
-    let textDate = ""
-    if (atualDate.getDate() - date.getDate() === 0) {
-      textDate = getTime(date)
-    } else if (atualDate.getDate() - date.getDate() === 1) {
-      textDate = "Ontem"
-    } else if (atualDate.getDate() - date.getDate() >= 2) {
-      textDate = `${date
-        .getDate()
-        .toString()}/${date
-        .getMonth()
-        .toString()}/${date.getFullYear().toString()}`
-    }
-    return textDate
-  }
-
   searchFilterFunction = text => {
     this.setState({ text })
     const { conversas } = this.state
@@ -314,34 +294,7 @@ export default class Conversas extends Component {
                   this.confirmDelete(item)
                 }}
               >
-                <ListItem
-                  style={styles.conversa}
-                  subtitle={
-                    <View style={styles.containerSub}>
-                      <Text style={styles.name}>{item.contactName}</Text>
-                      <Text style={styles.lastMsg}>{item.lastMessage}</Text>
-                      <View style={styles.rightInformation}>
-                        <Text style={styles.data}>
-                          {this.parseTime(item.dateLastMessage)}
-                        </Text>
-                        {item.unreadMsgs && (
-                          <LinearGradient
-                            colors={["#547BF0", "#6AC3FB"]}
-                            style={styles.cont}
-                          >
-                            <Text style={styles.unread}>
-                              {item.numUnreadMsgs}
-                            </Text>
-                          </LinearGradient>
-                        )}
-                      </View>
-                    </View>
-                  }
-                  leftAvatar={{
-                    source: { uri: item.contactPhoto },
-                    size: "medium"
-                  }}
-                />
+                <Conversa item={item} />
               </TouchableOpacity>
             )
           }}
@@ -368,10 +321,6 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans",
     backgroundColor: "#F4F5F8"
   },
-  containerSub: {
-    position: "absolute",
-    width: "100%"
-  },
   header: {
     backgroundColor: "#fff",
     elevation: 5,
@@ -395,11 +344,6 @@ const styles = StyleSheet.create({
   searchIcon: {
     justifyContent: "center"
   },
-  conversa: {
-    width: "100%",
-    backgroundColor: "#E8E3E3",
-    marginBottom: 1
-  },
   button: {
     elevation: 5,
     alignItems: "center",
@@ -410,35 +354,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 5,
     right: 5
-  },
-  cont: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    justifyContent: "center",
-    marginTop: 5
-  },
-  data: {
-    fontSize: 8
-  },
-  unread: {
-    fontWeight: "bold",
-    fontSize: 8,
-    alignSelf: "center",
-    color: "white"
-  },
-  rightInformation: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    right: 0,
-    top: "50%",
-    bottom: "50%"
-  },
-  lastMsg: {
-    marginTop: 10,
-    color: "#a9a9a9",
-    fontSize: 13
   },
   myPicture: {
     width: 40,
