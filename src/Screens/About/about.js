@@ -18,15 +18,12 @@ const aboutScreen = () => {
       <View style={styles.elevationBody}>
         <Text style={styles.titleTextStyle}>Unichat Messenger</Text>
         <Text style={styles.titleTextStyle}>Versão 0.3.0</Text>
-        <Image style={styles.imageStyle} />
+        <Image
+          source={require("../../assets/imgs/unichat-icon.png")}
+          style={styles.imageStyle}
+        />
         <Text style={styles.titleTextStyle}>2019 Unichat Inc.</Text>
-        <TouchableOpacity
-          onPress={() => {
-            Linking.openURL(
-              "https://github.com/ES2-UFPI/Unichat/blob/master/LICENSE"
-            )
-          }}
-        >
+        <TouchableOpacity onPress={() => {}}>
           <Text style={styles.linkStyle}>Licença</Text>
         </TouchableOpacity>
       </View>
@@ -38,6 +35,7 @@ const aboutScreen = () => {
           <Avatar
             rounded
             icon={{ name: "user", type: "font-awesome" }}
+            source={require("../../assets/imgs/dev_profiles/neto.jpeg")}
             size="medium"
           />
           <View style={styles.cardViewText}>
@@ -54,6 +52,7 @@ const aboutScreen = () => {
           <Avatar
             rounded
             icon={{ name: "user", type: "font-awesome" }}
+            source={require("../../assets/imgs/dev_profiles/jpe.jpeg")}
             size="medium"
           />
           <View style={styles.cardViewText}>
@@ -70,6 +69,7 @@ const aboutScreen = () => {
           <Avatar
             rounded
             icon={{ name: "user", type: "font-awesome" }}
+            source={require("../../assets/imgs/dev_profiles/max.jpeg")}
             size="medium"
           />
           <View style={styles.cardViewText}>
@@ -88,6 +88,7 @@ const aboutScreen = () => {
           <Avatar
             rounded
             icon={{ name: "user", type: "font-awesome" }}
+            source={require("../../assets/imgs/dev_profiles/evandro.jpeg")}
             size="medium"
           />
           <View style={styles.cardViewText}>
@@ -148,8 +149,10 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   imageStyle: {
-    width: 100,
-    height: 100
+    marginTop: 10,
+    marginBottom: 10,
+    width: 75,
+    height: 75
   },
   linkStyle: {
     fontSize: 20,
