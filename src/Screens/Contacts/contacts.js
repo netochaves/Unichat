@@ -1,13 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable react-native/split-platform-components */
 import React, { Component } from "react"
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  ToastAndroid,
-  TouchableOpacity
-} from "react-native"
+import { View, FlatList, StyleSheet, ToastAndroid } from "react-native"
 import Contato from "~/Components/Contato/contato"
 import Contacts from "react-native-contacts"
 import AsyncStorage from "@react-native-community/async-storage"
@@ -152,11 +146,12 @@ export default class Contatos extends Component {
           data={arrayholder.sort((a, b) => a.givenName.localeCompare(b))}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("ChatScreen", { item })}
-              >
-                <Contato item={item} />
-              </TouchableOpacity>
+              <Contato
+                item={item}
+                onPress={param => {
+                  navigation.navigate("ChatScreen", { item: param })
+                }}
+              />
             )
           }}
           keyExtractor={i => i.recordID}
