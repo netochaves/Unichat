@@ -34,9 +34,9 @@ return (exports.sendPushNotification = functions.firestore
           body: contentTranslated,
           sound: "default",
           priority: "high",
-          icon: "icon",
+          icon: "logo_notification",
           android_channel_id: "unichat",
-          large_icon: "icon",
+          large_icon: "logo_notification",
           show_in_foreground: "true",
           content_available: "true"
         }
