@@ -268,7 +268,7 @@ export default class Conversas extends Component {
             <Image source={{ uri: myPicture }} style={styles.myPicture} />
             <Text style={styles.conversasInfo}>{myName}</Text>
             <Touchable
-              background={Touchable.Ripple("blue")}
+              background={Touchable.Ripple("black", true)}
               onPress={() => {
                 this.setState({ isSerchable: true })
               }}
