@@ -185,6 +185,7 @@ export default class Conversas extends Component {
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <Touchable
+              // hitSlop={{ top: 100, left: 100, right: 100, bottom: 100 }}
               background={Touchable.SelectableBackgroundBorderless()}
               style={styles.back}
               onPress={this.handleBackPress}
@@ -343,7 +344,8 @@ const styles = StyleSheet.create({
   perfilInfo: {
     flex: 1,
     fontSize: 22,
-    textAlign: "center"
+    textAlign: "center",
+    marginRight: 40
   },
   editImage: {
     justifyContent: "center",
@@ -454,7 +456,8 @@ const styles = StyleSheet.create({
   },
   back: {
     // position: "absolute",
-    justifyContent: "center"
+    justifyContent: "center",
+    width: 40
     // height: 40,
     // width: 40
   },
