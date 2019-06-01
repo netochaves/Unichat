@@ -5,7 +5,8 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Switch
+  Switch,
+  Linking
 } from "react-native"
 import { Icon } from "react-native-elements"
 
@@ -79,7 +80,14 @@ const configBody = props => {
             <Text style={styles.touchableStyle}>Avaliar App</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.touchableIcon}>
+          <TouchableOpacity
+            style={styles.touchableIcon}
+            onPress={() => {
+              Linking.openURL(
+                "https://github.com/ES2-UFPI/Unichat/blob/dev/PRIVACY-POLICY.md"
+              )
+            }}
+          >
             <Icon name="notifications" size={28} color="#25e01f" />
             <Text style={styles.touchableStyle}>Política de Privacidade</Text>
           </TouchableOpacity>
