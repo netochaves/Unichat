@@ -5,7 +5,8 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Switch
+  Switch,
+  Share
 } from "react-native"
 import { Icon } from "react-native-elements"
 
@@ -69,7 +70,15 @@ const configBody = props => {
             <Text style={styles.touchableStyle}>Enviar Feedback</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.touchableIcon}>
+          <TouchableOpacity
+            style={styles.touchableIcon}
+            onPress={() => {
+              Share.share({
+                message:
+                  "Olá, já instalou o Unichat? Se não, é bem fácil. Apenas clique no link a seguir https://github.com/ES2-UFPI/Unichat/releases"
+              })
+            }}
+          >
             <Icon name="share" size={28} color="#14d2e8" />
             <Text style={styles.touchableStyle}>Compartilhar App</Text>
           </TouchableOpacity>
