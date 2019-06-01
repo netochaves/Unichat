@@ -2,8 +2,10 @@ import React, { PureComponent } from "react"
 import { Svg, Path } from "react-native-svg"
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import { moderateScale } from "react-native-size-matters"
+import getColor from "~/functions/getColor"
 import firebase from "react-native-firebase"
 
+const cor = getColor()
 const styles = StyleSheet.create({
   // Estilo para a mensagem do remetente
   remet: {
@@ -32,6 +34,7 @@ const styles = StyleSheet.create({
     right: 5
   },
   textRemet: {
+    fontFamily: "Open Sans",
     fontSize: 14,
     color: "white"
   },
@@ -64,6 +67,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     padding: 10
   },
+  nomeRemetente: {
+    fontFamily: "Open Sans",
+    fontSize: 12,
+    fontWeight: "bold",
+    color: cor
+  },
   arrowDest: {
     elevation: 5,
     position: "absolute",
@@ -71,6 +80,7 @@ const styles = StyleSheet.create({
     left: 5
   },
   textDest: {
+    fontFamily: "Open Sans",
     fontSize: 14,
     color: "black"
   },
@@ -93,7 +103,8 @@ export default class Mensagem extends PureComponent {
       content: "",
       date: "",
       source: "",
-      original: ""
+      original: "",
+      nomeRemetente: null
     }
     const userUid = firebase.auth().currentUser.uid
     const { destUserUid } = this.props
@@ -107,9 +118,9 @@ export default class Mensagem extends PureComponent {
   }
 
   componentDidMount() {
-    const { chave, content, date, source, original } = this.props
+    const { chave, content, date, source, original, nomeRemetente } = this.props
 
-    this.setState({ chave, content, date, source, original })
+    this.setState({ chave, content, date, source, original, nomeRemetente })
   }
 
   alterarIdioma = chave => {
@@ -171,7 +182,7 @@ export default class Mensagem extends PureComponent {
   }
 
   render() {
-    const { content, date, source } = this.state
+    const { content, date, source, nomeRemetente } = this.state
     let message
     // Remetente
     if (source === "1") {
@@ -225,6 +236,11 @@ export default class Mensagem extends PureComponent {
               </Svg>
             </View>
             <View style={styles.boxDest}>
+              {nomeRemetente && (
+                <View>
+                  <Text style={styles.nomeRemetente}>{nomeRemetente}</Text>
+                </View>
+              )}
               <Text style={styles.textDest}>{content}</Text>
             </View>
           </TouchableOpacity>
