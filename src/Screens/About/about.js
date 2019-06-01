@@ -5,25 +5,58 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  Linking,
-  ScrollView
+  ScrollView,
+  Linking
 } from "react-native"
-import { Avatar } from "react-native-elements"
-import Icon from "react-native-vector-icons/FontAwesome"
-import LinearGradient from "react-native-linear-gradient"
+import AboutHeader from "~/Components/About/aboutHeader"
+import AboutCards from "~/Components/About/aboutCards"
 
-const aboutScreen = () => {
+const aboutScreen = props => {
+  const { navigation } = props
+
+  const openURL = path => {
+    Linking.openURL(path)
+  }
+
+  const devCards = [
+    {
+      id: "1",
+      name: "José Chaves",
+      desc: "Cara que fez tudo",
+      avatar: require("../../assets/imgs/dev_profiles/neto.jpeg")
+    },
+    {
+      id: "2",
+      name: "João Pedro",
+      desc: "Só ajudou mesmo",
+      avatar: require("../../assets/imgs/dev_profiles/jpe.jpeg")
+    },
+    {
+      id: "3",
+      name: "Max Nícolas",
+      desc: "100% estresse",
+      avatar: require("../../assets/imgs/dev_profiles/max.jpeg")
+    },
+    {
+      id: "4",
+      name: "Evandro Monte",
+      desc: "é né...",
+      avatar: require("../../assets/imgs/dev_profiles/evandro.jpeg")
+    }
+  ]
+
   return (
     <View style={styles.container}>
+      <AboutHeader navigation={navigation} />
       <View style={styles.elevationBody}>
-        <Text style={styles.titleTextStyle}>Unichat Messenger</Text>
+        <Text style={styles.titleTextStyle}>Unichat</Text>
         <Text style={styles.titleTextStyle}>Versão 0.3.0</Text>
         <Image
           source={require("../../assets/imgs/unichat-icon.png")}
           style={styles.imageStyle}
         />
         <Text style={styles.titleTextStyle}>2019 Unichat Inc.</Text>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => openURL()}>
           <Text style={styles.linkStyle}>Licença</Text>
         </TouchableOpacity>
       </View>
@@ -31,75 +64,9 @@ const aboutScreen = () => {
         <Text style={styles.titleTextStyle}>Créditos</Text>
       </View>
       <ScrollView>
-        <LinearGradient colors={["#fff", "#F4F5F8"]} style={styles.cardView}>
-          <Avatar
-            rounded
-            icon={{ name: "user", type: "font-awesome" }}
-            source={require("../../assets/imgs/dev_profiles/neto.jpeg")}
-            size="medium"
-          />
-          <View style={styles.cardViewText}>
-            <Text style={styles.titleTextStyle}>José Chaves</Text>
-            <Text style={styles.bodyTextStyle}>Fez tudo praticamente</Text>
-            <View style={styles.iconView}>
-              <Icon name="twitter" size={30} color="#2ECCFA" />
-              <Icon name="github" size={30} color="#333" />
-            </View>
-          </View>
-        </LinearGradient>
-
-        <LinearGradient colors={["#fff", "#F4F5F8"]} style={styles.cardView}>
-          <Avatar
-            rounded
-            icon={{ name: "user", type: "font-awesome" }}
-            source={require("../../assets/imgs/dev_profiles/jpe.jpeg")}
-            size="medium"
-          />
-          <View style={styles.cardViewText}>
-            <Text style={styles.titleTextStyle}>João Pedro</Text>
-            <Text style={styles.bodyTextStyle}>Fez algo ali e aqui</Text>
-            <View style={styles.iconView}>
-              <Icon name="twitter" size={30} color="#2ECCFA" />
-              <Icon name="github" size={30} color="#333" />
-            </View>
-          </View>
-        </LinearGradient>
-
-        <LinearGradient colors={["#fff", "#F4F5F8"]} style={styles.cardView}>
-          <Avatar
-            rounded
-            icon={{ name: "user", type: "font-awesome" }}
-            source={require("../../assets/imgs/dev_profiles/max.jpeg")}
-            size="medium"
-          />
-          <View style={styles.cardViewText}>
-            <Text style={styles.titleTextStyle}>Max Nícolas</Text>
-            <Text style={styles.bodyTextStyle}>
-              Tiltou mais do que programou
-            </Text>
-            <View style={styles.iconView}>
-              <Icon name="twitter" size={30} color="#2ECCFA" />
-              <Icon name="github" size={30} color="#333" />
-            </View>
-          </View>
-        </LinearGradient>
-
-        <LinearGradient colors={["#fff", "#F4F5F8"]} style={styles.cardView}>
-          <Avatar
-            rounded
-            icon={{ name: "user", type: "font-awesome" }}
-            source={require("../../assets/imgs/dev_profiles/evandro.jpeg")}
-            size="medium"
-          />
-          <View style={styles.cardViewText}>
-            <Text style={styles.titleTextStyle}>Evandro Monte</Text>
-            <Text style={styles.bodyTextStyle}>hehehe</Text>
-            <View style={styles.iconView}>
-              <Icon name="twitter" size={30} color="#2ECCFA" />
-              <Icon name="github" size={30} color="#333" />
-            </View>
-          </View>
-        </LinearGradient>
+        {devCards.map(dev => {
+          return <AboutCards {...dev} key={dev.id} />
+        })}
       </ScrollView>
     </View>
   )
@@ -130,24 +97,6 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30
   },
-  cardView: {
-    elevation: 1,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    marginLeft: 30,
-    marginRight: 30,
-    marginBottom: 30,
-    flexDirection: "row"
-  },
-  cardViewText: {
-    marginLeft: 10
-  },
-  iconView: {
-    flexDirection: "row"
-  },
   imageStyle: {
     marginTop: 10,
     marginBottom: 10,
@@ -161,11 +110,6 @@ const styles = StyleSheet.create({
   },
   titleTextStyle: {
     fontSize: 20,
-    fontFamily: "OpenSans",
-    color: "#999295"
-  },
-  bodyTextStyle: {
-    fontSize: 14,
     fontFamily: "OpenSans",
     color: "#999295"
   }
