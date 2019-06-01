@@ -2,7 +2,8 @@ import React from "react"
 import {
   createAppContainer,
   createStackNavigator,
-  createMaterialTopTabNavigator
+  createMaterialTopTabNavigator,
+  createSwitchNavigator
 } from "react-navigation"
 import PerfilSettings from "~/Screens/PerfilSettings/perfilsettings"
 import PreviewImage from "~/Screens/PreviewImage/previewImg"
@@ -14,17 +15,8 @@ import Conversas from "~/Screens/Conversas/conversas"
 import Settings from "~/Screens/Config/config"
 import EditPerfil from "~/Screens/EditPerfil/editperfil"
 import Languages from "~/Screens/Languages/languages"
-import { Icon } from "react-native-elements"
-import firebase from "react-native-firebase"
 
-let rota = "AuthScreen"
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    rota = "Conversas"
-  } else {
-    rota = "AuthScreen"
-  }
-})
+import { Icon } from "react-native-elements"
 
 const tabBarNavigator = createMaterialTopTabNavigator(
   {
@@ -84,47 +76,9 @@ const tabBarNavigator = createMaterialTopTabNavigator(
     }
   }
 )
-const appStackNavigator = createStackNavigator(
+
+const HomeStackNavigator = createStackNavigator(
   {
-    AuthScreen: {
-      screen: Auth,
-      navigationOptions: {
-        header: null
-      }
-    },
-    PerfilSettings: {
-      screen: PerfilSettings,
-      navigationOptions: {
-        header: null
-      }
-    },
-    PreviewImage: {
-      screen: PreviewImage,
-    },
-    VerificationScreen: {
-      screen: Verification,
-      navigationOptions: {
-        header: null
-      }
-    },
-    Conversas: {
-      screen: tabBarNavigator,
-      navigationOptions: {
-        header: null
-      }
-    },
-    ContactsScreen: {
-      screen: tabBarNavigator,
-      navigationOptions: {
-        header: null
-      }
-    },
-    ChatScreen: {
-      screen: Chat,
-      navigationOptions: {
-        header: null
-      }
-    },
     SettingsScreen: {
       screen: tabBarNavigator,
       navigationOptions: {
@@ -145,11 +99,76 @@ const appStackNavigator = createStackNavigator(
           fontWeight: "normal"
         }
       }
+    },
+    Contacts: {
+      screen: tabBarNavigator,
+      navigationOptions: {
+        header: null
+      }
+    },
+
+    ChatScreen: {
+      screen: Chat,
+      navigationOptions: {
+        header: null
+      }
+    },
+    Conversas: {
+      screen: tabBarNavigator,
+      navigationOptions: {
+        header: null
+      }
     }
   },
   {
-    initialRouteName: rota
+    initialRouteName: "Conversas"
   },
   { header: null }
 )
-export default createAppContainer(appStackNavigator)
+
+const authStackNavigator = createStackNavigator(
+  {
+    AuthScreen: {
+      screen: Auth,
+      navigationOptions: {
+        header: null
+      }
+    },
+    PerfilSettings: {
+      screen: PerfilSettings,
+      navigationOptions: {
+        header: null
+      }
+    },
+    PreviewImage: {
+      screen: PreviewImage
+    },
+    VerificationScreen: {
+      screen: Verification,
+      navigationOptions: {
+        header: null
+      }
+    },
+    Conversas: {
+      screen: tabBarNavigator,
+      navigationOptions: {
+        header: null
+      }
+    }
+  },
+  {
+    initialRouteName: "AuthScreen"
+  },
+  { header: null }
+)
+export const createRootNavigator = (isAuth = false) => {
+  return createAppContainer(
+    createSwitchNavigator(
+      {
+        Home: HomeStackNavigator,
+        Auth: authStackNavigator
+      },
+      { initialRouteName: isAuth ? "Home" : "Auth" }
+    )
+  )
+}
