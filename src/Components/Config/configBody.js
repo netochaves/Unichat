@@ -131,11 +131,6 @@ export default class configBody extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.touchableIcon}>
-              <Icon name="notifications" size={28} color="#25e01f" />
-              <Text style={styles.touchableStyle}>Política de Privacidade</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.touchableIcon}>
               <Icon name="info" size={28} color="#ef9739" />
               <Text style={styles.touchableStyle}>Sobre</Text>
             </TouchableOpacity>
