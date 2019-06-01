@@ -204,7 +204,8 @@ export default class Conversas extends Component {
                 content: newMessage.content,
                 date: newMessage.date,
                 contentTranslated: translated,
-                source: "2"
+                source: "2",
+                isChanged: false
               })
               .then(() => true)
               .catch(error => error)
@@ -267,7 +268,7 @@ export default class Conversas extends Component {
           status={status}
         />
         <View style={styles.chatContainer}>
-          <ChatContainer messages={messages} />
+          <ChatContainer messages={messages} destUserUid={destUser.key}/>
         </View>
         <View style={styles.input}>
           <ChatInput
