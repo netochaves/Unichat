@@ -14,34 +14,50 @@ import AboutCards from "~/Components/About/aboutCards"
 const aboutScreen = props => {
   const { navigation } = props
 
-  const openURL = path => {
-    Linking.openURL(path)
+  const openURL = url => {
+    Linking.openURL(url)
   }
 
   const devCards = [
     {
       id: "1",
       name: "José Chaves",
-      desc: "Cara que fez tudo",
-      avatar: require("../../assets/imgs/dev_profiles/neto.jpeg")
+      desc: "Cara que fez (quase) tudo",
+      avatar: require("../../assets/imgs/dev_profiles/neto.jpeg"),
+      socialMedia: {
+        twitter: "https://twitter.com/dctlol",
+        github: "https://github.com/netochaves"
+      }
     },
     {
       id: "2",
       name: "João Pedro",
       desc: "Só ajudou mesmo",
-      avatar: require("../../assets/imgs/dev_profiles/jpe.jpeg")
+      avatar: require("../../assets/imgs/dev_profiles/jpe.jpeg"),
+      socialMedia: {
+        twitter: "https://twitter.com/",
+        github: "https://github.com/sosolidkk"
+      }
     },
     {
       id: "3",
       name: "Max Nícolas",
       desc: "100% estresse",
-      avatar: require("../../assets/imgs/dev_profiles/max.jpeg")
+      avatar: require("../../assets/imgs/dev_profiles/max.jpeg"),
+      socialMedia: {
+        twitter: "https://twitter.com/Mex978",
+        github: "https://github.com/Mex978"
+      }
     },
     {
       id: "4",
       name: "Evandro Monte",
-      desc: "é né...",
-      avatar: require("../../assets/imgs/dev_profiles/evandro.jpeg")
+      desc: "Foi o último team leader",
+      avatar: require("../../assets/imgs/dev_profiles/evandro.jpeg"),
+      socialMedia: {
+        twitter: "https://twitter.com/",
+        github: "https://github.com/mrvan04"
+      }
     }
   ]
 
@@ -56,7 +72,11 @@ const aboutScreen = props => {
           style={styles.imageStyle}
         />
         <Text style={styles.titleTextStyle}>2019 Unichat Inc.</Text>
-        <TouchableOpacity onPress={() => openURL()}>
+        <TouchableOpacity
+          onPress={() =>
+            openURL("https://github.com/ES2-UFPI/Unichat/blob/master/LICENSE")
+          }
+        >
           <Text style={styles.linkStyle}>Licença</Text>
         </TouchableOpacity>
       </View>

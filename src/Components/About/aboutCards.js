@@ -1,11 +1,15 @@
 import React from "react"
-import { View, StyleSheet, Text } from "react-native"
+import { View, StyleSheet, Text, Linking } from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome"
 import { Avatar } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
 
 const aboutCards = props => {
-  const { name, desc, avatar } = props
+  const { name, desc, avatar, socialMedia } = props
+
+  const openURL = url => {
+    Linking.openURL(url)
+  }
 
   return (
     <LinearGradient colors={["#fff", "#F4F5F8"]} style={styles.cardView}>
@@ -19,7 +23,18 @@ const aboutCards = props => {
         <Text style={styles.titleTextStyle}>{name}</Text>
         <Text style={styles.bodyTextStyle}>{desc}</Text>
         <View style={styles.iconView}>
-          <Icon name="github" size={30} color="#333" />
+          <Icon
+            name="twitter"
+            size={30}
+            color="#38A1F3"
+            onPress={() => openURL(socialMedia.twitter)}
+          />
+          <Icon
+            name="github"
+            size={30}
+            color="#333"
+            onPress={() => openURL(socialMedia.github)}
+          />
         </View>
       </View>
     </LinearGradient>
