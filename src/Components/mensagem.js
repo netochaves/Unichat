@@ -2,7 +2,10 @@ import React, { PureComponent } from "react"
 import { Svg, Path } from "react-native-svg"
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import { moderateScale } from "react-native-size-matters"
+import getColor from "~/functions/getColor"
+import firebase from "react-native-firebase"
 
+const cor = getColor()
 const styles = StyleSheet.create({
   // Estilo para a mensagem do remetente
   remet: {
@@ -31,6 +34,7 @@ const styles = StyleSheet.create({
     right: 5
   },
   textRemet: {
+    fontFamily: "Open Sans",
     fontSize: 14,
     color: "white"
   },
@@ -63,6 +67,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     padding: 10
   },
+  nomeRemetente: {
+    fontFamily: "Open Sans",
+    fontSize: 12,
+    fontWeight: "bold",
+    color: cor
+  },
   arrowDest: {
     elevation: 5,
     position: "absolute",
@@ -70,6 +80,7 @@ const styles = StyleSheet.create({
     left: 5
   },
   textDest: {
+    fontFamily: "Open Sans",
     fontSize: 14,
     color: "black"
   },
@@ -85,37 +96,93 @@ const styles = StyleSheet.create({
 })
 
 export default class Mensagem extends PureComponent {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
+      chave: "",
       content: "",
       date: "",
       source: "",
-      original: ""
+      original: "",
+      nomeRemetente: null
     }
+    const userUid = firebase.auth().currentUser.uid
+    const { destUserUid } = this.props
+    this.ref = firebase
+      .firestore()
+      .collection("users")
+      .doc(userUid)
+      .collection("conversas")
+      .doc(destUserUid)
+      .collection("messages")
   }
 
   componentDidMount() {
-    const { content, date, source, original } = this.props
+    const { chave, content, date, source, original, nomeRemetente } = this.props
 
-    this.setState({ content, date, source, original })
+    this.setState({ chave, content, date, source, original, nomeRemetente })
+  }
+
+  alterarIdioma = chave => {
+    const { content, original } = this.state
+    const translated = content
+    const noTranslated = original
+    this.ref
+      .doc(chave)
+      .get()
+      .then(doc => {
+        const { isChanged } = doc.data()
+        if (isChanged) {
+          this.ref.doc(chave).update({
+            content: translated,
+            contentTranslated: noTranslated,
+            isChanged: false
+          })
+        } else {
+          this.ref.doc(chave).update({
+            content: translated,
+            contentTranslated: noTranslated,
+            isChanged: true
+          })
+        }
+        this.setState({ content: noTranslated, original: translated })
+      })
   }
 
   verLinguaOriginal = () => {
-    const { original } = this.state
-    Alert.alert(
-      "Confirmar",
-      "Deseja ver a mensagem na linguagem original?",
-      [
-        { text: "Sim", onPress: () => this.setState({ content: original }) },
-        { text: "Não" }
-      ],
-      { cancelable: false }
-    )
+    const { chave } = this.state
+
+    this.ref
+      .doc(chave)
+      .get()
+      .then(doc => {
+        const { isChanged } = doc.data()
+        if (isChanged) {
+          Alert.alert(
+            "Confirmar",
+            "Deseja ver a tradução da mensagem?",
+            [
+              { text: "Sim", onPress: () => this.alterarIdioma(chave) },
+              { text: "Não" }
+            ],
+            { cancelable: false }
+          )
+        } else {
+          Alert.alert(
+            "Confirmar",
+            "Deseja ver a mensagem na linguagem original?",
+            [
+              { text: "Sim", onPress: () => this.alterarIdioma(chave) },
+              { text: "Não" }
+            ],
+            { cancelable: false }
+          )
+        }
+      })
   }
 
   render() {
-    const { content, date, source } = this.state
+    const { content, date, source, nomeRemetente } = this.state
     let message
     // Remetente
     if (source === "1") {
@@ -169,6 +236,11 @@ export default class Mensagem extends PureComponent {
               </Svg>
             </View>
             <View style={styles.boxDest}>
+              {nomeRemetente && (
+                <View>
+                  <Text style={styles.nomeRemetente}>{nomeRemetente}</Text>
+                </View>
+              )}
               <Text style={styles.textDest}>{content}</Text>
             </View>
           </TouchableOpacity>
