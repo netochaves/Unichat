@@ -45,8 +45,10 @@ return (exports.sendPushNotification = functions.firestore
         .doc(userId)
         .get()
         .then(doc => {
-          const { pushToken } = doc.data()
-          return admin.messaging().sendToDevice(pushToken, payload)
+          const { pushToken, notifications } = doc.data()
+          if (notifications)
+            return admin.messaging().sendToDevice(pushToken, payload)
+          else return null
         })
     }
   }))
