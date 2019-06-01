@@ -24,14 +24,14 @@ return (exports.sendPushNotification = functions.firestore
       .catch(error => console.log(error))
 
     const { contactName, contactPhoto } = data
-    if (source === "2") {
+    if (source === "1") {
       const payload = {
         data: {
           conversaId
         },
         notification: {
           title: contactName,
-          body: contentTranslated,
+          body: content,
           sound: "default",
           android_channel_id: "main-channel",
           collapseKey: "unichat",
@@ -45,8 +45,10 @@ return (exports.sendPushNotification = functions.firestore
         .doc(userId)
         .get()
         .then(doc => {
-          const { pushToken } = doc.data()
-          return admin.messaging().sendToDevice(pushToken, payload)
+          const { pushToken, notifications } = doc.data()
+          if (notifications)
+            return admin.messaging().sendToDevice(pushToken, payload)
+          else return null
         })
     }
   }))
