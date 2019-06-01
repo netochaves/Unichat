@@ -2,6 +2,7 @@ import React, { PureComponent } from "react"
 import { Svg, Path } from "react-native-svg"
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import { moderateScale } from "react-native-size-matters"
+import firebase from "react-native-firebase"
 
 const styles = StyleSheet.create({
   // Estilo para a mensagem do remetente
@@ -85,33 +86,88 @@ const styles = StyleSheet.create({
 })
 
 export default class Mensagem extends PureComponent {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
+      chave: "",
       content: "",
       date: "",
       source: "",
       original: ""
     }
+    const userUid = firebase.auth().currentUser.uid
+    const { destUserUid } = this.props
+    this.ref = firebase
+      .firestore()
+      .collection("users")
+      .doc(userUid)
+      .collection("conversas")
+      .doc(destUserUid)
+      .collection("messages")
   }
 
   componentDidMount() {
-    const { content, date, source, original } = this.props
+    const { chave, content, date, source, original } = this.props
 
-    this.setState({ content, date, source, original })
+    this.setState({ chave, content, date, source, original })
+  }
+
+  alterarIdioma = chave => {
+    const { content, original } = this.state
+    const translated = content
+    const noTranslated = original
+    this.ref
+      .doc(chave)
+      .get()
+      .then(doc => {
+        const { isChanged } = doc.data()
+        if (isChanged) {
+          this.ref.doc(chave).update({
+            content: translated,
+            contentTranslated: noTranslated,
+            isChanged: false
+          })
+        } else {
+          this.ref.doc(chave).update({
+            content: translated,
+            contentTranslated: noTranslated,
+            isChanged: true
+          })
+        }
+        this.setState({ content: noTranslated, original: translated })
+      })
   }
 
   verLinguaOriginal = () => {
-    const { original } = this.state
-    Alert.alert(
-      "Confirmar",
-      "Deseja ver a mensagem na linguagem original?",
-      [
-        { text: "Sim", onPress: () => this.setState({ content: original }) },
-        { text: "Não" }
-      ],
-      { cancelable: false }
-    )
+    const { chave } = this.state
+
+    this.ref
+      .doc(chave)
+      .get()
+      .then(doc => {
+        const { isChanged } = doc.data()
+        if (isChanged) {
+          Alert.alert(
+            "Confirmar",
+            "Deseja ver a tradução da mensagem?",
+            [
+              { text: "Sim", onPress: () => this.alterarIdioma(chave) },
+              { text: "Não" }
+            ],
+            { cancelable: false }
+          )
+        } else {
+          Alert.alert(
+            "Confirmar",
+            "Deseja ver a mensagem na linguagem original?",
+            [
+              { text: "Sim", onPress: () => this.alterarIdioma(chave) },
+              { text: "Não" }
+            ],
+            { cancelable: false }
+          )
+        }
+      })
   }
 
   render() {
