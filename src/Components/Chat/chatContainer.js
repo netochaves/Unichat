@@ -15,6 +15,7 @@ const Chat = props => {
         renderItem={({ item }) => {
           return (
             <Message
+              nomeRemetente={null}
               chave={item.key}
               destUserUid={destUserUid}
               content={
