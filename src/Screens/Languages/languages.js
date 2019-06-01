@@ -6,8 +6,10 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  ToastAndroid
+  ToastAndroid,
+  BackHandler
 } from "react-native"
+import LanguagesHeader from "~/Components/Languages/languagesHeader"
 import { CheckBox } from "react-native-elements"
 import firebase from "react-native-firebase"
 import data from "~/assets/languages/languages.json"
@@ -19,7 +21,8 @@ export default class Languages extends Component {
       dataSource: [],
       currentLanguageName: "",
       checkBoxIndex: -1,
-      checkBox: true
+      checkBox: true,
+      disabled: false
     }
     this.user = firebase.auth().currentUser
 
@@ -30,6 +33,8 @@ export default class Languages extends Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
+
     this.setState({
       dataSource: data
     })
@@ -39,7 +44,20 @@ export default class Languages extends Component {
     })
   }
 
-  changeLanguage = (item, index) => {
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+  }
+
+  handleBackPress = () => {
+    const { navigation } = this.props
+    const { disabled } = this.state
+    if (!disabled) {
+      navigation.navigate("SettingsScreen")
+    }
+    return true
+  }
+
+  changeLanguage = item => {
     firebase
       .firestore()
       .collection("users")
@@ -70,8 +88,11 @@ export default class Languages extends Component {
       checkBox,
       checkBoxIndex
     } = this.state
+    const { navigation } = this.props
+
     return (
       <View style={styles.container}>
+        <LanguagesHeader navigation={navigation} />
         <View style={styles.headerTitle}>
           <Text style={styles.headerText}>Idioma atual</Text>
           <Text style={styles.itemTextHeader}>{currentLanguageName}</Text>
@@ -86,16 +107,17 @@ export default class Languages extends Component {
               return (
                 <TouchableOpacity
                   style={styles.buttonStyle}
-                  onPress={() => this.changeLanguage(item, index)}
+                  onPress={() => this.changeLanguage(item)}
                 >
                   <Text style={styles.itemText}>{item.name}</Text>
                   <View style={styles.checkBoxView}>
                     <CheckBox
                       checkedColor="#00aced"
-                      size={28}
+                      size={26}
                       checkedIcon="check-circle"
                       uncheckedIcon="circle-o"
                       checked={index === checkBoxIndex ? checkBox : !checkBox}
+                      onPress={() => this.changeLanguage(item)}
                     />
                   </View>
                 </TouchableOpacity>
@@ -115,19 +137,19 @@ const styles = StyleSheet.create({
   },
   itemTextHeader: {
     backgroundColor: "#fff",
-    fontSize: 20,
+    fontSize: 18,
     paddingTop: 15,
     paddingLeft: 20,
     paddingBottom: 15
   },
   itemText: {
-    fontSize: 20
+    fontSize: 18
   },
   headerTitle: {
     backgroundColor: "#F4F5F8"
   },
   headerText: {
-    fontSize: 26,
+    fontSize: 24,
     alignSelf: "flex-start",
     paddingTop: 10,
     paddingBottom: 10,
