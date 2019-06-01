@@ -5,7 +5,9 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Switch
+  Switch,
+  Linking,
+  Share
 } from "react-native"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
@@ -99,7 +101,15 @@ export default class configBody extends Component {
               <Text style={styles.touchableStyle}>Enviar Feedback</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.touchableIcon}>
+            <TouchableOpacity
+              style={styles.touchableIcon}
+              onPress={() => {
+                Share.share({
+                  message:
+                    "Olá, já instalou o Unichat? Se não, é bem fácil. Apenas clique no link a seguir https://github.com/ES2-UFPI/Unichat/releases"
+                })
+              }}
+            >
               <Icon name="share" size={28} color="#14d2e8" />
               <Text style={styles.touchableStyle}>Compartilhar App</Text>
             </TouchableOpacity>
@@ -107,6 +117,17 @@ export default class configBody extends Component {
             <TouchableOpacity style={styles.touchableIcon}>
               <Icon name="star" size={28} color="#deea2e" />
               <Text style={styles.touchableStyle}>Avaliar App</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.touchableIcon}
+              onPress={() => {
+                Linking.openURL(
+                  "https://github.com/ES2-UFPI/Unichat/blob/dev/PRIVACY-POLICY.md"
+                )
+              }}
+            >
+              <Icon name="notifications" size={28} color="#25e01f" />
+              <Text style={styles.touchableStyle}>Política de Privacidade</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.touchableIcon}>
