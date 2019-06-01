@@ -140,10 +140,7 @@ const appStackNavigator = createStackNavigator(
     LanguagesScreen: {
       screen: Languages,
       navigationOptions: {
-        title: "Tela de Idiomas",
-        headerTitleStyle: {
-          fontWeight: "normal"
-        }
+        header: null
       }
     }
   },
