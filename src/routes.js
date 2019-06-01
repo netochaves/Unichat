@@ -98,10 +98,7 @@ const HomeStackNavigator = createStackNavigator(
     LanguagesScreen: {
       screen: Languages,
       navigationOptions: {
-        title: "Tela de Idiomas",
-        headerTitleStyle: {
-          fontWeight: "normal"
-        }
+        header: null
       }
     },
     Contacts: {
