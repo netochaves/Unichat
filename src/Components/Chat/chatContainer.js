@@ -5,7 +5,7 @@ import getTime from "~/functions/getTime"
 import Message from "../mensagem"
 
 const Chat = props => {
-  const { messages } = props
+  const { messages, destUserUid } = props
   return (
     <View>
       <FlatList
@@ -15,6 +15,9 @@ const Chat = props => {
         renderItem={({ item }) => {
           return (
             <Message
+              nomeRemetente={null}
+              chave={item.key}
+              destUserUid={destUserUid}
               content={
                 item.source === "1" ? item.content : item.contentTranslated
               }

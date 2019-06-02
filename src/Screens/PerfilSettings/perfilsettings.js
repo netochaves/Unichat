@@ -12,7 +12,8 @@ import {
   BackHandler,
   KeyboardAvoidingView,
   ActivityIndicator,
-  Keyboard
+  Keyboard,
+  Alert
 } from "react-native"
 import AsyncStorage from "@react-native-community/async-storage"
 import { Icon } from "react-native-elements"
@@ -32,8 +33,9 @@ export default class PerfilSettings extends Component {
       img: placeHolder[0],
       userName: "",
       eMail: "",
-      profileImageUrl: "",
-      disabled: true,
+      profileImageUrl:
+        "https://firebasestorage.googleapis.com/v0/b/unichat-35f13.appspot.com/o/profile-placeholder.png?alt=media&token=2cd02156-cb41-4142-8903-72abac4ddf3c",
+      disabled: false,
       uploading: false
     }
     this.user = firebase.auth().currentUser
@@ -73,7 +75,8 @@ export default class PerfilSettings extends Component {
             language_code: code,
             profile_img_url: profileImageUrl,
             online: true,
-            lastSeen: ""
+            lastSeen: "",
+            notifications: true
           })
         })
       }
@@ -88,26 +91,20 @@ export default class PerfilSettings extends Component {
   uploadphotos = () => {
     const user = firebase.auth().currentUser
     const { img } = this.state
-    this.setState({ uploading: true })
+    this.setState({ uploading: true, disabled: true })
 
     firebase
       .storage()
       .ref(`profile_pics/${user.uid}`)
       .putFile(img.path)
       .on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => {
-        let state = {}
-        state = {
-          ...state
-        }
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-          state = {
+          this.setState({
             disabled: false,
             uploading: false,
             profileImageUrl: snapshot.downloadURL
-          }
+          })
         }
-
-        this.setState(state)
       })
   }
 
@@ -122,8 +119,15 @@ export default class PerfilSettings extends Component {
 
     ImagePicker.showImagePicker(options, response => {
       if (response.uri) {
-        this.setState({ img: response })
-        this.uploadphotos()
+        if (response.fileSize <= 600000) {
+          this.setState({ img: response })
+          this.uploadphotos()
+        } else {
+          Alert.alert(
+            "Erro",
+            "Selecione uma foto com tamanho inferior a 600 kB"
+          )
+        }
       }
     })
   }
