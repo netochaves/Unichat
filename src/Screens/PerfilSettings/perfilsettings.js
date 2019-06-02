@@ -12,7 +12,8 @@ import {
   BackHandler,
   KeyboardAvoidingView,
   ActivityIndicator,
-  Keyboard
+  Keyboard,
+  Alert
 } from "react-native"
 import AsyncStorage from "@react-native-community/async-storage"
 import { Icon } from "react-native-elements"
@@ -73,7 +74,8 @@ export default class PerfilSettings extends Component {
             language_code: code,
             profile_img_url: profileImageUrl,
             online: true,
-            lastSeen: ""
+            lastSeen: "",
+            notifications: true
           })
         })
       }
@@ -122,8 +124,15 @@ export default class PerfilSettings extends Component {
 
     ImagePicker.showImagePicker(options, response => {
       if (response.uri) {
-        this.setState({ img: response })
-        this.uploadphotos()
+        if (response.fileSize <= 600000) {
+          this.setState({ img: response })
+          this.uploadphotos()
+        } else {
+          Alert.alert(
+            "Erro",
+            "Selecione uma foto com tamanho inferior a 600 kB"
+          )
+        }
       }
     })
   }
