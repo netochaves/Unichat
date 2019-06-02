@@ -47,9 +47,16 @@ export default class Conversas extends Component {
     })
     const { navigation } = this.props
 
-    const username = await AsyncStorage.getItem("@username")
-    const profileImageUrl = await AsyncStorage.getItem("@profileImageUrl")
-    this.setState({ myName: username, myPicture: profileImageUrl })
+    this.listener = this.ref.onSnapshot(async doc => {
+      const username = await AsyncStorage.getItem("@username")
+      const profileImageUrl = await AsyncStorage.getItem("@profileImageUrl")
+      if (
+        doc.data().username === username ||
+        doc.data().profile_img_url === profileImageUrl
+      ) {
+        this.setState({ myName: username, myPicture: profileImageUrl })
+      }
+    })
 
     const channel = new firebase.notifications.Android.Channel(
       "unichat",
