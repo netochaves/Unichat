@@ -130,7 +130,12 @@ export default class configBody extends Component {
               <Text style={styles.touchableStyle}>Política de Privacidade</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.touchableIcon}>
+            <TouchableOpacity
+              style={styles.touchableIcon}
+              onPress={() => {
+                navigation.navigate("AboutScreen")
+              }}
+            >
               <Icon name="info" size={28} color="#ef9739" />
               <Text style={styles.touchableStyle}>Sobre</Text>
             </TouchableOpacity>
