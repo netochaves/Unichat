@@ -15,7 +15,7 @@ import Conversas from "~/Screens/Conversas/conversas"
 import Settings from "~/Screens/Config/config"
 import EditPerfil from "~/Screens/EditPerfil/editperfil"
 import Languages from "~/Screens/Languages/languages"
-
+import About from "~/Screens/About/about"
 import { Icon } from "react-native-elements"
 
 const tabBarNavigator = createMaterialTopTabNavigator(
@@ -91,13 +91,14 @@ const HomeStackNavigator = createStackNavigator(
         header: null
       }
     },
+    PreviewImage: {
+      screen: PreviewImage
+    },
+
     LanguagesScreen: {
       screen: Languages,
       navigationOptions: {
-        title: "Tela de Idiomas",
-        headerTitleStyle: {
-          fontWeight: "normal"
-        }
+        header: null
       }
     },
     Contacts: {
@@ -115,6 +116,12 @@ const HomeStackNavigator = createStackNavigator(
     },
     Conversas: {
       screen: tabBarNavigator,
+      navigationOptions: {
+        header: null
+      }
+    },
+    AboutScreen: {
+      screen: About,
       navigationOptions: {
         header: null
       }
