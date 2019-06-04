@@ -40,10 +40,12 @@ export default class Conversas extends Component {
   }
 
   async componentDidMount() {
+    this.mounted = true
     this.listener = this.ref.onSnapshot(async () => {
       const username = await AsyncStorage.getItem("@username")
       const profileImageUrl = await AsyncStorage.getItem("@profileImageUrl")
-      this.setState({ myName: username, myPicture: profileImageUrl })
+      if (this.mounted)
+        this.setState({ myName: username, myPicture: profileImageUrl })
     })
 
     const { navigation } = this.props
@@ -101,6 +103,7 @@ export default class Conversas extends Component {
   }
 
   componentWillUnmount() {
+    this.mounted = false
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe()
     this.listener()
