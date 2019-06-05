@@ -12,6 +12,7 @@ import {
   AppState
 } from "react-native"
 import { ListItem, Icon } from "react-native-elements"
+import { FAB, Portal, Provider } from "react-native-paper"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
@@ -28,7 +29,8 @@ export default class Conversas extends Component {
       arrayholder: [],
       myName: "",
       myPicture: null,
-      text: ""
+      text: "",
+      open: false
     }
 
     this.appState = AppState.currentState
@@ -97,7 +99,8 @@ export default class Conversas extends Component {
       this.setState(prevState => ({
         arrayholder: prevState.conversas,
         isSerchable: false,
-        text: ""
+        text: "",
+        open: false
       }))
     })
   }
@@ -111,7 +114,8 @@ export default class Conversas extends Component {
     this.setState(prevState => ({
       arrayholder: prevState.conversas,
       isSerchable: false,
-      text: ""
+      text: "",
+      open: false
     }))
   }
 
@@ -292,7 +296,14 @@ export default class Conversas extends Component {
   }
 
   render() {
-    const { myName, myPicture, isSerchable, text, arrayholder } = this.state
+    const {
+      myName,
+      myPicture,
+      isSerchable,
+      text,
+      arrayholder,
+      open
+    } = this.state
     let toolbar
     if (isSerchable)
       toolbar = (
@@ -369,15 +380,32 @@ export default class Conversas extends Component {
           keyExtractor={i => i.key}
           keyboardShouldPersistTaps="always"
         />
-        <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-          <TouchableOpacity
-            onPress={() => {
-              this.newConversa()
-            }}
-          >
-            <Icon name="plus" color="white" type="antdesign" />
-          </TouchableOpacity>
-        </LinearGradient>
+        <Provider>
+          <Portal>
+            <FAB.Group
+              open={open}
+              icon={open ? "close" : "add"}
+              actions={[
+                {
+                  icon: "chat",
+                  label: "Nova conversa",
+                  onPress: () => {
+                    this.newConversa()
+                  }
+                },
+                {
+                  icon: "group",
+                  label: "Novo grupo",
+                  onPress: () => {}
+                }
+              ]}
+              onStateChange={() =>
+                this.setState(prevState => ({ open: !prevState.open }))
+              }
+              fabStyle={styles.fab}
+            />
+          </Portal>
+        </Provider>
       </View>
     )
   }
@@ -421,16 +449,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#E8E3E3",
     marginBottom: 1
   },
-  button: {
-    elevation: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    position: "absolute",
-    bottom: 5,
-    right: 5
+  fab: {
+    backgroundColor: "#007AFF"
   },
   cont: {
     width: 20,
