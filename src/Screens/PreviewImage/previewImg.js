@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 
 import { View, StyleSheet, Image, BackHandler } from "react-native"
+import PreviewImageHeader from "~/Components/PreviewImage/previewImageHeader"
 
 export default class PerfilSettings extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -36,7 +37,15 @@ export default class PerfilSettings extends Component {
     } else {
       image = <Image source={img} style={styles.img} resizeMode="contain" />
     }
-    return <View style={styles.container}>{image}</View>
+    return (
+      <View style={styles.container}>
+        <PreviewImageHeader
+          navigation={navigation}
+          style={styles.previewImage}
+        />
+        {image}
+      </View>
+    )
   }
 }
 
@@ -44,8 +53,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
-    alignItems: "center",
     justifyContent: "center"
+  },
+  previewImage: {
+    flex: 1
   },
   img: {
     flex: 1,
