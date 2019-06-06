@@ -21,8 +21,8 @@ const conversa = props => {
     } else if (atualDate.getDate() - date.getDate() >= 2) {
       textDate = `${date
         .getDate()
-        .toString()}/${date
-        .getMonth()
+        .toString()}/${(date
+        .getMonth() + 1)
         .toString()}/${date.getFullYear().toString()}`
     }
     return textDate
