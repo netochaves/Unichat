@@ -3,12 +3,12 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableOpacity,
   ScrollView,
   Switch,
   Linking,
   Share
 } from "react-native"
+import Touchable from "react-native-platform-touchable"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
 
@@ -46,63 +46,71 @@ export default class configBody extends Component {
           <View style={styles.innerBody}>
             <Text style={styles.touchableStyleTitle}>Conta</Text>
             <Text style={styles.line} />
-            <TouchableOpacity
-              style={styles.touchableIcon}
+            <Touchable
+              style={styles.platformTouchable}
               onPress={() => {
                 navigation.navigate("LanguagesScreen")
               }}
             >
-              <Icon name="language" size={28} color="#007AFF" />
-              <Text style={styles.touchableStyle}>Idiomas</Text>
-              <View style={styles.chevronStyle}>
-                <Icon
-                  name="chevron-right"
-                  size={28}
-                  color="gray"
-                  type="evilicon"
-                />
+              <View style={styles.touchableIcon}>
+                <Icon name="language" size={28} color="#007AFF" />
+                <Text style={styles.touchableStyle}>Idiomas</Text>
+                <View style={styles.chevronStyle}>
+                  <Icon
+                    name="chevron-right"
+                    size={28}
+                    color="gray"
+                    type="evilicon"
+                  />
+                </View>
               </View>
-            </TouchableOpacity>
+            </Touchable>
 
-            <TouchableOpacity
-              style={styles.touchableIcon}
+            <Touchable
+              style={styles.platformTouchable}
               onPress={() => {
                 navigation.navigate("EditPerfilScreen")
               }}
             >
-              <Icon name="person" size={28} color="#c6056c" />
-              <Text style={styles.touchableStyle}>Perfil</Text>
-              <View style={styles.chevronStyle}>
-                <Icon
-                  name="chevron-right"
-                  size={28}
-                  color="gray"
-                  type="evilicon"
-                />
+              <View style={styles.touchableIcon}>
+                <Icon name="person" size={28} color="#c6056c" />
+                <Text style={styles.touchableStyle}>Perfil</Text>
+                <View style={styles.chevronStyle}>
+                  <Icon
+                    name="chevron-right"
+                    size={28}
+                    color="gray"
+                    type="evilicon"
+                  />
+                </View>
               </View>
-            </TouchableOpacity>
+            </Touchable>
 
-            <TouchableOpacity style={styles.touchableIcon}>
-              <Icon name="notifications" size={28} color="#ef2390" />
-              <Text style={styles.touchableStyle}>Notificação</Text>
-              <View style={styles.chevronStyle}>
-                <Switch
-                  onValueChange={this.switchHandler}
-                  value={switchState}
-                />
+            <Touchable style={styles.platformTouchable}>
+              <View style={styles.touchableIcon}>
+                <Icon name="notifications" size={28} color="#ef2390" />
+                <Text style={styles.touchableStyle}>Notificação</Text>
+                <View style={styles.chevronStyle}>
+                  <Switch
+                    onValueChange={this.switchHandler}
+                    value={switchState}
+                  />
+                </View>
               </View>
-            </TouchableOpacity>
+            </Touchable>
 
             <Text style={styles.touchableStyleTitle}>Aplicativo</Text>
             <Text style={styles.line} />
 
-            <TouchableOpacity style={styles.touchableIcon}>
-              <Icon name="chat" size={28} color="#e542f4" />
-              <Text style={styles.touchableStyle}>Enviar Feedback</Text>
-            </TouchableOpacity>
+            <Touchable style={styles.platformTouchable}>
+              <View style={styles.touchableIcon}>
+                <Icon name="chat" size={28} color="#e542f4" />
+                <Text style={styles.touchableStyle}>Enviar Feedback</Text>
+              </View>
+            </Touchable>
 
-            <TouchableOpacity
-              style={styles.touchableIcon}
+            <Touchable
+              style={styles.platformTouchable}
               onPress={() => {
                 Share.share({
                   message:
@@ -110,39 +118,49 @@ export default class configBody extends Component {
                 })
               }}
             >
-              <Icon name="share" size={28} color="#14d2e8" />
-              <Text style={styles.touchableStyle}>Compartilhar App</Text>
-            </TouchableOpacity>
+              <View style={styles.touchableIcon}>
+                <Icon name="share" size={28} color="#14d2e8" />
+                <Text style={styles.touchableStyle}>Compartilhar App</Text>
+              </View>
+            </Touchable>
 
-            <TouchableOpacity style={styles.touchableIcon}>
-              <Icon name="star" size={28} color="#deea2e" />
-              <Text style={styles.touchableStyle}>Avaliar App</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.touchableIcon}
+            <Touchable style={styles.platformTouchable}>
+              <View style={styles.touchableIcon}>
+                <Icon name="star" size={28} color="#deea2e" />
+                <Text style={styles.touchableStyle}>Avaliar App</Text>
+              </View>
+            </Touchable>
+            <Touchable
+              style={styles.platformTouchable}
               onPress={() => {
                 Linking.openURL(
                   "https://github.com/ES2-UFPI/Unichat/blob/dev/PRIVACY-POLICY.md"
                 )
               }}
             >
-              <Icon name="notifications" size={28} color="#25e01f" />
-              <Text style={styles.touchableStyle}>Política de Privacidade</Text>
-            </TouchableOpacity>
+              <View style={styles.touchableIcon}>
+                <Icon name="notifications" size={28} color="#25e01f" />
+                <Text style={styles.touchableStyle}>
+                  Política de Privacidade
+                </Text>
+              </View>
+            </Touchable>
 
-            <TouchableOpacity
-              style={styles.touchableIcon}
+            <Touchable
+              style={styles.platformTouchable}
               onPress={() => {
                 navigation.navigate("AboutScreen")
               }}
             >
-              <Icon name="info" size={28} color="#ef9739" />
-              <Text style={styles.touchableStyle}>Sobre</Text>
-            </TouchableOpacity>
+              <View style={styles.touchableIcon}>
+                <Icon name="info" size={28} color="#ef9739" />
+                <Text style={styles.touchableStyle}>Sobre</Text>
+              </View>
+            </Touchable>
           </View>
-          <TouchableOpacity>
+          <Touchable style={styles.platformTouchable}>
             <Text style={styles.touchableStyleExit}>Excluir Conta</Text>
-          </TouchableOpacity>
+          </Touchable>
         </ScrollView>
       </View>
     )
@@ -162,17 +180,16 @@ const styles = StyleSheet.create({
   },
   innerBody: {
     marginTop: 10,
-    marginLeft: 30
+    marginLeft: 20,
+    marginRight: 20
   },
   chevronStyle: {
     flex: 1,
-    marginRight: 10,
     alignItems: "flex-end"
   },
   touchableIcon: {
     flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10
+    alignItems: "center"
   },
   touchableStyle: {
     fontFamily: "OpenSans",
@@ -202,5 +219,8 @@ const styles = StyleSheet.create({
     borderTopColor: "#dce1ea",
     borderTopWidth: 2,
     marginRight: 20
+  },
+  platformTouchable: {
+    marginBottom: 5
   }
 })
