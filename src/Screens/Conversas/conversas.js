@@ -8,7 +8,8 @@ import {
   Image,
   BackHandler,
   Alert,
-  AppState
+  AppState,
+  StatusBar
 } from "react-native"
 import Touchable from "react-native-platform-touchable"
 import Conversa from "~/Components/Conversa/conversa"
@@ -303,6 +304,7 @@ export default class Conversas extends Component {
       )
     return (
       <View style={styles.container}>
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         {toolbar}
         <FlatList
           data={arrayholder}
