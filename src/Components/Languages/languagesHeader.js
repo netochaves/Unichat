@@ -1,13 +1,15 @@
 import React from "react"
 
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native"
+import { View, StyleSheet, Text } from "react-native"
+import Touchable from "react-native-platform-touchable"
 import { Icon } from "react-native-elements"
 
 const languagesHeader = props => {
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
-        <TouchableOpacity
+        <Touchable
+          background={Touchable.SelectableBackgroundBorderless()}
           style={styles.backButton}
           onPress={() => {
             const { navigation } = props
@@ -15,8 +17,10 @@ const languagesHeader = props => {
           }}
           hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
         >
-          <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
-        </TouchableOpacity>
+          <View>
+            <Icon name="md-arrow-back" color="#00aced" type="ionicon" />
+          </View>
+        </Touchable>
         <Text style={styles.languagesInfo}>Idiomas</Text>
       </View>
     </View>
@@ -31,23 +35,18 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans"
   },
   headerContent: {
-    backgroundColor: "#fff",
+    flexDirection: "row",
+    alignContent: "center",
     marginBottom: 15,
-    marginTop: 15,
-    paddingLeft: 15,
-    marginRight: 10,
-    flexDirection: "row"
+    marginTop: 15
   },
   backButton: {
-    justifyContent: "center"
+    justifyContent: "center",
+    width: 40
   },
   languagesInfo: {
-    flex: 1,
     fontSize: 22,
-    textAlign: "left",
-    backgroundColor: "#fff",
-    marginLeft: 20,
-    paddingRight: 20
+    textAlign: "left"
   }
 })
 

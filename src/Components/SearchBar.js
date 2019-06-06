@@ -9,11 +9,14 @@ const Components = props => {
   return (
     <View style={styles.container}>
       <View style={styles.itens}>
-        <Touchable background={Touchable.SelectableBackgroundBorderless()} onPress={onBackPressHandler}>
+        <Touchable
+          background={Touchable.SelectableBackgroundBorderless()}
+          onPress={onBackPressHandler}
+        >
           <Icon
             containerStyle={styles.arrowIcon}
-            name="arrowleft"
-            type="antdesign"
+            name="md-arrow-back"
+            type="ionicon"
             color="#00aced"
           />
         </Touchable>

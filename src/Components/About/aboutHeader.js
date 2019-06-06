@@ -15,7 +15,7 @@ const aboutHeader = props => {
           }}
           hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
         >
-          <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
+          <Icon name="md-arrow-back" color="#00aced" type="ionicon" />
         </TouchableOpacity>
         <Text style={styles.languagesInfo}>Sobre</Text>
       </View>

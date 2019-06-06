@@ -5,10 +5,10 @@ import {
   Text,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
   ToastAndroid,
   BackHandler
 } from "react-native"
+import Touchable from "react-native-platform-touchable"
 import LanguagesHeader from "~/Components/Languages/languagesHeader"
 import { CheckBox } from "react-native-elements"
 import firebase from "react-native-firebase"
@@ -105,22 +105,25 @@ export default class Languages extends Component {
             extraData={this.state}
             renderItem={({ item, index }) => {
               return (
-                <TouchableOpacity
-                  style={styles.buttonStyle}
+                <Touchable
+                  background={Touchable.SelectableBackground()}
+                  style={styles.touchableStyle}
                   onPress={() => this.changeLanguage(item)}
                 >
-                  <Text style={styles.itemText}>{item.name}</Text>
-                  <View style={styles.checkBoxView}>
-                    <CheckBox
-                      checkedColor="#00aced"
-                      size={26}
-                      checkedIcon="check-circle"
-                      uncheckedIcon="circle-o"
-                      checked={index === checkBoxIndex ? checkBox : !checkBox}
-                      onPress={() => this.changeLanguage(item)}
-                    />
+                  <View style={styles.buttonStyle}>
+                    <Text style={styles.itemText}>{item.name}</Text>
+                    <View style={styles.checkBoxView}>
+                      <CheckBox
+                        checkedColor="#00aced"
+                        size={26}
+                        checkedIcon="check-circle"
+                        uncheckedIcon="circle-o"
+                        checked={index === checkBoxIndex ? checkBox : !checkBox}
+                        onPress={() => this.changeLanguage(item)}
+                      />
+                    </View>
                   </View>
-                </TouchableOpacity>
+                </Touchable>
               )
             }}
           />
@@ -155,11 +158,13 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingLeft: 20
   },
-  buttonStyle: {
+  touchableStyle: {
     backgroundColor: "#fff",
+    marginBottom: 2
+  },
+  buttonStyle: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 2,
     paddingLeft: 20
   },
   checkBoxView: {

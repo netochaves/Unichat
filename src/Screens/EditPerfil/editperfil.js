@@ -193,13 +193,12 @@ export default class Conversas extends Component {
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <Touchable
-              // hitSlop={{ top: 100, left: 100, right: 100, bottom: 100 }}
               background={Touchable.SelectableBackgroundBorderless()}
               style={styles.back}
               onPress={this.handleBackPress}
               hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
             >
-              <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
+              <Icon name="md-arrow-back" color="#00aced" type="ionicon" />
             </Touchable>
             <Text style={styles.perfilInfo}>Perfil</Text>
           </View>
@@ -342,19 +341,14 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans"
   },
   headerContent: {
-    justifyContent: "space-between",
+    flexDirection: "row",
     alignContent: "center",
     marginBottom: 15,
-    marginTop: 15,
-    marginRight: 10,
-    paddingLeft: 15,
-    flexDirection: "row"
+    marginTop: 15
   },
   perfilInfo: {
-    flex: 1,
     fontSize: 22,
-    textAlign: "left",
-    marginLeft: 20
+    textAlign: "left"
   },
   editImage: {
     justifyContent: "center",
@@ -464,11 +458,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   back: {
-    // position: "absolute",
     justifyContent: "center",
     width: 40
-    // height: 40,
-    // width: 40
   },
   editNameContainer: {
     elevation: 6,

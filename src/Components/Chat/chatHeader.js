@@ -16,7 +16,7 @@ const chatHeader = props => {
           onPress={() => navigation.goBack()}
         >
           <View style={styles.backButton}>
-            <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
+            <Icon name="md-arrow-back" color="#00aced" type="ionicon" />
             <Avatar
               containerStyle={styles.avatar}
               rounded
