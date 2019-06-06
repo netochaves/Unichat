@@ -25,21 +25,22 @@ const chatHeader = props => {
             />
           </View>
         </Touchable>
-        <View style={styles.userInfo}>
-          <Text
-            style={styles.userName}
-            onPress={() =>
-              navigation.navigate("PreviewImage", {
-                img: userPhoto,
-                name: userName,
-                isLoggedIn: true
-              })
-            }
-          >
-            {userName}
-          </Text>
-          <Text style={styles.lastSeen}>{status}</Text>
-        </View>
+        <Touchable
+          background={Touchable.SelectableBackground()}
+          style={styles.userInfo}
+          onPress={() =>
+            navigation.navigate("PreviewImage", {
+              img: userPhoto,
+              name: userName,
+              isLoggedIn: true
+            })
+          }
+        >
+          <View>
+            <Text style={styles.userName}>{userName}</Text>
+            <Text style={styles.lastSeen}>{status}</Text>
+          </View>
+        </Touchable>
         <Icon
           containerStyle={styles.moreInfo}
           name="dots-vertical"
