@@ -348,7 +348,8 @@ const styles = StyleSheet.create({
   },
   perfilInfo: {
     fontSize: 22,
-    textAlign: "left"
+    textAlign: "left",
+    marginLeft: 10
   },
   editImage: {
     justifyContent: "center",
@@ -459,7 +460,8 @@ const styles = StyleSheet.create({
   },
   back: {
     justifyContent: "center",
-    width: 40
+    width: 40,
+    marginLeft: 10
   },
   editNameContainer: {
     elevation: 6,

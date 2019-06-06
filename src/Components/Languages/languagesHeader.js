@@ -42,11 +42,13 @@ const styles = StyleSheet.create({
   },
   backButton: {
     justifyContent: "center",
-    width: 40
+    width: 40,
+    marginLeft: 10
   },
   languagesInfo: {
     fontSize: 22,
-    textAlign: "left"
+    textAlign: "left",
+    marginLeft: 10
   }
 })
 

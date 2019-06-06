@@ -36,24 +36,20 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans"
   },
   headerContent: {
-    backgroundColor: "#000",
     marginBottom: 15,
     marginTop: 15,
-    marginRight: 10,
-    paddingLeft: 15,
-    justifyContent: "center",
+    alignContent: "center",
     flexDirection: "row"
   },
   previewImageInfo: {
-    flex: 1,
     fontSize: 22,
-    // textAlign: "left",
     color: "#fff",
-    backgroundColor: "#000",
-    marginLeft: 20
+    marginLeft: 10
   },
   backButton: {
-    justifyContent: "center"
+    justifyContent: "center",
+    width: 40,
+    marginLeft: 10
   }
 })
 
