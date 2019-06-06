@@ -92,7 +92,10 @@ const HomeStackNavigator = createStackNavigator(
       }
     },
     PreviewImage: {
-      screen: PreviewImage
+      screen: PreviewImage,
+      navigationOptions: {
+        header: null
+      }
     },
 
     LanguagesScreen: {
@@ -148,7 +151,10 @@ const authStackNavigator = createStackNavigator(
       }
     },
     PreviewImage: {
-      screen: PreviewImage
+      screen: PreviewImage,
+      navigationOptions: {
+        header: null
+      }
     },
     VerificationScreen: {
       screen: Verification,
