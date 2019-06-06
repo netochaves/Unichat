@@ -197,6 +197,7 @@ export default class Conversas extends Component {
               background={Touchable.SelectableBackgroundBorderless()}
               style={styles.back}
               onPress={this.handleBackPress}
+              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
             >
               <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
             </Touchable>
@@ -343,17 +344,17 @@ const styles = StyleSheet.create({
   headerContent: {
     justifyContent: "space-between",
     alignContent: "center",
-    marginBottom: 10,
-    marginLeft: 10,
-    marginTop: 10,
+    marginBottom: 15,
+    marginTop: 15,
     marginRight: 10,
+    paddingLeft: 15,
     flexDirection: "row"
   },
   perfilInfo: {
     flex: 1,
     fontSize: 22,
-    textAlign: "center",
-    marginRight: 40
+    textAlign: "left",
+    marginLeft: 20
   },
   editImage: {
     justifyContent: "center",

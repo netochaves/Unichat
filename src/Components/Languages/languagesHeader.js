@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginBottom: 15,
     marginTop: 15,
-    marginLeft: 15,
+    paddingLeft: 15,
     marginRight: 10,
     flexDirection: "row"
   },
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   languagesInfo: {
     flex: 1,
     fontSize: 22,
-    textAlign: "center",
+    textAlign: "left",
     backgroundColor: "#fff",
     marginLeft: 20,
     paddingRight: 20
