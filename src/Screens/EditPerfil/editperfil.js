@@ -10,7 +10,8 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
-  TextInput
+  TextInput,
+  Alert
 } from "react-native"
 import Touchable from "react-native-platform-touchable"
 import AsyncStorage from "@react-native-community/async-storage"
@@ -111,8 +112,15 @@ export default class Conversas extends Component {
 
     ImagePicker.showImagePicker(options, response => {
       if (response.uri) {
-        this.setState({ myImage: response })
-        this.uploadphotos()
+        if (response.fileSize <= 600000) {
+          this.setState({ myImage: response })
+          this.uploadphotos()
+        } else {
+          Alert.alert(
+            "Erro",
+            "Selecione uma foto com tamanho inferior a 600 kB"
+          )
+        }
       }
     })
   }
