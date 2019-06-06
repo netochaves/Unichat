@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { Component } from "react"
 import {
   View,
@@ -6,6 +7,7 @@ import {
   ScrollView,
   Switch,
   Linking,
+  TouchableOpacity,
   Share
 } from "react-native"
 import Touchable from "react-native-platform-touchable"
@@ -158,9 +160,9 @@ export default class configBody extends Component {
               </View>
             </Touchable>
           </View>
-          <Touchable style={styles.platformTouchable}>
+          <TouchableOpacity style={{alignSelf: "center"}}>
             <Text style={styles.touchableStyleExit}>Excluir Conta</Text>
-          </Touchable>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     )

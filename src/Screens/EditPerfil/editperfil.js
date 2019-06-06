@@ -236,6 +236,7 @@ export default class Conversas extends Component {
             <View style={styles.editNameMenu}>
               <Text style={styles.editMenuTitle}>Digite o email</Text>
               <TextInput
+                keyboardType="email-address"
                 style={styles.textInput}
                 placeholder="Digite aqui"
                 autoFocus
