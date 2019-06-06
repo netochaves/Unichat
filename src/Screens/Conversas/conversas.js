@@ -19,6 +19,7 @@ import AsyncStorage from "@react-native-community/async-storage"
 import getTime from "~/functions/getTime"
 import NetInfo from "@react-native-community/netinfo"
 import SearchBar from "~/Components/SearchBar"
+import CreateGroup from "~/Screens/CreateGroup/CreateGroup"
 
 export default class Conversas extends Component {
   constructor() {
@@ -30,7 +31,8 @@ export default class Conversas extends Component {
       myName: "",
       myPicture: null,
       text: "",
-      open: false
+      open: false,
+      isModalVisible: false
     }
 
     this.appState = AppState.currentState
@@ -256,8 +258,6 @@ export default class Conversas extends Component {
     navigation.navigate("ContactsScreen")
   }
 
-  search = () => {}
-
   parseTime = dateNanoScds => {
     const date = dateNanoScds.toDate()
     const atualDate = firebase.database().getServerTime()
@@ -302,7 +302,8 @@ export default class Conversas extends Component {
       isSerchable,
       text,
       arrayholder,
-      open
+      open,
+      isModalVisible
     } = this.state
     let toolbar
     if (isSerchable)
@@ -334,6 +335,11 @@ export default class Conversas extends Component {
     return (
       <View style={styles.container}>
         {toolbar}
+        <CreateGroup
+          isVisible={isModalVisible}
+          onBackGroundPress={() => this.setState({ isModalVisible: false })}
+          onCancelPress={() => this.setState({ isModalVisible: false })}
+        />
         <FlatList
           data={arrayholder}
           renderItem={({ item }) => {
@@ -396,7 +402,7 @@ export default class Conversas extends Component {
                 {
                   icon: "group",
                   label: "Novo grupo",
-                  onPress: () => {}
+                  onPress: () => this.setState({ isModalVisible: true })
                 }
               ]}
               onStateChange={() =>
