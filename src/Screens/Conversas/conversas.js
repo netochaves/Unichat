@@ -102,7 +102,8 @@ export default class Conversas extends Component {
         arrayholder: prevState.conversas,
         isSerchable: false,
         text: "",
-        open: false
+        open: false,
+        isModalVisible: false
       }))
     })
   }
@@ -117,7 +118,8 @@ export default class Conversas extends Component {
       arrayholder: prevState.conversas,
       isSerchable: false,
       text: "",
-      open: false
+      open: false,
+      isModalVisible: false
     }))
   }
 
@@ -305,6 +307,7 @@ export default class Conversas extends Component {
       open,
       isModalVisible
     } = this.state
+    const { navigation } = this.props
     let toolbar
     if (isSerchable)
       toolbar = (
@@ -339,6 +342,7 @@ export default class Conversas extends Component {
           isVisible={isModalVisible}
           onBackGroundPress={() => this.setState({ isModalVisible: false })}
           onCancelPress={() => this.setState({ isModalVisible: false })}
+          navigation={navigation}
         />
         <FlatList
           data={arrayholder}

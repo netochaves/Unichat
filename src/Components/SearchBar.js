@@ -11,9 +11,9 @@ const Components = props => {
         <TouchableOpacity onPress={onBackPressHandler}>
           <Icon
             containerStyle={styles.arrowIcon}
-            name="arrowleft"
-            type="antdesign"
-            color="#00aced"
+            name="md-arrow-back"
+            type="ionicon"
+            color="#007AFF"
           />
         </TouchableOpacity>
         <TextInput

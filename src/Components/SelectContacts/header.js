@@ -3,8 +3,8 @@ import React from "react"
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native"
 import { Icon } from "react-native-elements"
 
-const createGroupHeader = props => {
-  const { onBackHandler } = props
+const Header = props => {
+  const { onBackHandler, onPressSearch } = props
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
@@ -13,10 +13,15 @@ const createGroupHeader = props => {
             onPress={onBackHandler}
             hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
           >
-            <Icon name="ios-arrow-back" color="#007AFF" type="ionicon" />
+            <Icon name="md-arrow-back" color="#007AFF" type="ionicon" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.contactsInfo}>Novo grupo</Text>
+        <Text style={styles.contactsInfo}>Selecione os participantes</Text>
+        <View style={styles.searchIcon}>
+          <TouchableOpacity onPress={onPressSearch}>
+            <Icon name="search1" color="#007AFF" type="antdesign" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   )
@@ -47,7 +52,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 15,
     marginLeft: 15
+  },
+  searchIcon: {
+    justifyContent: "center",
+    marginRight: 10,
+    marginLeft: 10
   }
 })
 
-export default createGroupHeader
+export default Header

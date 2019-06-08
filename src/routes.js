@@ -16,6 +16,8 @@ import Settings from "~/Screens/Config/config"
 import EditPerfil from "~/Screens/EditPerfil/editperfil"
 import Languages from "~/Screens/Languages/languages"
 import About from "~/Screens/About/about"
+import SelectContacts from "~/Screens/SelectContacts/SelectContacts"
+
 import { Icon } from "react-native-elements"
 
 const tabBarNavigator = createMaterialTopTabNavigator(
@@ -122,6 +124,12 @@ const HomeStackNavigator = createStackNavigator(
     },
     AboutScreen: {
       screen: About,
+      navigationOptions: {
+        header: null
+      }
+    },
+    SelectContacts: {
+      screen: SelectContacts,
       navigationOptions: {
         header: null
       }

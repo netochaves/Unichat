@@ -42,7 +42,12 @@ export default class CreateGroup extends React.Component {
 
   render() {
     const { text, img } = this.state
-    const { isVisible, onBackGroundPress, onCancelPress } = this.props
+    const {
+      isVisible,
+      onBackGroundPress,
+      onCancelPress,
+      navigation
+    } = this.props
     return (
       <Overlay
         isVisible={isVisible}
@@ -82,7 +87,11 @@ export default class CreateGroup extends React.Component {
             <TouchableOpacity onPress={onCancelPress}>
               <Text style={styles.button}>CANCELAR</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("SelectContacts", { img, text })
+              }
+            >
               <Text style={styles.button}>PRÓXIMO</Text>
             </TouchableOpacity>
           </View>
