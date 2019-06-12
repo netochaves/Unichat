@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignItems: "center"
   },
-  
+
   // Estilo para a mensagem do destinatario
   dest: {
     flexDirection: "row",

@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import React, { Component } from "react"
 
-import { View, StyleSheet, StatusBar, BackHandler } from "react-native"
+import { View, StyleSheet, BackHandler } from "react-native"
 import {
   ProviderTypes,
   TranslatorConfiguration,
@@ -257,10 +257,8 @@ export default class Conversas extends Component {
   render() {
     const { messages, messageText, isValueNull, destUser, status } = this.state
     const { navigation } = this.props
-    // firebase.auth().signOut()
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <ChatHeader
           userName={destUser.contactName}
           userPhoto={destUser.contactPhoto}
@@ -268,7 +266,7 @@ export default class Conversas extends Component {
           status={status}
         />
         <View style={styles.chatContainer}>
-          <ChatContainer messages={messages} destUserUid={destUser.key}/>
+          <ChatContainer messages={messages} destUserUid={destUser.key} />
         </View>
         <View style={styles.input}>
           <ChatInput

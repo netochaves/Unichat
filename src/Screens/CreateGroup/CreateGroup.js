@@ -14,7 +14,8 @@ import ImagePicker from "react-native-image-picker"
 export default class CreateGroup extends React.Component {
   state = {
     text: "",
-    img: null
+    img:
+      "https://firebasestorage.googleapis.com/v0/b/unichat-35f13.appspot.com/o/profile-placeholder.png?alt=media&token=2cd02156-cb41-4142-8903-72abac4ddf3c"
   }
 
   handleChooseImage = () => {
@@ -55,6 +56,7 @@ export default class CreateGroup extends React.Component {
         height="auto"
         containerStyle={styles.container}
         onBackdropPress={onBackGroundPress}
+        borderRadius={15}
       >
         <>
           <View style={styles.groupInfo}>

@@ -17,6 +17,7 @@ import EditPerfil from "~/Screens/EditPerfil/editperfil"
 import Languages from "~/Screens/Languages/languages"
 import About from "~/Screens/About/about"
 import SelectContacts from "~/Screens/SelectContacts/SelectContacts"
+import GroupChat from "~/Screens/GroupChat/GroupChat"
 
 import { Icon } from "react-native-elements"
 
@@ -130,6 +131,12 @@ const HomeStackNavigator = createStackNavigator(
     },
     SelectContacts: {
       screen: SelectContacts,
+      navigationOptions: {
+        header: null
+      }
+    },
+    GroupChat: {
+      screen: GroupChat,
       navigationOptions: {
         header: null
       }

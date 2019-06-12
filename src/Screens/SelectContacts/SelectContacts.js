@@ -97,6 +97,14 @@ export default class SelectContacts extends Component {
     )
   }
 
+  next = () => {
+    const { selectedContacts } = this.state
+    const { navigation } = this.props
+    const img = navigation.getParam("img")
+    const text = navigation.getParam("text")
+    navigation.navigate("GroupChat", { img, text, selectedContacts })
+  }
+
   render() {
     const { selectedContactsKey, isSearchable, text, arrayholder } = this.state
     let toolbar
@@ -169,7 +177,7 @@ export default class SelectContacts extends Component {
             keyboardShouldPersistTaps="always"
           />
         </View>
-        <FAB icon="arrow-forward" style={styles.fab} onPress={() => {}} />
+        <FAB icon="arrow-forward" style={styles.fab} onPress={this.next} />
       </>
     )
   }
