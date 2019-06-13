@@ -3,6 +3,7 @@ import React from "react"
 import { View, StyleSheet, Text } from "react-native"
 import Touchable from "react-native-platform-touchable"
 import { Icon } from "react-native-elements"
+import { scale } from "~/Components/responsive"
 
 const aboutHeader = props => {
   return (
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   languagesInfo: {
-    fontSize: 22,
+    fontSize: scale(20),
     textAlign: "left",
     marginLeft: 10
   }
