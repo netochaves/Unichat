@@ -13,6 +13,7 @@ import {
   Dimensions,
   Keyboard
 } from "react-native"
+import Communications from "react-native-communications"
 import { Icon } from "react-native-elements"
 import Touchable from "react-native-platform-touchable"
 import LinearGradient from "react-native-linear-gradient"
@@ -27,27 +28,18 @@ export default class Feedback extends Component {
   }
 
   componentDidMount() {
-    this.unsubscribe1 = Keyboard.addListener(
+    this.unsubscribe = Keyboard.addListener(
       "keyboardDidShow",
       this.keyboardDidShow
-    )
-    this.unsubscribe2 = Keyboard.addListener(
-      "keyboardDidHide",
-      this.keyboardDidHide
     )
   }
 
   componentWillUnmount() {
-    this.unsubscribe1()
-    this.unsubscribe2()
+    this.unsubscribe()
   }
 
   keyboardDidShow = () => {
-    this.scrollView.scrollToEnd({ animated: true, duration: 100000 })
-  }
-
-  keyboardDidHide = () => {
-    this.textInput.focus()
+    this.scrollView.scrollToEnd({ animated: true })
   }
 
   handleBackPress = () => {
@@ -93,7 +85,6 @@ export default class Feedback extends Component {
               </Text>
             </View>
           </LinearGradient>
-          {/* <View style={styles.painel2}> */}
           <TouchableWithoutFeedback
             onPress={() => {
               this.textInput.focus()
@@ -104,7 +95,6 @@ export default class Feedback extends Component {
                 ref={textInput => {
                   this.textInput = textInput
                 }}
-                // style={styles.textInputView}
                 placeholder="Digite aqui..."
                 onChangeText={text => this.setState({ content: text })}
                 value={content}
@@ -112,8 +102,23 @@ export default class Feedback extends Component {
               />
             </View>
           </TouchableWithoutFeedback>
-          {/* <View style={styles.buttonContainer}> */}
-          <TouchableOpacity>
+          <TouchableOpacity
+            disabled={content === ""}
+            onPress={() => {
+              Communications.email(
+                [
+                  "max.lima2@gmail.com",
+                  "pedrochaveslimas3@gmail.com",
+                  "netobac1@gmail.com",
+                  "evandro.monte98@hotmail.com"
+                ],
+                null,
+                null,
+                "Feedback",
+                content
+              )
+            }}
+          >
             <LinearGradient
               colors={["#547BF0", "#6AC3FB"]}
               style={styles.button}
@@ -121,8 +126,6 @@ export default class Feedback extends Component {
               <Text style={styles.textButton}>Enviar</Text>
             </LinearGradient>
           </TouchableOpacity>
-          {/* </View> */}
-          {/* </View> */}
         </ScrollView>
       </View>
     )
@@ -154,17 +157,13 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   painelText: {
-    // flex: 1,
     marginLeft: 30,
     marginRight: 20,
     marginBottom: 20
-    // backgroundColor: "red"
   },
   logo: {
-    // flex: 1,
     width: largura / 2,
     height: largura / 2,
-    // aspectRatio: 3 / 2,
     marginLeft: 30
   },
   textoTitulo: {
@@ -178,11 +177,7 @@ const styles = StyleSheet.create({
   },
   textInputView: {
     flex: 1,
-    // backgroundColor: "green"
     height: altura / 3
-    // marginLeft: 10,
-    // marginRight: 10
-    // borderWidth: 1
   },
   textButton: {
     alignSelf: "center",
