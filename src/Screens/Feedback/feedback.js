@@ -8,9 +8,10 @@ import {
   TextInput,
   StatusBar,
   Dimensions,
-  TouchableOpacity,
-  ScrollView
+  TouchableOpacity
 } from "react-native"
+import { Icon } from "react-native-elements"
+import Touchable from "react-native-platform-touchable"
 import LinearGradient from "react-native-linear-gradient"
 import unichatIcon from "../../assets/imgs/unichat-icon-no-background.png"
 
@@ -22,12 +23,34 @@ export default class Feedback extends Component {
     }
   }
 
+  handleBackPress = () => {
+    const { navigation } = this.props
+    const { disabled } = this.state
+    if (!disabled) {
+      navigation.navigate("SettingsScreen")
+    }
+    return true
+  }
+
   render() {
     const { content } = this.state
 
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor="#547BF0" barStyle="light-content" />
+        <StatusBar backgroundColor="white" barStyle="dark-content" />
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
+              style={styles.back}
+              onPress={this.handleBackPress}
+              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+            >
+              <Icon name="md-arrow-back" color="#00aced" type="ionicon" />
+            </Touchable>
+            <Text style={styles.feedbackInfo}>Feedback</Text>
+          </View>
+        </View>
         <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.painel1}>
           <Image source={unichatIcon} style={styles.logo} />
           <View style={styles.painelText}>
@@ -69,6 +92,23 @@ const altura = Dimensions.get("window").height
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  header: {
+    backgroundColor: "#fff",
+    elevation: 5,
+    marginTop: 0,
+    fontFamily: "OpenSans"
+  },
+  headerContent: {
+    flexDirection: "row",
+    alignContent: "center",
+    marginBottom: 15,
+    marginTop: 15
+  },
+  feedbackInfo: {
+    fontSize: 22,
+    textAlign: "left",
+    marginLeft: 10
   },
   painel1: {
     // flex: 3
@@ -119,5 +159,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     height: "30%",
     justifyContent: "center"
+  },
+  back: {
+    justifyContent: "center",
+    width: 40,
+    marginLeft: 10
   }
 })
