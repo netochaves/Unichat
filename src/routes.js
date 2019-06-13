@@ -138,8 +138,7 @@ const HomeStackNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "FeedbackScreen"
-    // initialRouteName: "Conversas"
+    initialRouteName: "Conversas"
   },
   { header: null }
 )

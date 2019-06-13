@@ -11,7 +11,8 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Dimensions,
-  Keyboard
+  Keyboard,
+  BackHandler
 } from "react-native"
 import Communications from "react-native-communications"
 import { Icon } from "react-native-elements"
@@ -28,14 +29,13 @@ export default class Feedback extends Component {
   }
 
   componentDidMount() {
-    this.unsubscribe = Keyboard.addListener(
-      "keyboardDidShow",
-      this.keyboardDidShow
-    )
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
+    Keyboard.addListener("keyboardDidShow", this.keyboardDidShow)
   }
 
   componentWillUnmount() {
-    this.unsubscribe()
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+    Keyboard.removeListener("keyboardDidShow", this.keyboardDidShow)
   }
 
   keyboardDidShow = () => {
@@ -44,10 +44,7 @@ export default class Feedback extends Component {
 
   handleBackPress = () => {
     const { navigation } = this.props
-    const { disabled } = this.state
-    if (!disabled) {
-      navigation.navigate("SettingsScreen")
-    }
+    navigation.navigate("SettingsScreen")
     return true
   }
 
