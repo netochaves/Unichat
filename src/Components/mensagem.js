@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react"
 import { Svg, Path } from "react-native-svg"
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native"
+import { View, Text, StyleSheet, Alert } from "react-native"
+import Touchable from "react-native-platform-touchable"
 import { moderateScale } from "react-native-size-matters"
 import getColor from "~/functions/getColor"
 import firebase from "react-native-firebase"
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignItems: "center"
   },
-  
+
   // Estilo para a mensagem do destinatario
   dest: {
     flexDirection: "row",
@@ -215,27 +216,28 @@ export default class Mensagem extends PureComponent {
       // Destinatario
       message = (
         <View style={styles.dest}>
-          <TouchableOpacity
+          <View style={styles.arrowDest}>
+            <Svg
+              width={moderateScale(15.5, 0.6)}
+              height={moderateScale(17.5, 0.6)}
+              viewBox="32.484 17.5 15.515 17.5"
+              enable-background="new 32.485 17.5 15.515 17.5"
+            >
+              <Path
+                d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
+                fill="white"
+                x="0"
+                y="0"
+              />
+            </Svg>
+          </View>
+          <Touchable
+            style={styles.boxDest}
             onLongPress={() => {
               this.verLinguaOriginal()
             }}
           >
-            <View style={styles.arrowDest}>
-              <Svg
-                width={moderateScale(15.5, 0.6)}
-                height={moderateScale(17.5, 0.6)}
-                viewBox="32.484 17.5 15.515 17.5"
-                enable-background="new 32.485 17.5 15.515 17.5"
-              >
-                <Path
-                  d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
-                  fill="white"
-                  x="0"
-                  y="0"
-                />
-              </Svg>
-            </View>
-            <View style={styles.boxDest}>
+            <View>
               {nomeRemetente && (
                 <View>
                   <Text style={styles.nomeRemetente}>{nomeRemetente}</Text>
@@ -243,7 +245,7 @@ export default class Mensagem extends PureComponent {
               )}
               <Text style={styles.textDest}>{content}</Text>
             </View>
-          </TouchableOpacity>
+          </Touchable>
           <View style={styles.dateDest}>
             <Text style={styles.texto}>{date}</Text>
           </View>

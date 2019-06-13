@@ -6,16 +6,17 @@ import {
   StyleSheet,
   Text,
   Image,
-  TouchableOpacity,
   BackHandler,
   Alert,
-  AppState
+  AppState,
+  StatusBar
 } from "react-native"
-import { ListItem, Icon } from "react-native-elements"
+import Touchable from "react-native-platform-touchable"
+import Conversa from "~/Components/Conversa/conversa"
+import { Icon } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
-import getTime from "~/functions/getTime"
 import NetInfo from "@react-native-community/netinfo"
 import SearchBar from "~/Components/SearchBar"
 
@@ -252,26 +253,6 @@ export default class Conversas extends Component {
     navigation.navigate("ContactsScreen")
   }
 
-  search = () => {}
-
-  parseTime = dateNanoScds => {
-    const date = dateNanoScds.toDate()
-    const atualDate = firebase.database().getServerTime()
-    let textDate = ""
-    if (atualDate.getDate() - date.getDate() === 0) {
-      textDate = getTime(date)
-    } else if (atualDate.getDate() - date.getDate() === 1) {
-      textDate = "Ontem"
-    } else if (atualDate.getDate() - date.getDate() >= 2) {
-      textDate = `${date
-        .getDate()
-        .toString()}/${date
-        .getMonth()
-        .toString()}/${date.getFullYear().toString()}`
-    }
-    return textDate
-  }
-
   searchFilterFunction = text => {
     this.setState({ text })
     const { conversas } = this.state
@@ -308,7 +289,8 @@ export default class Conversas extends Component {
           <View style={styles.headerContent}>
             <Image source={{ uri: myPicture }} style={styles.myPicture} />
             <Text style={styles.conversasInfo}>{myName}</Text>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               onPress={() => {
                 this.setState({ isSerchable: true })
               }}
@@ -316,67 +298,41 @@ export default class Conversas extends Component {
               <View style={styles.searchIcon} on>
                 <Icon name="search1" color="#00aced" type="antdesign" />
               </View>
-            </TouchableOpacity>
+            </Touchable>
           </View>
         </View>
       )
     return (
       <View style={styles.container}>
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         {toolbar}
         <FlatList
           data={arrayholder}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity
-                onPress={() => {
-                  this.goToChat(item)
+              <Conversa
+                item={item}
+                onPress={param => {
+                  this.goToChat(param)
                 }}
-                onLongPress={() => {
-                  this.confirmDelete(item)
+                onLongPress={param => {
+                  this.confirmDelete(param)
                 }}
-              >
-                <ListItem
-                  style={styles.conversa}
-                  subtitle={
-                    <View style={styles.containerSub}>
-                      <Text style={styles.name}>{item.contactName}</Text>
-                      <Text style={styles.lastMsg}>{item.lastMessage}</Text>
-                      <View style={styles.rightInformation}>
-                        <Text style={styles.data}>
-                          {this.parseTime(item.dateLastMessage)}
-                        </Text>
-                        {item.unreadMsgs && (
-                          <LinearGradient
-                            colors={["#547BF0", "#6AC3FB"]}
-                            style={styles.cont}
-                          >
-                            <Text style={styles.unread}>
-                              {item.numUnreadMsgs}
-                            </Text>
-                          </LinearGradient>
-                        )}
-                      </View>
-                    </View>
-                  }
-                  leftAvatar={{
-                    source: { uri: item.contactPhoto },
-                    size: "medium"
-                  }}
-                />
-              </TouchableOpacity>
+              />
             )
           }}
           keyExtractor={i => i.key}
           keyboardShouldPersistTaps="always"
         />
         <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-          <TouchableOpacity
+          <Touchable
+            background={Touchable.Ripple("black", true)}
             onPress={() => {
               this.newConversa()
             }}
           >
             <Icon name="plus" color="white" type="antdesign" />
-          </TouchableOpacity>
+          </Touchable>
         </LinearGradient>
       </View>
     )
@@ -388,10 +344,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: "OpenSans",
     backgroundColor: "#F4F5F8"
-  },
-  containerSub: {
-    position: "absolute",
-    width: "100%"
   },
   header: {
     backgroundColor: "#fff",
@@ -416,11 +368,6 @@ const styles = StyleSheet.create({
   searchIcon: {
     justifyContent: "center"
   },
-  conversa: {
-    width: "100%",
-    backgroundColor: "#E8E3E3",
-    marginBottom: 1
-  },
   button: {
     elevation: 5,
     alignItems: "center",
@@ -431,35 +378,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 5,
     right: 5
-  },
-  cont: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    justifyContent: "center",
-    marginTop: 5
-  },
-  data: {
-    fontSize: 8
-  },
-  unread: {
-    fontWeight: "bold",
-    fontSize: 8,
-    alignSelf: "center",
-    color: "white"
-  },
-  rightInformation: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    right: 0,
-    top: "50%",
-    bottom: "50%"
-  },
-  lastMsg: {
-    marginTop: 10,
-    color: "#a9a9a9",
-    fontSize: 13
   },
   myPicture: {
     width: 40,
