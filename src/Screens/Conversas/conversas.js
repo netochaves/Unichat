@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   conversasInfo: {
-    fontSize: scale(18)
+    fontSize: scale(16)
   },
   searchIcon: {
     justifyContent: "center"
