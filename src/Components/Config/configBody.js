@@ -13,6 +13,7 @@ import {
 import Touchable from "react-native-platform-touchable"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
+import { scale } from "~/Components/responsive"
 
 export default class configBody extends Component {
   constructor() {
@@ -160,7 +161,7 @@ export default class configBody extends Component {
               </View>
             </Touchable>
           </View>
-          <TouchableOpacity style={{alignSelf: "center"}}>
+          <TouchableOpacity style={{ alignSelf: "center" }}>
             <Text style={styles.touchableStyleExit}>Excluir Conta</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
   },
   touchableStyle: {
     fontFamily: "OpenSans",
-    fontSize: 18,
+    fontSize: scale(16),
     marginLeft: 10
   },
   touchableStyleExit: {
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
     padding: 12
   },
   touchableStyleTitle: {
-    fontSize: 22,
+    fontSize: scale(20),
     fontFamily: "OpenSans",
     fontWeight: "bold",
     marginTop: 20,
