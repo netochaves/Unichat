@@ -6,11 +6,12 @@ import {
   StyleSheet,
   Text,
   Image,
-  TouchableOpacity,
   BackHandler,
   Alert,
-  AppState
+  AppState,
+  StatusBar
 } from "react-native"
+import Touchable from "react-native-platform-touchable"
 import Conversa from "~/Components/Conversa/conversa"
 import { Icon } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
@@ -40,12 +41,27 @@ export default class Conversas extends Component {
   }
 
   async componentDidMount() {
+    this.mounted = true
     this.listener = this.ref.onSnapshot(async () => {
       const username = await AsyncStorage.getItem("@username")
       const profileImageUrl = await AsyncStorage.getItem("@profileImageUrl")
-      this.setState({ myName: username, myPicture: profileImageUrl })
+      if (this.mounted)
+        this.setState({ myName: username, myPicture: profileImageUrl })
     })
+
     const { navigation } = this.props
+
+    const channel = new firebase.notifications.Android.Channel(
+      "unichat",
+      "Unichat channel",
+      firebase.notifications.Android.Importance.Max
+    )
+      .setDescription("My app channel")
+      .setVibrationPattern([500])
+      .setLockScreenVisibility(firebase.notifications.Android.Visibility.Public)
+
+    firebase.notifications().android.createChannel(channel)
+
     const notificationOpen = await firebase
       .notifications()
       .getInitialNotification()
@@ -53,6 +69,11 @@ export default class Conversas extends Component {
       const { notification } = notificationOpen
       const { conversaId } = notification.data
       notification.android.setGroup("unichat")
+      notification.android.setPriority(
+        firebase.notifications.Android.Priority.High
+      )
+      notification.android.setChannelId("unichat")
+      notification.android.setVibrate([500])
       this.ref
         .collection("conversas")
         .doc(conversaId)
@@ -83,6 +104,7 @@ export default class Conversas extends Component {
   }
 
   componentWillUnmount() {
+    this.mounted = false
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe()
     this.listener()
@@ -267,7 +289,8 @@ export default class Conversas extends Component {
           <View style={styles.headerContent}>
             <Image source={{ uri: myPicture }} style={styles.myPicture} />
             <Text style={styles.conversasInfo}>{myName}</Text>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               onPress={() => {
                 this.setState({ isSerchable: true })
               }}
@@ -275,40 +298,41 @@ export default class Conversas extends Component {
               <View style={styles.searchIcon} on>
                 <Icon name="search1" color="#00aced" type="antdesign" />
               </View>
-            </TouchableOpacity>
+            </Touchable>
           </View>
         </View>
       )
     return (
       <View style={styles.container}>
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         {toolbar}
         <FlatList
           data={arrayholder}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity
-                onPress={() => {
-                  this.goToChat(item)
+              <Conversa
+                item={item}
+                onPress={param => {
+                  this.goToChat(param)
                 }}
-                onLongPress={() => {
-                  this.confirmDelete(item)
+                onLongPress={param => {
+                  this.confirmDelete(param)
                 }}
-              >
-                <Conversa item={item} />
-              </TouchableOpacity>
+              />
             )
           }}
           keyExtractor={i => i.key}
           keyboardShouldPersistTaps="always"
         />
         <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-          <TouchableOpacity
+          <Touchable
+            background={Touchable.Ripple("black", true)}
             onPress={() => {
               this.newConversa()
             }}
           >
             <Icon name="plus" color="white" type="antdesign" />
-          </TouchableOpacity>
+          </Touchable>
         </LinearGradient>
       </View>
     )

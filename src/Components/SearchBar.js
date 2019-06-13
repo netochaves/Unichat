@@ -1,21 +1,25 @@
 import React from "react"
 
-import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native"
+import { View, TextInput, StyleSheet } from "react-native"
 import { Icon } from "react-native-elements"
+import Touchable from "react-native-platform-touchable"
 
 const Components = props => {
   const { onChangeText, value, onBackPressHandler } = props
   return (
     <View style={styles.container}>
       <View style={styles.itens}>
-        <TouchableOpacity onPress={onBackPressHandler}>
+        <Touchable
+          background={Touchable.SelectableBackgroundBorderless()}
+          onPress={onBackPressHandler}
+        >
           <Icon
             containerStyle={styles.arrowIcon}
-            name="arrowleft"
-            type="antdesign"
+            name="md-arrow-back"
+            type="ionicon"
             color="#00aced"
           />
-        </TouchableOpacity>
+        </Touchable>
         <TextInput
           style={styles.input}
           onChangeText={onChangeText}

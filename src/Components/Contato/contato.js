@@ -2,30 +2,40 @@ import React from "react"
 
 import { View, StyleSheet, Text } from "react-native"
 import { Avatar } from "react-native-elements"
+import Touchable from "react-native-platform-touchable"
 
 const Contato = props => {
-  const { item } = props
+  const { item, onPress } = props
 
   return (
-    <View style={styles.contato}>
-      <Avatar
-        containerStyle={styles.avatar}
-        rounded
-        source={{ uri: item.contactPhoto }}
-        size="medium"
-      />
-      <View style={styles.mainInformation}>
-        <Text style={styles.name}>{item.contactName}</Text>
-        <Text style={styles.phone}>{item.phoneNumbers[0].number}</Text>
+    <Touchable
+      style={styles.button}
+      background={Touchable.SelectableBackground()}
+      onPress={() => onPress(item)}
+    >
+      <View style={styles.contato}>
+        <Avatar
+          containerStyle={styles.avatar}
+          rounded
+          source={{ uri: item.contactPhoto }}
+          size="medium"
+        />
+        <View style={styles.mainInformation}>
+          <Text style={styles.name}>{item.contactName}</Text>
+          <Text style={styles.phone}>{item.phoneNumbers[0].number}</Text>
+        </View>
       </View>
-    </View>
+    </Touchable>
   )
 }
 const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "white",
+    marginBottom: 1
+  },
   contato: {
     flexDirection: "row",
     width: "100%",
-    backgroundColor: "#FFF",
     marginBottom: 1
   },
   avatar: {

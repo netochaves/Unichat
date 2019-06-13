@@ -13,6 +13,7 @@ import {
   TextInput,
   Alert
 } from "react-native"
+import Touchable from "react-native-platform-touchable"
 import AsyncStorage from "@react-native-community/async-storage"
 import firebase from "react-native-firebase"
 import LinearGradient from "react-native-linear-gradient"
@@ -191,12 +192,14 @@ export default class Conversas extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               style={styles.back}
               onPress={this.handleBackPress}
+              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
             >
-              <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
-            </TouchableOpacity>
+              <Icon name="md-arrow-back" color="#00aced" type="ionicon" />
+            </Touchable>
             <Text style={styles.perfilInfo}>Perfil</Text>
           </View>
         </View>
@@ -233,6 +236,7 @@ export default class Conversas extends Component {
             <View style={styles.editNameMenu}>
               <Text style={styles.editMenuTitle}>Digite o email</Text>
               <TextInput
+                keyboardType="email-address"
                 style={styles.textInput}
                 placeholder="Digite aqui"
                 autoFocus
@@ -294,22 +298,24 @@ export default class Conversas extends Component {
           <View style={styles.editBox}>
             <Text style={styles.rotulo}>Nome</Text>
             <Text style={styles.label}>{myName}</Text>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               style={styles.iconName}
               onPress={this.handleEditName}
             >
               <Icon name="create" iconStyle={{ color: "#616161" }} />
-            </TouchableOpacity>
+            </Touchable>
           </View>
           <View style={styles.editBox}>
             <Text style={styles.rotulo}>Email</Text>
             <Text style={styles.label}>{email}</Text>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               style={styles.iconName}
               onPress={this.handleEditEmail}
             >
               <Icon name="create" iconStyle={{ color: "#616161" }} />
-            </TouchableOpacity>
+            </Touchable>
           </View>
           <View style={styles.editBox}>
             <Text style={styles.rotulo}>Telefone</Text>
@@ -336,18 +342,15 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans"
   },
   headerContent: {
-    justifyContent: "space-between",
+    flexDirection: "row",
     alignContent: "center",
-    marginBottom: 10,
-    marginLeft: 10,
-    marginTop: 10,
-    marginRight: 10,
-    flexDirection: "row"
+    marginBottom: 15,
+    marginTop: 15
   },
   perfilInfo: {
-    flex: 1,
     fontSize: 22,
-    textAlign: "center"
+    textAlign: "left",
+    marginLeft: 10
   },
   editImage: {
     justifyContent: "center",
@@ -457,7 +460,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   back: {
-    justifyContent: "center"
+    justifyContent: "center",
+    width: 40,
+    marginLeft: 10
   },
   editNameContainer: {
     elevation: 6,
