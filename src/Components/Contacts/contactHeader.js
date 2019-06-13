@@ -1,13 +1,8 @@
 import React from "react"
 
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Dimensions
-} from "react-native"
+import { View, StyleSheet, Text, Dimensions } from "react-native"
 import { Icon } from "react-native-elements"
+import Touchable from "react-native-platform-touchable"
 
 const contactsHeader = props => {
   const { syncronize, onPressSearch } = props
@@ -16,19 +11,21 @@ const contactsHeader = props => {
       <View style={styles.headerContent}>
         <Text style={styles.contactsInfo}>Contatos</Text>
         <View style={styles.Icon}>
-          <TouchableOpacity onPress={onPressSearch}>
+          <Touchable
+            onPress={onPressSearch}
+            background={Touchable.SelectableBackgroundBorderless()}
+          >
             <Icon name="search1" color="#00aced" type="antdesign" />
-          </TouchableOpacity>
+          </Touchable>
         </View>
-        <TouchableOpacity>
-          <Icon
-            containerStyle={styles.syncIcon}
-            name="sync"
-            color="#00aced"
-            type="material"
+        <View style={styles.Icon}>
+          <Touchable
             onPress={syncronize}
-          />
-        </TouchableOpacity>
+            background={Touchable.SelectableBackgroundBorderless()}
+          >
+            <Icon name="sync" color="#00aced" type="material" />
+          </Touchable>
+        </View>
       </View>
     </View>
   )
@@ -59,11 +56,8 @@ const styles = StyleSheet.create({
   },
   Icon: {
     justifyContent: "center",
-    marginRight: 10,
-    marginLeft: 10
-  },
-  syncIcon: {
-    justifyContent: "center"
+    marginRight: 5,
+    marginLeft: 5
   }
 })
 

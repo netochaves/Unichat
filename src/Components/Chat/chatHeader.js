@@ -1,7 +1,8 @@
 import React from "react"
 
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native"
+import { View, StyleSheet, Text } from "react-native"
 import { Avatar, Icon } from "react-native-elements"
+import Touchable from "react-native-platform-touchable"
 
 const chatHeader = props => {
   const { userName, userPhoto, navigation, status } = props
@@ -9,33 +10,37 @@ const chatHeader = props => {
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
-        <TouchableOpacity
+        <Touchable
+          background={Touchable.SelectableBackgroundBorderless()}
           style={styles.back}
           onPress={() => navigation.goBack()}
         >
-          <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
-        </TouchableOpacity>
-        <Avatar
-          containerStyle={styles.avatar}
-          rounded
-          source={{ uri: userPhoto }}
-          size={40}
-        />
-        <View style={styles.userInfo}>
-          <Text
-            style={styles.userName}
-            onPress={() =>
-              navigation.navigate("PreviewImage", {
-                img: userPhoto,
-                name: userName,
-                isLoggedIn: true
-              })
-            }
-          >
-            {userName}
-          </Text>
-          <Text style={styles.lastSeen}>{status}</Text>
-        </View>
+          <View style={styles.backButton}>
+            <Icon name="md-arrow-back" color="#00aced" type="ionicon" />
+            <Avatar
+              containerStyle={styles.avatar}
+              rounded
+              source={{ uri: userPhoto }}
+              size={40}
+            />
+          </View>
+        </Touchable>
+        <Touchable
+          background={Touchable.SelectableBackground()}
+          style={styles.userInfo}
+          onPress={() =>
+            navigation.navigate("PreviewImage", {
+              img: userPhoto,
+              name: userName,
+              isLoggedIn: true
+            })
+          }
+        >
+          <View>
+            <Text style={styles.userName}>{userName}</Text>
+            <Text style={styles.lastSeen}>{status}</Text>
+          </View>
+        </Touchable>
         <Icon
           containerStyle={styles.moreInfo}
           name="dots-vertical"
@@ -78,6 +83,11 @@ const styles = StyleSheet.create({
   },
   back: {
     justifyContent: "center"
+  },
+  backButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   }
 })
 

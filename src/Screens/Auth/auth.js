@@ -235,6 +235,7 @@ export default class Auth extends Component {
         <TouchableOpacity
           onPress={() => this.confirmPhone()}
           disabled={notValid}
+          style={styles.touchable}
         >
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
             <Text style={styles.textButton}>Enviar</Text>
@@ -316,9 +317,11 @@ const styles = StyleSheet.create({
   button: {
     height: 60,
     borderRadius: 20,
-    justifyContent: "center",
+    justifyContent: "center"
+  },
+  touchable: {
+    marginTop: 20,
     marginLeft: 40,
-    marginRight: 40,
-    marginTop: 20
+    marginRight: 40
   }
 })

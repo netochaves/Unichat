@@ -26,6 +26,7 @@
     "react-native-gesture-handler": "^1.1.0",
     "react-native-image-picker": "^0.28.1",
     "react-native-linear-gradient": "^2.5.4",
+    "react-native-platform-touchable": "^1.1.1",
     "react-native-power-translator": "^1.1.1",
     "react-native-size-matters": "^0.1.7",
     "react-native-svg": "^9.3.7",
