@@ -10,9 +10,10 @@ import {
 import { ListItem, Avatar, CheckBox } from "react-native-elements"
 import { FAB } from "react-native-paper"
 import AsyncStorage from "@react-native-community/async-storage"
-
+import generate from "shortid"
 import Header from "~/Components/SelectContacts/header"
 import SearchBar from "~/Components/SearchBar"
+import firebase from "react-native-firebase"
 
 export default class SelectContacts extends Component {
   state = {
@@ -21,7 +22,9 @@ export default class SelectContacts extends Component {
     selectedContactsKey: [],
     isSearchable: false,
     text: "",
-    arrayholder: []
+    arrayholder: [],
+    groupKey: null,
+    loading: false
   }
 
   componentDidMount() {
@@ -97,16 +100,81 @@ export default class SelectContacts extends Component {
     )
   }
 
-  next = () => {
+  save = (url, groupName, users, selectedContacts) => {
+    const { navigation } = this.props
+    const { groupKey } = this.state
+
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("conversas")
+      .add({ groupName, groupImg: url })
+      .then(doc => {
+        this.setState({ groupKey: doc.key })
+        users.map(user => doc.collection("users").add({ user }))
+        selectedContacts.map(contact =>
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(contact.key)
+            .collection("conversas")
+            .add({ groupName, groupImg: url })
+            .then(x => {
+              users.map(user => x.collection("users").add({ user }))
+            })
+        )
+      })
+      .then(() => {
+        this.setState({ loading: false })
+        navigation.navigate("GroupChat", { groupKey })
+      })
+  }
+
+  next = async () => {
     const { selectedContacts } = this.state
     const { navigation } = this.props
-    const img = navigation.getParam("img")
-    const text = navigation.getParam("text")
-    navigation.navigate("GroupChat", { img, text, selectedContacts })
+    const groupName = navigation.getParam("text")
+    let groupImg = navigation.getParam("img")
+    this.setState({ loading: true })
+
+    if (selectedContacts.length === 0) {
+      Alert.alert(
+        "Erro",
+        "Porfavor adicione pelo menos um participante ao grupo"
+      )
+      this.setState({ loading: false })
+    } else {
+      const users = []
+
+      selectedContacts.map(user => users.push(user.key))
+
+      users.push(firebase.auth().currentUser.uid)
+
+      if (groupImg !== null) {
+        await firebase
+          .storage()
+          .ref(generate.generate())
+          .putFile(groupImg.path)
+          .then(snapshot => {
+            this.save(snapshot.downloadURL, groupName, users, selectedContacts)
+          })
+      } else {
+        groupImg =
+          "https://firebasestorage.googleapis.com/v0/b/unichat-35f13.appspot.com/o/profile-placeholder.png?alt=media&token=2cd02156-cb41-4142-8903-72abac4ddf3c"
+        this.save(groupImg, groupName, users, selectedContacts)
+      }
+    }
   }
 
   render() {
-    const { selectedContactsKey, isSearchable, text, arrayholder } = this.state
+    const {
+      selectedContactsKey,
+      isSearchable,
+      text,
+      arrayholder,
+      loading
+    } = this.state
     let toolbar
     if (isSearchable) {
       toolbar = (
@@ -177,7 +245,12 @@ export default class SelectContacts extends Component {
             keyboardShouldPersistTaps="always"
           />
         </View>
-        <FAB icon="arrow-forward" style={styles.fab} onPress={this.next} />
+        <FAB
+          icon="arrow-forward"
+          style={styles.fab}
+          onPress={this.next}
+          loading={loading}
+        />
       </>
     )
   }

@@ -14,8 +14,11 @@ import ImagePicker from "react-native-image-picker"
 export default class CreateGroup extends React.Component {
   state = {
     text: "",
-    img:
-      "https://firebasestorage.googleapis.com/v0/b/unichat-35f13.appspot.com/o/profile-placeholder.png?alt=media&token=2cd02156-cb41-4142-8903-72abac4ddf3c"
+    img: null
+  }
+
+  componentDidMount() {
+    this.clean()
   }
 
   handleChooseImage = () => {
@@ -41,21 +44,42 @@ export default class CreateGroup extends React.Component {
     })
   }
 
+  next = () => {
+    const { text, img } = this.state
+    const { navigation } = this.props
+
+    if (text !== "" && text.replace(/\s/g, "").length) {
+      navigation.navigate("SelectContacts", { img, text })
+    }
+  }
+
+  clean = () => {
+    this.setState({ text: "" })
+    this.setState({ img: null })
+  }
+
+  back = () => {
+    const { onBackGroundPress } = this.props
+    this.clean()
+    onBackGroundPress()
+  }
+
+  cancel = () => {
+    const { onCancelPress } = this.props
+    this.clean()
+    onCancelPress()
+  }
+
   render() {
     const { text, img } = this.state
-    const {
-      isVisible,
-      onBackGroundPress,
-      onCancelPress,
-      navigation
-    } = this.props
+    const { isVisible } = this.props
     return (
       <Overlay
         isVisible={isVisible}
         width="auto"
         height="auto"
         containerStyle={styles.container}
-        onBackdropPress={onBackGroundPress}
+        onBackdropPress={this.back}
         borderRadius={15}
       >
         <>
@@ -86,14 +110,10 @@ export default class CreateGroup extends React.Component {
             </View>
           </View>
           <View style={styles.buttons}>
-            <TouchableOpacity onPress={onCancelPress}>
+            <TouchableOpacity onPress={this.cancel}>
               <Text style={styles.button}>CANCELAR</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("SelectContacts", { img, text })
-              }
-            >
+            <TouchableOpacity onPress={this.next}>
               <Text style={styles.button}>PRÓXIMO</Text>
             </TouchableOpacity>
           </View>

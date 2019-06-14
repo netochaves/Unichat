@@ -12,7 +12,7 @@ import {
   AppState
 } from "react-native"
 import { ListItem, Icon } from "react-native-elements"
-import { FAB, Portal } from "react-native-paper"
+import { Provider, FAB, Portal } from "react-native-paper"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
@@ -390,30 +390,32 @@ export default class Conversas extends Component {
           keyExtractor={i => i.key}
           keyboardShouldPersistTaps="always"
         />
-        <Portal>
-          <FAB.Group
-            open={open}
-            icon={open ? "close" : "add"}
-            actions={[
-              {
-                icon: "chat",
-                label: "Nova conversa",
-                onPress: () => {
-                  this.newConversa()
+        <Provider>
+          <Portal>
+            <FAB.Group
+              open={open}
+              icon={open ? "close" : "add"}
+              actions={[
+                {
+                  icon: "chat",
+                  label: "Nova conversa",
+                  onPress: () => {
+                    this.newConversa()
+                  }
+                },
+                {
+                  icon: "group",
+                  label: "Novo grupo",
+                  onPress: () => this.setState({ isModalVisible: true })
                 }
-              },
-              {
-                icon: "group",
-                label: "Novo grupo",
-                onPress: () => this.setState({ isModalVisible: true })
+              ]}
+              onStateChange={() =>
+                this.setState(prevState => ({ open: !prevState.open }))
               }
-            ]}
-            onStateChange={() =>
-              this.setState(prevState => ({ open: !prevState.open }))
-            }
-            fabStyle={styles.fab}
-          />
-        </Portal>
+              fabStyle={styles.fab}
+            />
+          </Portal>
+        </Provider>
       </View>
     )
   }
@@ -458,7 +460,6 @@ const styles = StyleSheet.create({
     marginBottom: 1
   },
   fab: {
-    marginBottom: 80,
     backgroundColor: "#007AFF"
   },
   cont: {
