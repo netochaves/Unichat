@@ -153,6 +153,7 @@ export default class Conversas extends Component {
   }
 
   handleBackPress = () => {
+    BackHandler.exitApp()
     return true
   }
 

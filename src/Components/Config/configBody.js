@@ -105,7 +105,12 @@ export default class configBody extends Component {
             <Text style={styles.touchableStyleTitle}>Aplicativo</Text>
             <Text style={styles.line} />
 
-            <Touchable style={styles.platformTouchable}>
+            <Touchable
+              style={styles.platformTouchable}
+              onPress={() => {
+                navigation.navigate("FeedbackScreen")
+              }}
+            >
               <View style={styles.touchableIcon}>
                 <Icon name="chat" size={28} color="#e542f4" />
                 <Text style={styles.touchableStyle}>Enviar Feedback</Text>
