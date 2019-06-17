@@ -1,7 +1,14 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable camelcase */
 import React, { Component } from "react"
 
-import { View, StyleSheet, StatusBar, BackHandler } from "react-native"
+import {
+  View,
+  StyleSheet,
+  StatusBar,
+  BackHandler,
+  ActivityIndicator
+} from "react-native"
 import {
   ProviderTypes,
   TranslatorConfiguration,
@@ -29,7 +36,10 @@ export default class Conversas extends Component {
       userData: null,
       isValueNull: true,
       destUser: navigation.getParam("item"),
-      status: ""
+      status: "",
+      numMsgsRender: 20,
+      isRefreshing: false,
+      load: true
     }
     const { user, destUser } = this.state
     this.ref = firebase
@@ -69,6 +79,7 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
+    const { numMsgsRender } = this.state
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribeDest = this.userDest.onSnapshot(() => {
       this.getTime()
@@ -76,6 +87,7 @@ export default class Conversas extends Component {
     this.unsubscribe = this.ref
       .collection("messages")
       .orderBy("date", "desc")
+      .limit(numMsgsRender)
       .onSnapshot(querySnapshot => {
         const messages = []
         querySnapshot.forEach(doc => {
@@ -101,6 +113,44 @@ export default class Conversas extends Component {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribeDest()
     this.unsubscribe()
+  }
+
+  handleLoadMore = () => {
+    const { numMsgsRender, load } = this.state
+
+    this.ref
+      .collection("messages")
+      .get()
+      .then(doc => {
+        if (numMsgsRender >= doc.size) {
+          this.setState({ load: false })
+        } else {
+          this.setState({ load: true })
+        }
+      })
+    if (load) {
+      this.setState({ isRefreshing: true })
+      this.setState({ numMsgsRender: numMsgsRender + 30 })
+      this.ref
+        .collection("messages")
+        .orderBy("date", "desc")
+        .limit(numMsgsRender)
+        .get()
+        .then(doc => {
+          const messages = []
+          doc.forEach(msgs => {
+            const { content, contentTranslated, date, source } = msgs.data()
+            messages.push({
+              key: msgs.id,
+              content,
+              contentTranslated,
+              date: date.toDate(),
+              source
+            })
+          })
+          this.setState({ isRefreshing: false, messages })
+        })
+    }
   }
 
   handleBackPress = () => {
@@ -255,7 +305,14 @@ export default class Conversas extends Component {
   }
 
   render() {
-    const { messages, messageText, isValueNull, destUser, status } = this.state
+    const {
+      messages,
+      messageText,
+      isValueNull,
+      destUser,
+      status,
+      isRefreshing
+    } = this.state
     const { navigation } = this.props
     // firebase.auth().signOut()
     return (
@@ -268,7 +325,16 @@ export default class Conversas extends Component {
           status={status}
         />
         <View style={styles.chatContainer}>
-          <ChatContainer messages={messages} destUserUid={destUser.key}/>
+          {isRefreshing && (
+            <View style={{ width: "100%" }}>
+              <ActivityIndicator size="small" color="#0000ff" />
+            </View>
+          )}
+          <ChatContainer
+            onLoadMore={this.handleLoadMore}
+            messages={messages}
+            destUserUid={destUser.key}
+          />
         </View>
         <View style={styles.input}>
           <ChatInput
