@@ -4,9 +4,9 @@ import {
   View,
   Text,
   StyleSheet,
-  Linking,
   TouchableOpacity,
-  BackHandler
+  BackHandler,
+  Alert
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import CodeInput from "react-native-confirmation-code-input"
@@ -16,7 +16,8 @@ export default class Verificacao extends Component {
   constructor() {
     super()
     this.state = {
-      code: ""
+      code: "",
+      confirmResult: null
     }
   }
 
@@ -40,8 +41,11 @@ export default class Verificacao extends Component {
 
   confirmChoice = code => {
     const { navigation } = this.props
-    const confirmResult = navigation.getParam("confirmResultFirebase")
-
+    const { confirmResult } = this.state
+    const cR = navigation.getParam("confirmResultFirebase")
+    if (!confirmResult) {
+      this.setState({ confirmResult: cR })
+    }
     if (confirmResult && code.length) {
       confirmResult
         .confirm(code)
@@ -62,6 +66,20 @@ export default class Verificacao extends Component {
         // Caso dê algum erro, o tratamento é feito aqui
         .catch(() => {})
     }
+  }
+
+  reenviarCodigo = () => {
+    Alert.alert("Clicou", "clicou")
+    const { navigation } = this.props
+    const phoneNumber = navigation.getParam("phoneNumber")
+
+    firebase
+      .auth()
+      .signInWithPhoneNumber(phoneNumber)
+      .then(_confirmResult => {
+        this.setState({ confirmResult: _confirmResult })
+      })
+      .catch(erro => Alert.alert("Erro", erro))
   }
 
   render() {
@@ -96,9 +114,9 @@ export default class Verificacao extends Component {
         </TouchableOpacity>
         <View style={styles.containerText2}>
           <Text>Não recebeu o código de verificação?</Text>
-          <Text style={styles.text2} onPress={() => Linking.openURL("#")}>
-            Reenviar código
-          </Text>
+          <TouchableOpacity onPress={this.reenviarCodigo}>
+            <Text style={styles.text2}>Reenviar código</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -127,7 +145,7 @@ const styles = StyleSheet.create({
   },
   text2: {
     marginLeft: 1,
-    color: "black",
+    color: "#007AFF",
     fontWeight: "bold"
   },
   button: {
