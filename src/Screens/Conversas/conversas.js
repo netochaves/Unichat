@@ -177,33 +177,48 @@ export default class Conversas extends Component {
               lastMessage,
               dateLastMessage,
               contactPhoto,
-              contactName
+              contactName,
+              isGroup
             } = doc.data()
-            contacts.forEach(contact => {
-              if (contact.key === doc.id) {
+            if (isGroup) {
+              const { groupName, groupImg } = doc.data()
+              conversas.push({
+                key: doc.id,
+                isGroup,
+                contactName: groupName,
+                contactPhoto: groupImg,
+                unreadMsgs: null,
+                numUnreadMsgs: null,
+                lastMessage: null,
+                dateLastMessage: null
+              })
+            } else {
+              contacts.forEach(contact => {
+                if (contact.key === doc.id) {
+                  conversas.push({
+                    contact,
+                    key: doc.id,
+                    contactPhoto,
+                    contactName: contact.contactName,
+                    unreadMsgs,
+                    numUnreadMsgs,
+                    lastMessage,
+                    dateLastMessage
+                  })
+                  find = true
+                }
+              })
+              if (find === false) {
                 conversas.push({
-                  contact,
                   key: doc.id,
                   contactPhoto,
-                  contactName: contact.contactName,
+                  contactName,
                   unreadMsgs,
                   numUnreadMsgs,
                   lastMessage,
                   dateLastMessage
                 })
-                find = true
               }
-            })
-            if (find === false) {
-              conversas.push({
-                key: doc.id,
-                contactPhoto,
-                contactName,
-                unreadMsgs,
-                numUnreadMsgs,
-                lastMessage,
-                dateLastMessage
-              })
             }
           })
           this.setState({ conversas, arrayholder: conversas })
@@ -261,21 +276,24 @@ export default class Conversas extends Component {
   }
 
   parseTime = dateNanoScds => {
-    const date = dateNanoScds.toDate()
-    const atualDate = firebase.database().getServerTime()
-    let textDate = ""
-    if (atualDate.getDate() - date.getDate() === 0) {
-      textDate = getTime(date)
-    } else if (atualDate.getDate() - date.getDate() === 1) {
-      textDate = "Ontem"
-    } else if (atualDate.getDate() - date.getDate() >= 2) {
-      textDate = `${date
-        .getDate()
-        .toString()}/${date
-        .getMonth()
-        .toString()}/${date.getFullYear().toString()}`
+    if (dateNanoScds) {
+      const date = dateNanoScds.toDate()
+      const atualDate = firebase.database().getServerTime()
+      let textDate = ""
+      if (atualDate.getDate() - date.getDate() === 0) {
+        textDate = getTime(date)
+      } else if (atualDate.getDate() - date.getDate() === 1) {
+        textDate = "Ontem"
+      } else if (atualDate.getDate() - date.getDate() >= 2) {
+        textDate = `${date
+          .getDate()
+          .toString()}/${date
+          .getMonth()
+          .toString()}/${date.getFullYear().toString()}`
+      }
+      return textDate
     }
-    return textDate
+    return null
   }
 
   searchFilterFunction = text => {
@@ -350,7 +368,8 @@ export default class Conversas extends Component {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  this.goToChat(item)
+                  if (item.isGroup) navigation.navigate("GroupChat", { item })
+                  else this.goToChat(item)
                 }}
                 onLongPress={() => {
                   this.confirmDelete(item)
@@ -364,7 +383,10 @@ export default class Conversas extends Component {
                       <Text style={styles.lastMsg}>{item.lastMessage}</Text>
                       <View style={styles.rightInformation}>
                         <Text style={styles.data}>
-                          {this.parseTime(item.dateLastMessage)}
+                          {console.log(item.dateLastMessage)}
+                          {item.dateLastMessage !== null
+                            ? this.parseTime(item.dateLastMessage)
+                            : null}
                         </Text>
                         {item.unreadMsgs && (
                           <LinearGradient

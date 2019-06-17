@@ -23,7 +23,6 @@ export default class SelectContacts extends Component {
     isSearchable: false,
     text: "",
     arrayholder: [],
-    groupKey: null,
     loading: false
   }
 
@@ -102,16 +101,24 @@ export default class SelectContacts extends Component {
 
   save = (url, groupName, users, selectedContacts) => {
     const { navigation } = this.props
-    const { groupKey } = this.state
 
     firebase
       .firestore()
       .collection("users")
       .doc(firebase.auth().currentUser.uid)
       .collection("conversas")
-      .add({ groupName, groupImg: url })
+      .add()
       .then(doc => {
-        this.setState({ groupKey: doc.key })
+        doc.set({
+          key: doc.id,
+          groupName,
+          groupImg: url,
+          isGroup: true,
+          numUnreadMsgs: 0,
+          unreadMsgs: false,
+          lastMessage: null,
+          dateLastMessage: null
+        })
         users.map(user => doc.collection("users").add({ user }))
         selectedContacts.map(contact =>
           firebase
@@ -119,15 +126,37 @@ export default class SelectContacts extends Component {
             .collection("users")
             .doc(contact.key)
             .collection("conversas")
-            .add({ groupName, groupImg: url })
-            .then(x => {
-              users.map(user => x.collection("users").add({ user }))
+            .doc(doc.id)
+            .set({
+              key: doc.id,
+              groupName,
+              groupImg: url,
+              isGroup: true,
+              numUnreadMsgs: 0,
+              unreadMsgs: false,
+              lastMessage: null,
+              dateLastMessage: null
+            })
+            .then(() => {
+              users.map(user =>
+                firebase
+                  .firestore()
+                  .collection("users")
+                  .doc(contact.key)
+                  .collection("conversas")
+                  .doc(doc.id)
+                  .collection("users")
+                  .add({ user })
+              )
             })
         )
-      })
-      .then(() => {
         this.setState({ loading: false })
-        navigation.navigate("GroupChat", { groupKey })
+        const item = {
+          contactName: groupName,
+          key: doc.id,
+          contactPhoto: url
+        }
+        navigation.navigate("GroupChat", { item })
       })
   }
 

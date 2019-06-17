@@ -11,7 +11,7 @@ const chatHeader = props => {
       <View style={styles.headerContent}>
         <TouchableOpacity
           style={styles.back}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("Conversas")}
         >
           <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
         </TouchableOpacity>
