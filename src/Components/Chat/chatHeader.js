@@ -3,9 +3,10 @@ import React from "react"
 import { View, StyleSheet, Text } from "react-native"
 import { Avatar, Icon } from "react-native-elements"
 import Touchable from "react-native-platform-touchable"
+import MyPopUpMenu from "~/Components/Chat/chatPopUpMenu"
 
 const chatHeader = props => {
-  const { userName, userPhoto, navigation, status } = props
+  const { userName, userPhoto, navigation, status, destUser } = props
 
   return (
     <View style={styles.header}>
@@ -41,11 +42,7 @@ const chatHeader = props => {
             <Text style={styles.lastSeen}>{status}</Text>
           </View>
         </Touchable>
-        <Icon
-          containerStyle={styles.moreInfo}
-          name="dots-vertical"
-          type="material-community"
-        />
+        <MyPopUpMenu destUser={destUser} />
       </View>
     </View>
   )
@@ -73,10 +70,6 @@ const styles = StyleSheet.create({
   },
   lastSeen: {
     fontSize: 10
-  },
-  moreInfo: {
-    marginTop: 10,
-    right: 0
   },
   avatar: {
     marginLeft: 10
