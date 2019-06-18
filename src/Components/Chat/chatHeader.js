@@ -18,7 +18,7 @@ const chatHeader = props => {
           onPress={() => navigation.navigate("Conversas")}
         >
           <View style={styles.backButton}>
-            <Icon name="md-arrow-back" color="#00aced" type="ionicon" />
+            <Icon name="md-arrow-back" color="#007AFF" type="ionicon" />
             <Avatar
               containerStyle={styles.avatar}
               rounded
