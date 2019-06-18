@@ -17,6 +17,7 @@ import EditPerfil from "~/Screens/EditPerfil/editperfil"
 import Languages from "~/Screens/Languages/languages"
 import About from "~/Screens/About/about"
 import { Icon } from "react-native-elements"
+import Feedback from "./Screens/Feedback/feedback"
 
 const tabBarNavigator = createMaterialTopTabNavigator(
   {
@@ -125,6 +126,12 @@ const HomeStackNavigator = createStackNavigator(
     },
     AboutScreen: {
       screen: About,
+      navigationOptions: {
+        header: null
+      }
+    },
+    FeedbackScreen: {
+      screen: Feedback,
       navigationOptions: {
         header: null
       }
