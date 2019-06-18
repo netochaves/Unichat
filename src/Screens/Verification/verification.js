@@ -77,10 +77,8 @@ export default class Verificacao extends Component {
   }
 
   reenviarCodigo = () => {
-    Alert.alert("Clicou", "clicou")
     const { navigation } = this.props
     const phoneNumber = navigation.getParam("phoneNumber")
-    Alert.alert("Numero", phoneNumber)
     this.setState({ disableResend: true })
     setTimeout(() => {
       this.setState({ disableResend: false })
