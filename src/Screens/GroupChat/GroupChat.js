@@ -69,6 +69,10 @@ export default class GroupChat extends Component {
       })
   }
 
+  componentWillUnmount() {
+    this.unsubscribe()
+  }
+
   onChangeHandler = text => {
     this.setState({ messageText: text, isValueNull: false })
   }

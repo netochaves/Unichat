@@ -351,10 +351,10 @@ export default class Conversas extends Component {
               <Conversa
                 item={item}
                 onPress={param => {
-                  this.goToChat(param)
+                  if (item.isGroup) navigation.navigate("GroupChat", { item })
+                  else this.goToChat(param)
                 }}
                 onLongPress={param => {
-                  if (item.isGroup) navigation.navigate("GroupChat", { item })
                   this.confirmDelete(param)
                 }}
               />

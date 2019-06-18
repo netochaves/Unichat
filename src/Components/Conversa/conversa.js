@@ -26,6 +26,7 @@ const conversa = props => {
       }
       return textDate
     }
+    return null
   }
 
   return (
