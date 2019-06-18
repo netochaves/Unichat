@@ -2,13 +2,7 @@
 /* eslint-disable camelcase */
 import React, { Component } from "react"
 
-import {
-  View,
-  StyleSheet,
-  StatusBar,
-  BackHandler,
-  ActivityIndicator
-} from "react-native"
+import { View, StyleSheet, BackHandler, ActivityIndicator } from "react-native"
 import {
   ProviderTypes,
   TranslatorConfiguration,
@@ -172,9 +166,7 @@ export default class Conversas extends Component {
 
   sendMessage = () => {
     const { destUser, user, messageText, userData } = this.state
-    if (messageText === "") {
-      this.setState({ isValueNull: true })
-    } else {
+    if (messageText !== "" && messageText.replace(/\s/g, "").length) {
       const newMessage = {
         content: messageText,
         date: firebase.database().getServerTime(),
@@ -258,9 +250,10 @@ export default class Conversas extends Component {
               .catch(error => error)
           })
         })
-
-      this.setState({ messageText: "", isValueNull: true })
+    } else {
+      this.setState({ isValueNull: true })
     }
+    this.setState({ messageText: "", isValueNull: true })
   }
 
   parseTime = dateNanoScds => {
@@ -311,15 +304,14 @@ export default class Conversas extends Component {
       isRefreshing
     } = this.state
     const { navigation } = this.props
-    // firebase.auth().signOut()
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <ChatHeader
           userName={destUser.contactName}
           userPhoto={destUser.contactPhoto}
           navigation={navigation}
           status={status}
+          destUser={destUser}
         />
         <View style={styles.chatContainer}>
           {isRefreshing && (

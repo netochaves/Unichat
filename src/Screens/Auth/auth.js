@@ -11,7 +11,9 @@ import {
   YellowBox,
   TouchableOpacity,
   BackHandler,
-  PermissionsAndroid
+  PermissionsAndroid,
+  Image,
+  Dimensions
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
@@ -20,6 +22,7 @@ import AsyncStorage from "@react-native-community/async-storage"
 import Contacts from "react-native-contacts"
 import countryList from "../../assets/country_dials/dials"
 import { scale } from "~/Components/responsive"
+import unichatIcon from "../../assets/imgs/unichat-icon.png"
 
 YellowBox.ignoreWarnings([
   "Warning: componentWillMount is deprecated",
@@ -198,7 +201,9 @@ export default class Auth extends Component {
     return (
       <View style={styles.container}>
         <View>
-          <Text style={styles.textBig}>Insira seu número de telefone</Text>
+          <View style={styles.logo}>
+            <Image style={styles.icon} source={unichatIcon} />
+          </View>
           <Text style={styles.textSmall}>
             Digite o número do seu telefone junto com o DDD
           </Text>
@@ -254,6 +259,7 @@ export default class Auth extends Component {
   }
 }
 
+const largura = Dimensions.get("window").width
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -262,19 +268,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 5
   },
-  textBig: {
-    alignSelf: "center",
-    fontSize: scale(24),
-    color: "black",
-    fontWeight: "bold",
-    marginTop: 10,
-    marginBottom: 20
-  },
   textSmall: {
     alignSelf: "center",
-    fontSize: scale(12),
+    fontSize: scale(14),
     color: "gray",
-    marginBottom: 20
+    marginBottom: 20,
+    textAlign: "center"
   },
   textEnd: {
     alignSelf: "center",
@@ -290,6 +289,15 @@ const styles = StyleSheet.create({
   },
   textInputView: {
     flexDirection: "row"
+  },
+  icon: {
+    width: largura / 2.5,
+    height: largura / 2.5
+  },
+  logo: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20
   },
   countryTextInput: {
     fontSize: scale(16),

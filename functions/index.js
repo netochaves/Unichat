@@ -24,7 +24,7 @@ return (exports.sendPushNotification = functions.firestore
       .catch(error => console.log(error))
 
     const { contactName, contactPhoto } = data
-    if (source === "1") {
+    if (source === "2") {
       const payload = {
         data: {
           conversaId
