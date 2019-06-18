@@ -10,13 +10,16 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
-  TextInput
+  TextInput,
+  Alert
 } from "react-native"
+import Touchable from "react-native-platform-touchable"
 import AsyncStorage from "@react-native-community/async-storage"
 import firebase from "react-native-firebase"
 import LinearGradient from "react-native-linear-gradient"
 import { Icon } from "react-native-elements"
 import ImagePicker from "react-native-image-picker"
+import { scale } from "~/Components/responsive"
 
 export default class Conversas extends Component {
   constructor() {
@@ -110,8 +113,15 @@ export default class Conversas extends Component {
 
     ImagePicker.showImagePicker(options, response => {
       if (response.uri) {
-        this.setState({ myImage: response })
-        this.uploadphotos()
+        if (response.fileSize <= 600000) {
+          this.setState({ myImage: response })
+          this.uploadphotos()
+        } else {
+          Alert.alert(
+            "Erro",
+            "Selecione uma foto com tamanho inferior a 600 kB"
+          )
+        }
       }
     })
   }
@@ -183,12 +193,14 @@ export default class Conversas extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               style={styles.back}
               onPress={this.handleBackPress}
+              hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
             >
-              <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
-            </TouchableOpacity>
+              <Icon name="md-arrow-back" color="#007AFF" type="ionicon" />
+            </Touchable>
             <Text style={styles.perfilInfo}>Perfil</Text>
           </View>
         </View>
@@ -225,6 +237,7 @@ export default class Conversas extends Component {
             <View style={styles.editNameMenu}>
               <Text style={styles.editMenuTitle}>Digite o email</Text>
               <TextInput
+                keyboardType="email-address"
                 style={styles.textInput}
                 placeholder="Digite aqui"
                 autoFocus
@@ -286,22 +299,24 @@ export default class Conversas extends Component {
           <View style={styles.editBox}>
             <Text style={styles.rotulo}>Nome</Text>
             <Text style={styles.label}>{myName}</Text>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               style={styles.iconName}
               onPress={this.handleEditName}
             >
-              <Icon name="create" iconStyle={{ color: "#616161" }} />
-            </TouchableOpacity>
+              <Icon name="create" iconStyle={{ color: "#007AFF" }} />
+            </Touchable>
           </View>
           <View style={styles.editBox}>
             <Text style={styles.rotulo}>Email</Text>
             <Text style={styles.label}>{email}</Text>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               style={styles.iconName}
               onPress={this.handleEditEmail}
             >
-              <Icon name="create" iconStyle={{ color: "#616161" }} />
-            </TouchableOpacity>
+              <Icon name="create" iconStyle={{ color: "#007AFF" }} />
+            </Touchable>
           </View>
           <View style={styles.editBox}>
             <Text style={styles.rotulo}>Telefone</Text>
@@ -328,18 +343,15 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans"
   },
   headerContent: {
-    justifyContent: "space-between",
+    flexDirection: "row",
     alignContent: "center",
-    marginBottom: 10,
-    marginLeft: 10,
-    marginTop: 10,
-    marginRight: 10,
-    flexDirection: "row"
+    marginBottom: 15,
+    marginTop: 15
   },
   perfilInfo: {
-    flex: 1,
-    fontSize: 22,
-    textAlign: "center"
+    fontSize: scale(20),
+    textAlign: "left",
+    marginLeft: 10
   },
   editImage: {
     justifyContent: "center",
@@ -373,7 +385,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 15,
     marginBottom: 15,
-    fontSize: 16,
+    fontSize: scale(16),
     color: "black"
   },
   iconImage: {
@@ -413,7 +425,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderBottomWidth: 2,
-    borderColor: "#6AC3FB"
+    borderColor: "#007AFF"
   },
   options: {
     marginTop: 25,
@@ -422,7 +434,8 @@ const styles = StyleSheet.create({
   },
   editMenuTitle: {
     color: "black",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontSize: scale(14)
   },
   editMenuButton: {
     flex: 1,
@@ -449,7 +462,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   back: {
-    justifyContent: "center"
+    justifyContent: "center",
+    width: 40,
+    marginLeft: 10
   },
   editNameContainer: {
     elevation: 6,
@@ -463,7 +478,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     top: 0,
-    fontSize: 10,
+    fontSize: scale(12),
     marginLeft: 2,
     color: "#6AC3FB"
   },

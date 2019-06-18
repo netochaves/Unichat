@@ -1,7 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable camelcase */
 import React, { Component } from "react"
 
-import { View, StyleSheet, StatusBar, BackHandler } from "react-native"
+import { View, StyleSheet, BackHandler, ActivityIndicator } from "react-native"
 import {
   ProviderTypes,
   TranslatorConfiguration,
@@ -29,7 +30,9 @@ export default class Conversas extends Component {
       userData: null,
       isValueNull: true,
       destUser: navigation.getParam("item"),
-      status: ""
+      status: "",
+      numMsgsRender: 20,
+      isRefreshing: false
     }
     const { user, destUser } = this.state
     this.ref = firebase
@@ -69,6 +72,7 @@ export default class Conversas extends Component {
   }
 
   componentDidMount() {
+    const { numMsgsRender } = this.state
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribeDest = this.userDest.onSnapshot(() => {
       this.getTime()
@@ -76,6 +80,7 @@ export default class Conversas extends Component {
     this.unsubscribe = this.ref
       .collection("messages")
       .orderBy("date", "desc")
+      .limit(numMsgsRender)
       .onSnapshot(querySnapshot => {
         const messages = []
         querySnapshot.forEach(doc => {
@@ -103,6 +108,42 @@ export default class Conversas extends Component {
     this.unsubscribe()
   }
 
+  loadMessages = () => {
+    const { numMsgsRender } = this.state
+    this.ref
+      .collection("messages")
+      .orderBy("date", "desc")
+      .limit(numMsgsRender + 30)
+      .get()
+      .then(doc => {
+        const messages = []
+        doc.forEach(msgs => {
+          const { content, contentTranslated, date, source } = msgs.data()
+          messages.push({
+            key: msgs.id,
+            content,
+            contentTranslated,
+            date: date.toDate(),
+            source
+          })
+        })
+        this.setState({
+          isRefreshing: false,
+          messages,
+          numMsgsRender: numMsgsRender + 30
+        })
+      })
+  }
+
+  handleLoadMore = () => {
+    const { numMsgsRender, messages } = this.state
+
+    if (messages.length === numMsgsRender) {
+      this.setState({ isRefreshing: true })
+      this.loadMessages()
+    }
+  }
+
   handleBackPress = () => {
     const { navigation } = this.props
     navigation.goBack()
@@ -125,9 +166,7 @@ export default class Conversas extends Component {
 
   sendMessage = () => {
     const { destUser, user, messageText, userData } = this.state
-    if (messageText === "") {
-      this.setState({ isValueNull: true })
-    } else {
+    if (messageText !== "" && messageText.replace(/\s/g, "").length) {
       const newMessage = {
         content: messageText,
         date: firebase.database().getServerTime(),
@@ -204,15 +243,17 @@ export default class Conversas extends Component {
                 content: newMessage.content,
                 date: newMessage.date,
                 contentTranslated: translated,
-                source: "2"
+                source: "2",
+                isChanged: false
               })
               .then(() => true)
               .catch(error => error)
           })
         })
-
-      this.setState({ messageText: "", isValueNull: true })
+    } else {
+      this.setState({ isValueNull: true })
     }
+    this.setState({ messageText: "", isValueNull: true })
   }
 
   parseTime = dateNanoScds => {
@@ -254,20 +295,35 @@ export default class Conversas extends Component {
   }
 
   render() {
-    const { messages, messageText, isValueNull, destUser, status } = this.state
+    const {
+      messages,
+      messageText,
+      isValueNull,
+      destUser,
+      status,
+      isRefreshing
+    } = this.state
     const { navigation } = this.props
-    // firebase.auth().signOut()
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <ChatHeader
           userName={destUser.contactName}
           userPhoto={destUser.contactPhoto}
           navigation={navigation}
           status={status}
+          destUser={destUser}
         />
         <View style={styles.chatContainer}>
-          <ChatContainer messages={messages} />
+          {isRefreshing && (
+            <View style={{ width: "100%" }}>
+              <ActivityIndicator size="small" color="#0000ff" />
+            </View>
+          )}
+          <ChatContainer
+            onLoadMore={this.handleLoadMore}
+            messages={messages}
+            destUserUid={destUser.key}
+          />
         </View>
         <View style={styles.input}>
           <ChatInput

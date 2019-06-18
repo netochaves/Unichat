@@ -6,18 +6,21 @@ import {
   StyleSheet,
   Text,
   Image,
-  TouchableOpacity,
   BackHandler,
   Alert,
-  AppState
+  AppState,
+  StatusBar
 } from "react-native"
-import { ListItem, Icon } from "react-native-elements"
-import LinearGradient from "react-native-linear-gradient"
+import { Icon } from "react-native-elements"
+import { Provider, FAB, Portal } from "react-native-paper"
+import Touchable from "react-native-platform-touchable"
+import Conversa from "~/Components/Conversa/conversa"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
-import getTime from "~/functions/getTime"
 import NetInfo from "@react-native-community/netinfo"
 import SearchBar from "~/Components/SearchBar"
+import CreateGroup from "~/Screens/CreateGroup/CreateGroup"
+import { scale } from "~/Components/responsive"
 
 export default class Conversas extends Component {
   constructor() {
@@ -28,7 +31,9 @@ export default class Conversas extends Component {
       arrayholder: [],
       myName: "",
       myPicture: null,
-      text: ""
+      text: "",
+      open: false,
+      isModalVisible: false
     }
 
     this.appState = AppState.currentState
@@ -40,12 +45,27 @@ export default class Conversas extends Component {
   }
 
   async componentDidMount() {
+    this.mounted = true
     this.listener = this.ref.onSnapshot(async () => {
       const username = await AsyncStorage.getItem("@username")
       const profileImageUrl = await AsyncStorage.getItem("@profileImageUrl")
-      this.setState({ myName: username, myPicture: profileImageUrl })
+      if (this.mounted)
+        this.setState({ myName: username, myPicture: profileImageUrl })
     })
+
     const { navigation } = this.props
+
+    const channel = new firebase.notifications.Android.Channel(
+      "unichat",
+      "Unichat channel",
+      firebase.notifications.Android.Importance.Max
+    )
+      .setDescription("My app channel")
+      .setVibrationPattern([500])
+      .setLockScreenVisibility(firebase.notifications.Android.Visibility.Public)
+
+    firebase.notifications().android.createChannel(channel)
+
     const notificationOpen = await firebase
       .notifications()
       .getInitialNotification()
@@ -53,6 +73,11 @@ export default class Conversas extends Component {
       const { notification } = notificationOpen
       const { conversaId } = notification.data
       notification.android.setGroup("unichat")
+      notification.android.setPriority(
+        firebase.notifications.Android.Priority.High
+      )
+      notification.android.setChannelId("unichat")
+      notification.android.setVibrate([500])
       this.ref
         .collection("conversas")
         .doc(conversaId)
@@ -77,12 +102,15 @@ export default class Conversas extends Component {
       this.setState(prevState => ({
         arrayholder: prevState.conversas,
         isSerchable: false,
-        text: ""
+        text: "",
+        open: false,
+        isModalVisible: false
       }))
     })
   }
 
   componentWillUnmount() {
+    this.mounted = false
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
     this.unsubscribe()
     this.listener()
@@ -90,7 +118,9 @@ export default class Conversas extends Component {
     this.setState(prevState => ({
       arrayholder: prevState.conversas,
       isSerchable: false,
-      text: ""
+      text: "",
+      open: false,
+      isModalVisible: false
     }))
   }
 
@@ -130,6 +160,7 @@ export default class Conversas extends Component {
   }
 
   handleBackPress = () => {
+    BackHandler.exitApp()
     return true
   }
 
@@ -148,33 +179,48 @@ export default class Conversas extends Component {
               lastMessage,
               dateLastMessage,
               contactPhoto,
-              contactName
+              contactName,
+              isGroup
             } = doc.data()
-            contacts.forEach(contact => {
-              if (contact.key === doc.id) {
+            if (isGroup) {
+              const { groupName, groupImg } = doc.data()
+              conversas.push({
+                key: doc.id,
+                isGroup,
+                contactName: groupName,
+                contactPhoto: groupImg,
+                unreadMsgs: null,
+                numUnreadMsgs: null,
+                lastMessage: null,
+                dateLastMessage: null
+              })
+            } else {
+              contacts.forEach(contact => {
+                if (contact.key === doc.id) {
+                  conversas.push({
+                    contact,
+                    key: doc.id,
+                    contactPhoto,
+                    contactName: contact.contactName,
+                    unreadMsgs,
+                    numUnreadMsgs,
+                    lastMessage,
+                    dateLastMessage
+                  })
+                  find = true
+                }
+              })
+              if (find === false) {
                 conversas.push({
-                  contact,
                   key: doc.id,
                   contactPhoto,
-                  contactName: contact.contactName,
+                  contactName,
                   unreadMsgs,
                   numUnreadMsgs,
                   lastMessage,
                   dateLastMessage
                 })
-                find = true
               }
-            })
-            if (find === false) {
-              conversas.push({
-                key: doc.id,
-                contactPhoto,
-                contactName,
-                unreadMsgs,
-                numUnreadMsgs,
-                lastMessage,
-                dateLastMessage
-              })
             }
           })
           this.setState({ conversas, arrayholder: conversas })
@@ -220,6 +266,17 @@ export default class Conversas extends Component {
         this.ref
           .collection("conversas")
           .doc(item.key)
+          .collection("users")
+          .get()
+          .then(snapshot => {
+            snapshot.docs.forEach(doc => {
+              doc.ref.delete()
+            })
+          })
+
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
           .delete()
       }
       return true
@@ -229,26 +286,6 @@ export default class Conversas extends Component {
   newConversa = () => {
     const { navigation } = this.props
     navigation.navigate("ContactsScreen")
-  }
-
-  search = () => {}
-
-  parseTime = dateNanoScds => {
-    const date = dateNanoScds.toDate()
-    const atualDate = firebase.database().getServerTime()
-    let textDate = ""
-    if (atualDate.getDate() - date.getDate() === 0) {
-      textDate = getTime(date)
-    } else if (atualDate.getDate() - date.getDate() === 1) {
-      textDate = "Ontem"
-    } else if (atualDate.getDate() - date.getDate() >= 2) {
-      textDate = `${date
-        .getDate()
-        .toString()}/${date
-        .getMonth()
-        .toString()}/${date.getFullYear().toString()}`
-    }
-    return textDate
   }
 
   searchFilterFunction = text => {
@@ -271,7 +308,16 @@ export default class Conversas extends Component {
   }
 
   render() {
-    const { myName, myPicture, isSerchable, text, arrayholder } = this.state
+    const {
+      myName,
+      myPicture,
+      isSerchable,
+      text,
+      arrayholder,
+      open,
+      isModalVisible
+    } = this.state
+    const { navigation } = this.props
     let toolbar
     if (isSerchable)
       toolbar = (
@@ -287,76 +333,74 @@ export default class Conversas extends Component {
           <View style={styles.headerContent}>
             <Image source={{ uri: myPicture }} style={styles.myPicture} />
             <Text style={styles.conversasInfo}>{myName}</Text>
-            <TouchableOpacity
+            <Touchable
+              background={Touchable.SelectableBackgroundBorderless()}
               onPress={() => {
                 this.setState({ isSerchable: true })
               }}
             >
               <View style={styles.searchIcon} on>
-                <Icon name="search1" color="#00aced" type="antdesign" />
+                <Icon name="search1" color="#007AFF" type="antdesign" />
               </View>
-            </TouchableOpacity>
+            </Touchable>
           </View>
         </View>
       )
     return (
       <View style={styles.container}>
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         {toolbar}
+        <CreateGroup
+          isVisible={isModalVisible}
+          onBackGroundPress={() => this.setState({ isModalVisible: false })}
+          onCancelPress={() => this.setState({ isModalVisible: false })}
+          navigation={navigation}
+        />
         <FlatList
           data={arrayholder}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity
-                onPress={() => {
-                  this.goToChat(item)
+              <Conversa
+                item={item}
+                onPress={param => {
+                  if (item.isGroup) navigation.navigate("GroupChat", { item })
+                  else this.goToChat(param)
                 }}
-                onLongPress={() => {
-                  this.confirmDelete(item)
+                onLongPress={param => {
+                  this.confirmDelete(param)
                 }}
-              >
-                <ListItem
-                  style={styles.conversa}
-                  subtitle={
-                    <View style={styles.containerSub}>
-                      <Text style={styles.name}>{item.contactName}</Text>
-                      <Text style={styles.lastMsg}>{item.lastMessage}</Text>
-                      <View style={styles.rightInformation}>
-                        <Text style={styles.data}>
-                          {this.parseTime(item.dateLastMessage)}
-                        </Text>
-                        {item.unreadMsgs && (
-                          <LinearGradient
-                            colors={["#547BF0", "#6AC3FB"]}
-                            style={styles.cont}
-                          >
-                            <Text style={styles.unread}>
-                              {item.numUnreadMsgs}
-                            </Text>
-                          </LinearGradient>
-                        )}
-                      </View>
-                    </View>
-                  }
-                  leftAvatar={{
-                    source: { uri: item.contactPhoto },
-                    size: "medium"
-                  }}
-                />
-              </TouchableOpacity>
+              />
             )
           }}
           keyExtractor={i => i.key}
           keyboardShouldPersistTaps="always"
         />
-        <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-          <TouchableOpacity
-            onPress={() => {
-              this.newConversa()
-            }}
-          >
-            <Icon name="plus" color="white" type="antdesign" />
-          </TouchableOpacity>
-        </LinearGradient>
+        <Provider>
+          <Portal>
+            <FAB.Group
+              open={open}
+              icon={open ? "close" : "add"}
+              actions={[
+                {
+                  icon: "chat",
+                  label: "Nova conversa",
+                  onPress: () => {
+                    this.newConversa()
+                  }
+                },
+                {
+                  icon: "group",
+                  label: "Novo grupo",
+                  onPress: () => this.setState({ isModalVisible: true })
+                }
+              ]}
+              onStateChange={() =>
+                this.setState(prevState => ({ open: !prevState.open }))
+              }
+              fabStyle={styles.fab}
+            />
+          </Portal>
+        </Provider>
       </View>
     )
   }
@@ -367,10 +411,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: "OpenSans",
     backgroundColor: "#F4F5F8"
-  },
-  containerSub: {
-    position: "absolute",
-    width: "100%"
   },
   header: {
     backgroundColor: "#fff",
@@ -390,55 +430,13 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   conversasInfo: {
-    fontSize: 18
+    fontSize: scale(16)
   },
   searchIcon: {
     justifyContent: "center"
   },
-  conversa: {
-    width: "100%",
-    backgroundColor: "#E8E3E3",
-    marginBottom: 1
-  },
-  button: {
-    elevation: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    position: "absolute",
-    bottom: 5,
-    right: 5
-  },
-  cont: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    justifyContent: "center",
-    marginTop: 5
-  },
-  data: {
-    fontSize: 8
-  },
-  unread: {
-    fontWeight: "bold",
-    fontSize: 8,
-    alignSelf: "center",
-    color: "white"
-  },
-  rightInformation: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    right: 0,
-    top: "50%",
-    bottom: "50%"
-  },
-  lastMsg: {
-    marginTop: 10,
-    color: "#a9a9a9",
-    fontSize: 13
+  fab: {
+    backgroundColor: "#007AFF"
   },
   myPicture: {
     width: 40,

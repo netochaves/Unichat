@@ -5,12 +5,15 @@ import {
   Text,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
-  ToastAndroid
+  ToastAndroid,
+  BackHandler
 } from "react-native"
+import Touchable from "react-native-platform-touchable"
+import LanguagesHeader from "~/Components/Languages/languagesHeader"
 import { CheckBox } from "react-native-elements"
 import firebase from "react-native-firebase"
 import data from "~/assets/languages/languages.json"
+import { scale } from "~/Components/responsive"
 
 export default class Languages extends Component {
   constructor() {
@@ -19,7 +22,8 @@ export default class Languages extends Component {
       dataSource: [],
       currentLanguageName: "",
       checkBoxIndex: -1,
-      checkBox: true
+      checkBox: true,
+      disabled: false
     }
     this.user = firebase.auth().currentUser
 
@@ -30,6 +34,8 @@ export default class Languages extends Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
+
     this.setState({
       dataSource: data
     })
@@ -39,7 +45,20 @@ export default class Languages extends Component {
     })
   }
 
-  changeLanguage = (item, index) => {
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress)
+  }
+
+  handleBackPress = () => {
+    const { navigation } = this.props
+    const { disabled } = this.state
+    if (!disabled) {
+      navigation.navigate("SettingsScreen")
+    }
+    return true
+  }
+
+  changeLanguage = item => {
     firebase
       .firestore()
       .collection("users")
@@ -70,8 +89,11 @@ export default class Languages extends Component {
       checkBox,
       checkBoxIndex
     } = this.state
+    const { navigation } = this.props
+
     return (
       <View style={styles.container}>
+        <LanguagesHeader navigation={navigation} />
         <View style={styles.headerTitle}>
           <Text style={styles.headerText}>Idioma atual</Text>
           <Text style={styles.itemTextHeader}>{currentLanguageName}</Text>
@@ -84,21 +106,25 @@ export default class Languages extends Component {
             extraData={this.state}
             renderItem={({ item, index }) => {
               return (
-                <TouchableOpacity
-                  style={styles.buttonStyle}
-                  onPress={() => this.changeLanguage(item, index)}
+                <Touchable
+                  background={Touchable.SelectableBackground()}
+                  style={styles.touchableStyle}
+                  onPress={() => this.changeLanguage(item)}
                 >
-                  <Text style={styles.itemText}>{item.name}</Text>
-                  <View style={styles.checkBoxView}>
-                    <CheckBox
-                      checkedColor="#00aced"
-                      size={28}
-                      checkedIcon="check-circle"
-                      uncheckedIcon="circle-o"
-                      checked={index === checkBoxIndex ? checkBox : !checkBox}
-                    />
+                  <View style={styles.buttonStyle}>
+                    <Text style={styles.itemText}>{item.name}</Text>
+                    <View style={styles.checkBoxView}>
+                      <CheckBox
+                        checkedColor="#007AFF"
+                        size={26}
+                        checkedIcon="check-circle"
+                        uncheckedIcon="circle-o"
+                        checked={index === checkBoxIndex ? checkBox : !checkBox}
+                        onPress={() => this.changeLanguage(item)}
+                      />
+                    </View>
                   </View>
-                </TouchableOpacity>
+                </Touchable>
               )
             }}
           />
@@ -115,29 +141,31 @@ const styles = StyleSheet.create({
   },
   itemTextHeader: {
     backgroundColor: "#fff",
-    fontSize: 20,
+    fontSize: scale(16),
     paddingTop: 15,
     paddingLeft: 20,
     paddingBottom: 15
   },
   itemText: {
-    fontSize: 20
+    fontSize: scale(16)
   },
   headerTitle: {
     backgroundColor: "#F4F5F8"
   },
   headerText: {
-    fontSize: 26,
+    fontSize: scale(18),
     alignSelf: "flex-start",
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 20
   },
-  buttonStyle: {
+  touchableStyle: {
     backgroundColor: "#fff",
+    marginBottom: 2
+  },
+  buttonStyle: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 2,
     paddingLeft: 20
   },
   checkBoxView: {

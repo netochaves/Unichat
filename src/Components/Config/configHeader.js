@@ -1,6 +1,7 @@
 import React from "react"
 
 import { View, StyleSheet, Text } from "react-native"
+import { scale } from "~/Components/responsive"
 
 const configHeader = () => {
   return (
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   },
   configInfo: {
     flex: 1,
-    fontSize: 22,
+    fontSize: scale(20),
     textAlign: "center",
     backgroundColor: "#fff"
   }

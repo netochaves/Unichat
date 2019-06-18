@@ -10,9 +10,10 @@ import {
   StyleSheet,
   Dimensions,
   BackHandler,
-  KeyboardAvoidingView,
   ActivityIndicator,
-  Keyboard
+  ScrollView,
+  Keyboard,
+  Alert
 } from "react-native"
 import AsyncStorage from "@react-native-community/async-storage"
 import { Icon } from "react-native-elements"
@@ -22,6 +23,7 @@ import LinearGradient from "react-native-linear-gradient"
 import ImagePicker from "react-native-image-picker"
 import languagelist from "../../assets/languages/languages"
 import placeHolder from "../../assets/place_holder/placeHolder"
+import { scale } from "~/Components/responsive"
 
 export default class PerfilSettings extends Component {
   constructor() {
@@ -32,8 +34,9 @@ export default class PerfilSettings extends Component {
       img: placeHolder[0],
       userName: "",
       eMail: "",
-      profileImageUrl: "",
-      disabled: true,
+      profileImageUrl:
+        "https://firebasestorage.googleapis.com/v0/b/unichat-35f13.appspot.com/o/profile-placeholder.png?alt=media&token=2cd02156-cb41-4142-8903-72abac4ddf3c",
+      disabled: false,
       uploading: false
     }
     this.user = firebase.auth().currentUser
@@ -73,7 +76,8 @@ export default class PerfilSettings extends Component {
             language_code: code,
             profile_img_url: profileImageUrl,
             online: true,
-            lastSeen: ""
+            lastSeen: "",
+            notifications: true
           })
         })
       }
@@ -88,26 +92,20 @@ export default class PerfilSettings extends Component {
   uploadphotos = () => {
     const user = firebase.auth().currentUser
     const { img } = this.state
-    this.setState({ uploading: true })
+    this.setState({ uploading: true, disabled: true })
 
     firebase
       .storage()
       .ref(`profile_pics/${user.uid}`)
       .putFile(img.path)
       .on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => {
-        let state = {}
-        state = {
-          ...state
-        }
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-          state = {
+          this.setState({
             disabled: false,
             uploading: false,
             profileImageUrl: snapshot.downloadURL
-          }
+          })
         }
-
-        this.setState(state)
       })
   }
 
@@ -122,8 +120,15 @@ export default class PerfilSettings extends Component {
 
     ImagePicker.showImagePicker(options, response => {
       if (response.uri) {
-        this.setState({ img: response })
-        this.uploadphotos()
+        if (response.fileSize <= 600000) {
+          this.setState({ img: response })
+          this.uploadphotos()
+        } else {
+          Alert.alert(
+            "Erro",
+            "Selecione uma foto com tamanho inferior a 600 kB"
+          )
+        }
       }
     })
   }
@@ -138,7 +143,7 @@ export default class PerfilSettings extends Component {
     const { language, code, img, disabled, uploading } = this.state
 
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="position">
+      <ScrollView style={styles.container} behavior="position">
         <Text style={styles.Titulo}>Configurações de Perfil</Text>
         <View style={styles.image}>
           <TouchableOpacity
@@ -176,6 +181,7 @@ export default class PerfilSettings extends Component {
         />
         <Text style={styles.labeltext}>Email:</Text>
         <TextInput
+          keyboardType="email-address"
           style={styles.entrada}
           onChangeText={text => this.setState({ eMail: text })}
           placeholder="Digite seu e-mail"
@@ -210,7 +216,7 @@ export default class PerfilSettings extends Component {
             <Text style={styles.textButton}>Cadastrar</Text>
           </LinearGradient>
         </TouchableOpacity>
-      </KeyboardAvoidingView>
+      </ScrollView>
     )
   }
 }
@@ -223,7 +229,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans"
   },
   Titulo: {
-    fontSize: 20,
+    fontSize: scale(20),
     fontWeight: "bold",
     color: "black",
     alignSelf: "center",
@@ -274,7 +280,7 @@ const styles = StyleSheet.create({
   },
   textButton: {
     alignSelf: "center",
-    fontSize: 20,
+    fontSize: scale(20),
     color: "white"
   },
   labeltext: {
@@ -282,7 +288,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
     marginLeft: 40,
-    marginRight: 40
+    marginRight: 40,
+    fontSize: scale(14)
   },
   entrada: {
     borderBottomWidth: 2,

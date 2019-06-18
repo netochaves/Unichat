@@ -8,6 +8,7 @@ import {
   TouchableOpacity
 } from "react-native"
 import Icon from "react-native-vector-icons/Feather"
+import { scale } from "~/Components/responsive"
 
 const { width: WIDTH } = Dimensions.get("window")
 
@@ -31,7 +32,7 @@ export default class MessageInput extends Component {
 
     const newStyle = {
       height,
-      fontSize: 14,
+      fontSize: scale(12),
       width: WIDTH - 60
     }
     return (
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 30 / 2,
-    backgroundColor: "#00BCD4"
+    backgroundColor: "#007AFF"
   },
   icon: {
     position: "absolute",

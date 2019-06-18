@@ -11,7 +11,9 @@ import {
   YellowBox,
   TouchableOpacity,
   BackHandler,
-  PermissionsAndroid
+  PermissionsAndroid,
+  Image,
+  Dimensions
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
@@ -19,6 +21,8 @@ import shortid from "shortid"
 import AsyncStorage from "@react-native-community/async-storage"
 import Contacts from "react-native-contacts"
 import countryList from "../../assets/country_dials/dials"
+import { scale } from "~/Components/responsive"
+import unichatIcon from "../../assets/imgs/unichat-icon.png"
 
 YellowBox.ignoreWarnings([
   "Warning: componentWillMount is deprecated",
@@ -197,7 +201,9 @@ export default class Auth extends Component {
     return (
       <View style={styles.container}>
         <View>
-          <Text style={styles.textBig}>Insira seu número de telefone</Text>
+          <View style={styles.logo}>
+            <Image style={styles.icon} source={unichatIcon} />
+          </View>
           <Text style={styles.textSmall}>
             Digite o número do seu telefone junto com o DDD
           </Text>
@@ -222,7 +228,11 @@ export default class Auth extends Component {
           </View>
         </View>
         <View style={styles.textInputView}>
-          <TextInput style={styles.countryTextInput} value={countryCode} />
+          <TextInput
+            style={styles.countryTextInput}
+            value={countryCode}
+            editable={false}
+          />
           <TextInput
             keyboardType="phone-pad"
             style={styles.textInputStyle}
@@ -235,6 +245,7 @@ export default class Auth extends Component {
         <TouchableOpacity
           onPress={() => this.confirmPhone()}
           disabled={notValid}
+          style={styles.touchable}
         >
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
             <Text style={styles.textButton}>Enviar</Text>
@@ -248,6 +259,7 @@ export default class Auth extends Component {
   }
 }
 
+const largura = Dimensions.get("window").width
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -256,23 +268,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 5
   },
-  textBig: {
-    alignSelf: "center",
-    fontSize: 24,
-    color: "black",
-    fontWeight: "bold",
-    marginTop: 10,
-    marginBottom: 30
-  },
   textSmall: {
     alignSelf: "center",
-    fontSize: 12,
+    fontSize: scale(14),
     color: "gray",
-    marginBottom: 10
+    marginBottom: 20,
+    textAlign: "center"
   },
   textEnd: {
     alignSelf: "center",
-    fontSize: 12,
+    fontSize: scale(12),
     color: "gray",
     marginTop: 50
   },
@@ -285,8 +290,17 @@ const styles = StyleSheet.create({
   textInputView: {
     flexDirection: "row"
   },
+  icon: {
+    width: largura / 2.5,
+    height: largura / 2.5
+  },
+  logo: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20
+  },
   countryTextInput: {
-    fontSize: 18,
+    fontSize: scale(16),
     width: 50,
     marginLeft: 40,
     marginTop: 10,
@@ -298,7 +312,7 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     flex: 1,
-    fontSize: 18,
+    fontSize: scale(16),
     marginLeft: 20,
     marginRight: 40,
     marginTop: 10,
@@ -310,15 +324,17 @@ const styles = StyleSheet.create({
   },
   textButton: {
     alignSelf: "center",
-    fontSize: 20,
+    fontSize: scale(20),
     color: "white"
   },
   button: {
     height: 60,
     borderRadius: 20,
-    justifyContent: "center",
+    justifyContent: "center"
+  },
+  touchable: {
+    marginTop: 20,
     marginLeft: 40,
-    marginRight: 40,
-    marginTop: 20
+    marginRight: 40
   }
 })

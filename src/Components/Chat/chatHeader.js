@@ -1,46 +1,49 @@
 import React from "react"
 
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native"
+import { View, StyleSheet, Text } from "react-native"
 import { Avatar, Icon } from "react-native-elements"
+import Touchable from "react-native-platform-touchable"
+import MyPopUpMenu from "~/Components/Chat/chatPopUpMenu"
+import { scale } from "~/Components/responsive"
 
 const chatHeader = props => {
-  const { userName, userPhoto, navigation, status } = props
+  const { userName, userPhoto, navigation, status, destUser } = props
 
   return (
     <View style={styles.header}>
       <View style={styles.headerContent}>
-        <TouchableOpacity
+        <Touchable
+          background={Touchable.SelectableBackgroundBorderless()}
           style={styles.back}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("Conversas")}
         >
-          <Icon name="ios-arrow-back" color="#00aced" type="ionicon" />
-        </TouchableOpacity>
-        <Avatar
-          containerStyle={styles.avatar}
-          rounded
-          source={{ uri: userPhoto }}
-          size={40}
-        />
-        <View style={styles.userInfo}>
-          <Text
-            style={styles.userName}
-            onPress={() =>
-              navigation.navigate("PreviewImage", {
-                img: userPhoto,
-                name: userName,
-                isLoggedIn: true
-              })
-            }
-          >
-            {userName}
-          </Text>
-          <Text style={styles.lastSeen}>{status}</Text>
-        </View>
-        <Icon
-          containerStyle={styles.moreInfo}
-          name="dots-vertical"
-          type="material-community"
-        />
+          <View style={styles.backButton}>
+            <Icon name="md-arrow-back" color="#007AFF" type="ionicon" />
+            <Avatar
+              containerStyle={styles.avatar}
+              rounded
+              source={{ uri: userPhoto }}
+              size={40}
+            />
+          </View>
+        </Touchable>
+        <Touchable
+          background={Touchable.SelectableBackground()}
+          style={styles.userInfo}
+          onPress={() =>
+            navigation.navigate("PreviewImage", {
+              img: userPhoto,
+              name: userName,
+              isLoggedIn: true
+            })
+          }
+        >
+          <View>
+            <Text style={styles.userName}>{userName}</Text>
+            <Text style={styles.lastSeen}>{status}</Text>
+          </View>
+        </Touchable>
+        <MyPopUpMenu destUser={destUser} />
       </View>
     </View>
   )
@@ -64,20 +67,21 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   userName: {
-    fontSize: 18
+    fontSize: scale(16)
   },
   lastSeen: {
-    fontSize: 10
-  },
-  moreInfo: {
-    marginTop: 10,
-    right: 0
+    fontSize: scale(10)
   },
   avatar: {
     marginLeft: 10
   },
   back: {
     justifyContent: "center"
+  },
+  backButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   }
 })
 
