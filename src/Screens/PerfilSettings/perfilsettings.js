@@ -23,6 +23,7 @@ import LinearGradient from "react-native-linear-gradient"
 import ImagePicker from "react-native-image-picker"
 import languagelist from "../../assets/languages/languages"
 import placeHolder from "../../assets/place_holder/placeHolder"
+import { scale } from "~/Components/responsive"
 
 export default class PerfilSettings extends Component {
   constructor() {
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans"
   },
   Titulo: {
-    fontSize: 20,
+    fontSize: scale(20),
     fontWeight: "bold",
     color: "black",
     alignSelf: "center",
@@ -279,7 +280,7 @@ const styles = StyleSheet.create({
   },
   textButton: {
     alignSelf: "center",
-    fontSize: 20,
+    fontSize: scale(20),
     color: "white"
   },
   labeltext: {
@@ -287,7 +288,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
     marginLeft: 40,
-    marginRight: 40
+    marginRight: 40,
+    fontSize: scale(14)
   },
   entrada: {
     borderBottomWidth: 2,

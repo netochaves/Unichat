@@ -5,96 +5,7 @@ import Touchable from "react-native-platform-touchable"
 import { moderateScale } from "react-native-size-matters"
 import getColor from "~/functions/getColor"
 import firebase from "react-native-firebase"
-
-const cor = getColor()
-const styles = StyleSheet.create({
-  // Estilo para a mensagem do remetente
-  remet: {
-    marginTop: 5,
-    flexDirection: "row",
-    alignSelf: "flex-end",
-    marginLeft: 60,
-    marginRight: 10
-  },
-  boxRemet: {
-    elevation: 5,
-    alignSelf: "center",
-    backgroundColor: "blue",
-    borderColor: "blue",
-    borderRadius: 10,
-    borderWidth: 0.5,
-    marginRight: 5,
-    padding: 10,
-    marginTop: 5,
-    marginBottom: 5
-  },
-  arrowRemet: {
-    elevation: 5,
-    position: "absolute",
-    bottom: 0,
-    right: 5
-  },
-  textRemet: {
-    fontFamily: "Open Sans",
-    fontSize: 14,
-    color: "white"
-  },
-  dateRemet: {
-    alignSelf: "center",
-    color: "gray",
-    fontSize: 8,
-    marginRight: 10,
-    alignItems: "center"
-  },
-
-  // Estilo para a mensagem do destinatario
-  dest: {
-    flexDirection: "row",
-    alignSelf: "flex-start",
-    marginLeft: 10,
-    marginTop: 5,
-    marginRight: 60
-  },
-  boxDest: {
-    elevation: 5,
-    alignSelf: "center",
-    backgroundColor: "white",
-    borderColor: "white",
-    borderRadius: 10,
-    borderWidth: 0.5,
-    marginLeft: 5,
-    marginRight: 0,
-    marginTop: 5,
-    marginBottom: 5,
-    padding: 10
-  },
-  nomeRemetente: {
-    fontFamily: "Open Sans",
-    fontSize: 12,
-    fontWeight: "bold",
-    color: cor
-  },
-  arrowDest: {
-    elevation: 5,
-    position: "absolute",
-    bottom: 0,
-    left: 5
-  },
-  textDest: {
-    fontFamily: "Open Sans",
-    fontSize: 14,
-    color: "black"
-  },
-  dateDest: {
-    alignSelf: "center",
-    marginTop: 5,
-    marginLeft: 10
-  },
-  texto: {
-    fontSize: 8,
-    color: "gray"
-  }
-})
+import { scale } from "~/Components/responsive"
 
 export default class Mensagem extends PureComponent {
   constructor(props) {
@@ -255,3 +166,93 @@ export default class Mensagem extends PureComponent {
     return message
   }
 }
+
+const cor = getColor()
+const styles = StyleSheet.create({
+  // Estilo para a mensagem do remetente
+  remet: {
+    marginTop: 5,
+    flexDirection: "row",
+    alignSelf: "flex-end",
+    marginLeft: 60,
+    marginRight: 10
+  },
+  boxRemet: {
+    elevation: 5,
+    alignSelf: "center",
+    backgroundColor: "blue",
+    borderColor: "blue",
+    borderRadius: 10,
+    borderWidth: 0.5,
+    marginRight: 5,
+    padding: 10,
+    marginTop: 5,
+    marginBottom: 5
+  },
+  arrowRemet: {
+    elevation: 5,
+    position: "absolute",
+    bottom: 0,
+    right: 5
+  },
+  textRemet: {
+    fontFamily: "Open Sans",
+    fontSize: scale(12),
+    color: "white"
+  },
+  dateRemet: {
+    alignSelf: "center",
+    color: "gray",
+    fontSize: scale(8),
+    marginRight: 10,
+    alignItems: "center"
+  },
+
+  // Estilo para a mensagem do destinatario
+  dest: {
+    flexDirection: "row",
+    alignSelf: "flex-start",
+    marginLeft: 10,
+    marginTop: 5,
+    marginRight: 60
+  },
+  boxDest: {
+    elevation: 5,
+    alignSelf: "center",
+    backgroundColor: "white",
+    borderColor: "white",
+    borderRadius: 10,
+    borderWidth: 0.5,
+    marginLeft: 5,
+    marginRight: 0,
+    marginTop: 5,
+    marginBottom: 5,
+    padding: 10
+  },
+  nomeRemetente: {
+    fontFamily: "Open Sans",
+    fontSize: scale(10),
+    fontWeight: "bold",
+    color: cor
+  },
+  arrowDest: {
+    elevation: 5,
+    position: "absolute",
+    bottom: 0,
+    left: 5
+  },
+  textDest: {
+    fontFamily: "Open Sans",
+    fontSize: scale(12),
+    color: "black"
+  },
+  dateDest: {
+    alignSelf: "center",
+    marginTop: 5,
+    marginLeft: 10
+  },
+  texto: {
+    fontSize: scale(8),
+    color: "gray"
+  }
+})

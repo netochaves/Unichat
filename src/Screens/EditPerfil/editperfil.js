@@ -19,6 +19,7 @@ import firebase from "react-native-firebase"
 import LinearGradient from "react-native-linear-gradient"
 import { Icon } from "react-native-elements"
 import ImagePicker from "react-native-image-picker"
+import { scale } from "~/Components/responsive"
 
 export default class Conversas extends Component {
   constructor() {
@@ -348,7 +349,7 @@ const styles = StyleSheet.create({
     marginTop: 15
   },
   perfilInfo: {
-    fontSize: 22,
+    fontSize: scale(20),
     textAlign: "left",
     marginLeft: 10
   },
@@ -384,7 +385,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 15,
     marginBottom: 15,
-    fontSize: 16,
+    fontSize: scale(16),
     color: "black"
   },
   iconImage: {
@@ -433,7 +434,8 @@ const styles = StyleSheet.create({
   },
   editMenuTitle: {
     color: "black",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontSize: scale(14)
   },
   editMenuButton: {
     flex: 1,
@@ -476,7 +478,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     top: 0,
-    fontSize: 10,
+    fontSize: scale(12),
     marginLeft: 2,
     color: "#6AC3FB"
   },
