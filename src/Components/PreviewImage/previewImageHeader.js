@@ -1,12 +1,7 @@
 import React from "react"
 
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  StatusBar
-} from "react-native"
+import { View, StyleSheet, Text, StatusBar } from "react-native"
+import Touchable from "react-native-platform-touchable"
 import { Icon } from "react-native-elements"
 
 const previewImageHeader = props => {
@@ -17,14 +12,16 @@ const previewImageHeader = props => {
     <View style={styles.header}>
       <StatusBar backgroundColor="#000" barStyle="light-content" />
       <View style={styles.headerContent}>
-        <TouchableOpacity
+        <Touchable
+          background={Touchable.Ripple("white", true)}
+          style={styles.backButton}
           onPress={() => {
             navigation.goBack()
           }}
           hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
         >
-          <Icon name="ios-arrow-back" color="#fff" type="ionicon" />
-        </TouchableOpacity>
+          <Icon name="md-arrow-back" color="#fff" type="ionicon" />
+        </Touchable>
         <Text style={styles.previewImageInfo}>{userName}</Text>
       </View>
     </View>
@@ -39,20 +36,20 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans"
   },
   headerContent: {
-    backgroundColor: "#000",
     marginBottom: 15,
     marginTop: 15,
-    marginRight: 10,
-    paddingLeft: 15,
+    alignContent: "center",
     flexDirection: "row"
   },
   previewImageInfo: {
-    flex: 1,
     fontSize: 22,
-    textAlign: "left",
     color: "#fff",
-    backgroundColor: "#000",
-    marginLeft: 20
+    marginLeft: 10
+  },
+  backButton: {
+    justifyContent: "center",
+    width: 40,
+    marginLeft: 10
   }
 })
 

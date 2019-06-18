@@ -86,7 +86,10 @@ export default class Verificacao extends Component {
             }}
           />
         </View>
-        <TouchableOpacity onPress={() => this.submitCode()}>
+        <TouchableOpacity
+          style={styles.touchable}
+          onPress={() => this.submitCode()}
+        >
           <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
             <Text style={styles.text3}>Verificar</Text>
           </LinearGradient>
@@ -128,8 +131,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   button: {
-    marginLeft: 40,
-    marginRight: 40,
     height: 60,
     borderRadius: 20,
     justifyContent: "center"
@@ -142,5 +143,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 25,
     color: "white"
+  },
+  touchable: {
+    marginLeft: 40,
+    marginRight: 40
   }
 })

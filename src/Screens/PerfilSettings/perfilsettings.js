@@ -10,8 +10,8 @@ import {
   StyleSheet,
   Dimensions,
   BackHandler,
-  KeyboardAvoidingView,
   ActivityIndicator,
+  ScrollView,
   Keyboard,
   Alert
 } from "react-native"
@@ -142,7 +142,7 @@ export default class PerfilSettings extends Component {
     const { language, code, img, disabled, uploading } = this.state
 
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="position">
+      <ScrollView style={styles.container} behavior="position">
         <Text style={styles.Titulo}>Configurações de Perfil</Text>
         <View style={styles.image}>
           <TouchableOpacity
@@ -180,6 +180,7 @@ export default class PerfilSettings extends Component {
         />
         <Text style={styles.labeltext}>Email:</Text>
         <TextInput
+          keyboardType="email-address"
           style={styles.entrada}
           onChangeText={text => this.setState({ eMail: text })}
           placeholder="Digite seu e-mail"
@@ -214,7 +215,7 @@ export default class PerfilSettings extends Component {
             <Text style={styles.textButton}>Cadastrar</Text>
           </LinearGradient>
         </TouchableOpacity>
-      </KeyboardAvoidingView>
+      </ScrollView>
     )
   }
 }

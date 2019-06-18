@@ -20,6 +20,7 @@ import SelectContacts from "~/Screens/SelectContacts/SelectContacts"
 import GroupChat from "~/Screens/GroupChat/GroupChat"
 
 import { Icon } from "react-native-elements"
+import Feedback from "./Screens/Feedback/feedback"
 
 const tabBarNavigator = createMaterialTopTabNavigator(
   {
@@ -140,6 +141,12 @@ const HomeStackNavigator = createStackNavigator(
     },
     GroupChat: {
       screen: GroupChat,
+      navigationOptions: {
+        header: null
+      }
+    },
+    FeedbackScreen: {
+      screen: Feedback,
       navigationOptions: {
         header: null
       }
