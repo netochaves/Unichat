@@ -12,19 +12,22 @@ const conversa = props => {
   const { item, onPress, onLongPress } = props
 
   const parseTime = dateNanoScds => {
-    const date = dateNanoScds.toDate()
-    const atualDate = firebase.database().getServerTime()
-    let textDate = ""
-    if (atualDate.getDate() - date.getDate() === 0) {
-      textDate = getTime(date)
-    } else if (atualDate.getDate() - date.getDate() === 1) {
-      textDate = "Ontem"
-    } else if (atualDate.getDate() - date.getDate() >= 2) {
-      textDate = `${date.getDate().toString()}/${(
-        date.getMonth() + 1
-      ).toString()}/${date.getFullYear().toString()}`
+    if (dateNanoScds) {
+      const date = dateNanoScds.toDate()
+      const atualDate = firebase.database().getServerTime()
+      let textDate = ""
+      if (atualDate.getDate() - date.getDate() === 0) {
+        textDate = getTime(date)
+      } else if (atualDate.getDate() - date.getDate() === 1) {
+        textDate = "Ontem"
+      } else if (atualDate.getDate() - date.getDate() >= 2) {
+        textDate = `${date.getDate().toString()}/${(
+          date.getMonth() + 1
+        ).toString()}/${date.getFullYear().toString()}`
+      }
+      return textDate
     }
-    return textDate
+    return null
   }
 
   return (
