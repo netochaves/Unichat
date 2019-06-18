@@ -23,34 +23,44 @@ Unichat é feito em React Native uma tecnologia voltada para o desenvolvimento m
 
 # Changelog
 
-## v0.3.0 - 28/05/2019
+## v0.4.0 - 18/06/2019
 
 ### New Features
 
-- [Criar tela de configuração](https://github.com/ES2-UFPI/Unichat/pull/121)
-- [Traduzir a mensagem de acordo com o idioma setado pelo usuário](https://github.com/ES2-UFPI/Unichat/pull/112)
-- [Push Notification](https://github.com/ES2-UFPI/Unichat/pull/139)
-- [Botão para sair na tela de configurações](https://github.com/ES2-UFPI/Unichat/pull/133)
-- [Visto por último de um usuário](https://github.com/ES2-UFPI/Unichat/pull/123)
-- [Número de mensagens não lidas em uma conversa](https://github.com/ES2-UFPI/Unichat/pull/115)
-- [Última mensagem da conversa](https://github.com/ES2-UFPI/Unichat/pull/115)
-- [Pesquisar contatos](https://github.com/ES2-UFPI/Unichat/pull/124)
-- [Pesquisar convesar](https://github.com/ES2-UFPI/Unichat/pull/125)
-- [Tela de edição de dados do usuário](https://github.com/ES2-UFPI/Unichat/pull/131)
-- [Receber mensagem quando não possuir o contato do usuário](https://github.com/ES2-UFPI/Unichat/pull/119)
-- [Exibir perfil do usuário em uma conversa](https://github.com/ES2-UFPI/Unichat/pull/138)
-- [Criar tela de seleção de idiomas](https://github.com/ES2-UFPI/Unichat/pull/135)
-- [Remoção de biblioteca de máscara](https://github.com/ES2-UFPI/Unichat/pull/137)
+- [#202](https://github.com/ES2-UFPI/Unichat/pull/202) Função para criar um grupo
+- [#202](https://github.com/ES2-UFPI/Unichat/pull/202) Traduzir dinamicamente a mensagem entre integrantes do grupo
+- [#202](https://github.com/ES2-UFPI/Unichat/pull/202) Estruturaçãodo grupo no firebase
+- [#](https://github.com/ES2-UFPI/Unichat/pull/169) Notificações enable/disable
+- [#198](https://github.com/ES2-UFPI/Unichat/pull/198) Tela de enviar feedback
+- [#187](https://github.com/ES2-UFPI/Unichat/pull/187) Políticas de privacidade
+- [#185](https://github.com/ES2-UFPI/Unichat/pull/185) Tela de sobre
+- [#174](https://github.com/ES2-UFPI/Unichat/pull/174) Ação de compartilhar o App
+- [#172](https://github.com/ES2-UFPI/Unichat/pull/172) Componente de mensagem personalizado para tela de grupos
+- [#180](https://github.com/ES2-UFPI/Unichat/pull/180) Ícone e splash screen
+- [#209](https://github.com/ES2-UFPI/Unichat/pull/209) Menu na tela de chat + limpar chat
+- [#208](https://github.com/ES2-UFPI/Unichat/pull/208) Adicionar a logo do App em algumas telas
 
 ### Bug Fixes
 
-- [Navegation antes do upload da imagem de perfil](https://github.com/ES2-UFPI/Unichat/pull/113)
-- [Teclado não fecha automaticamente](https://github.com/ES2-UFPI/Unichat/pull/114)
-- [Fixado bug na sincronização de contatos](https://github.com/ES2-UFPI/Unichat/pull/120)
-- [Botão de enviar mensagem do TextInput corretamente centralizado](https://github.com/ES2-UFPI/Unichat/pull/122)
-- [Barra de pesquisar não some/volta ao estado original](https://github.com/ES2-UFPI/Unichat/pull/130)
-- [Dois cliques na hora de pesquisar](https://github.com/ES2-UFPI/Unichat/pull/132)
+- [#171](https://github.com/ES2-UFPI/Unichat/pull/171) Manter o idioma original ao clicar para ver lingua original
+- [#181](https://github.com/ES2-UFPI/Unichat/pull/181) Alterar contatos para PureComponent
+- [#173](https://github.com/ES2-UFPI/Unichat/pull/173) Limitar tamanho da imagem
+- [#170](https://github.com/ES2-UFPI/Unichat/pull/170) Manter tela somente em moto retrato
+- [#182](https://github.com/ES2-UFPI/Unichat/pull/182) Melhorar área de cliques
+- [#200](https://github.com/ES2-UFPI/Unichat/pull/200) Cache de mensagens
+- [#175](https://github.com/ES2-UFPI/Unichat/pull/175) Foto padrão, caso usuário não escolha uma
+- [#186](https://github.com/ES2-UFPI/Unichat/pull/186) Bug fix nas notificações de push
+- [#197](https://github.com/ES2-UFPI/Unichat/pull/197) Padronização de fontes (responsividade)
 
 ### Refatorações
 
-- Não houve
+- [#177](https://github.com/ES2-UFPI/Unichat/pull/177) Padronização do header da tela de idiomas
+- [#190](https://github.com/ES2-UFPI/Unichat/pull/190) Alteração do header da tela de previewImage
+- [#205](https://github.com/ES2-UFPI/Unichat/pull/205) Refatoração da tela de verificação
+- [#207](https://github.com/ES2-UFPI/Unichat/pull/207) Trocada cor de ícones do App
+
+### Testes
+
+- [#211](https://github.com/ES2-UFPI/Unichat/pull/211) Teste da tela de Sobre
+- [#201](https://github.com/ES2-UFPI/Unichat/pull/201) Teste da tela de Feedback
+- [#202](https://github.com/ES2-UFPI/Unichat/pull/202) Teste da tela de Grupos
