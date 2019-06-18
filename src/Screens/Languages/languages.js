@@ -115,7 +115,7 @@ export default class Languages extends Component {
                     <Text style={styles.itemText}>{item.name}</Text>
                     <View style={styles.checkBoxView}>
                       <CheckBox
-                        checkedColor="#00aced"
+                        checkedColor="#007AFF"
                         size={26}
                         checkedIcon="check-circle"
                         uncheckedIcon="circle-o"

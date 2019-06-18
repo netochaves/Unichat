@@ -199,7 +199,7 @@ export default class Conversas extends Component {
               onPress={this.handleBackPress}
               hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
             >
-              <Icon name="md-arrow-back" color="#00aced" type="ionicon" />
+              <Icon name="md-arrow-back" color="#007AFF" type="ionicon" />
             </Touchable>
             <Text style={styles.perfilInfo}>Perfil</Text>
           </View>

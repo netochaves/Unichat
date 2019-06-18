@@ -298,7 +298,7 @@ export default class Conversas extends Component {
               }}
             >
               <View style={styles.searchIcon} on>
-                <Icon name="search1" color="#00aced" type="antdesign" />
+                <Icon name="search1" color="#007AFF" type="antdesign" />
               </View>
             </Touchable>
           </View>

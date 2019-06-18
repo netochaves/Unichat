@@ -20,7 +20,7 @@ const previewImageHeader = props => {
           }}
           hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
         >
-          <Icon name="md-arrow-back" color="#fff" type="ionicon" />
+          <Icon name="md-arrow-back" color="#007AFF" type="ionicon" />
         </Touchable>
         <Text style={styles.previewImageInfo}>{userName}</Text>
       </View>

@@ -17,7 +17,7 @@ const Components = props => {
             containerStyle={styles.arrowIcon}
             name="md-arrow-back"
             type="ionicon"
-            color="#00aced"
+            color="#007AFF"
           />
         </Touchable>
         <TextInput
