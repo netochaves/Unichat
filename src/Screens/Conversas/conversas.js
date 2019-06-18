@@ -20,6 +20,7 @@ import AsyncStorage from "@react-native-community/async-storage"
 import NetInfo from "@react-native-community/netinfo"
 import SearchBar from "~/Components/SearchBar"
 import CreateGroup from "~/Screens/CreateGroup/CreateGroup"
+import { scale } from "~/Components/responsive"
 
 export default class Conversas extends Component {
   constructor() {
@@ -418,7 +419,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   conversasInfo: {
-    fontSize: 18
+    fontSize: scale(16)
   },
   searchIcon: {
     justifyContent: "center"

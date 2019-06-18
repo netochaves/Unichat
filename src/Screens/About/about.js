@@ -10,6 +10,7 @@ import {
 } from "react-native"
 import AboutHeader from "~/Components/About/aboutHeader"
 import AboutCards from "~/Components/About/aboutCards"
+import { scale } from "~/Components/responsive"
 
 const aboutScreen = props => {
   const { navigation } = props
@@ -124,12 +125,12 @@ const styles = StyleSheet.create({
     height: 75
   },
   linkStyle: {
-    fontSize: 20,
+    fontSize: scale(16),
     color: "#0000ff",
     textDecorationLine: "underline"
   },
   titleTextStyle: {
-    fontSize: 20,
+    fontSize: scale(16),
     fontFamily: "OpenSans",
     color: "#999295"
   }

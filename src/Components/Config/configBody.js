@@ -13,6 +13,7 @@ import {
 import Touchable from "react-native-platform-touchable"
 import { Icon } from "react-native-elements"
 import firebase from "react-native-firebase"
+import { scale } from "~/Components/responsive"
 
 export default class configBody extends Component {
   constructor() {
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   },
   touchableStyle: {
     fontFamily: "OpenSans",
-    fontSize: 18,
+    fontSize: scale(16),
     marginLeft: 10
   },
   touchableStyleExit: {
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     padding: 12
   },
   touchableStyleTitle: {
-    fontSize: 22,
+    fontSize: scale(20),
     fontFamily: "OpenSans",
     fontWeight: "bold",
     marginTop: 20,

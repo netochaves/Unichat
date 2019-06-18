@@ -241,7 +241,7 @@ export default class SelectContacts extends Component {
                         ? item.phoneNumbers[0].number
                         : null
                     }
-                    leftAvatar={  
+                    leftAvatar={
                       item.contactPhoto === "" ? (
                         <Avatar
                           rounded
