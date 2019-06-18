@@ -169,9 +169,7 @@ export default class Conversas extends Component {
 
   sendMessage = () => {
     const { destUser, user, messageText, userData } = this.state
-    if (messageText === "") {
-      this.setState({ isValueNull: true })
-    } else {
+    if (messageText !== "" && messageText.replace(/\s/g, "").length) {
       const newMessage = {
         content: messageText,
         date: firebase.database().getServerTime(),
@@ -255,9 +253,10 @@ export default class Conversas extends Component {
               .catch(error => error)
           })
         })
-
-      this.setState({ messageText: "", isValueNull: true })
+    } else {
+      this.setState({ isValueNull: true })
     }
+    this.setState({ messageText: "", isValueNull: true })
   }
 
   parseTime = dateNanoScds => {
