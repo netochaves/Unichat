@@ -42,7 +42,7 @@ const conversa = props => {
           containerStyle={styles.avatar}
           rounded
           source={{ uri: item.contactPhoto }}
-          size={60}
+          size="medium"
         />
         <View style={styles.mainInformation}>
           <Text style={styles.name}>{item.contactName}</Text>
