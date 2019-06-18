@@ -29,6 +29,7 @@ export default class GroupChat extends Component {
       .doc(firebase.auth().currentUser.uid)
       .collection("conversas")
       .doc(group.key)
+
     TranslatorConfiguration.setConfig(
       ProviderTypes.Google,
       "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
@@ -108,6 +109,13 @@ export default class GroupChat extends Component {
         }
       })
 
+      const aux = await firebase
+        .firestore()
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid)
+        .get()
+      const { username } = aux.data()
+
       this.ref.collection("messages").add({
         content: newMessage.content,
         date: newMessage.date,
@@ -126,7 +134,7 @@ export default class GroupChat extends Component {
                 .collection("users")
                 .doc(user)
               const doc = await this.userRef.get()
-              const { language_code, username } = doc.data()
+              const { language_code } = doc.data()
 
               const docGroup = await this.userRef
                 .collection("conversas")
