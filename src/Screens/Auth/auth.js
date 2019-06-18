@@ -272,7 +272,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: scale(14),
     color: "gray",
-    marginBottom: 20
+    marginBottom: 20,
+    textAlign: "center"
   },
   textEnd: {
     alignSelf: "center",
@@ -288,6 +289,15 @@ const styles = StyleSheet.create({
   },
   textInputView: {
     flexDirection: "row"
+  },
+  icon: {
+    width: largura / 2.5,
+    height: largura / 2.5
+  },
+  logo: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20
   },
   countryTextInput: {
     fontSize: scale(16),
