@@ -323,6 +323,7 @@ export default class Conversas extends Component {
           userPhoto={destUser.contactPhoto}
           navigation={navigation}
           status={status}
+          destUser={destUser}
         />
         <View style={styles.chatContainer}>
           {isRefreshing && (
