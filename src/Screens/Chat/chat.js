@@ -110,7 +110,7 @@ export default class Conversas extends Component {
   }
 
   handleLoadMore = () => {
-    const { numMsgsRender, load } = this.state
+    const { numMsgsRender, load, messages } = this.state
 
     this.ref
       .collection("messages")

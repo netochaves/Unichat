@@ -4,4 +4,3 @@ import mockAsyncStorage from "@react-native-community/async-storage/jest/async-s
 
 Enzyme.configure({ adapter: new Adapter() })
 jest.mock("@react-native-community/async-storage", () => mockAsyncStorage)
-jest.mock("react-native-firebase/react-native-firebase")
