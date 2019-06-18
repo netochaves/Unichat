@@ -266,6 +266,17 @@ export default class Conversas extends Component {
         this.ref
           .collection("conversas")
           .doc(item.key)
+          .collection("users")
+          .get()
+          .then(snapshot => {
+            snapshot.docs.forEach(doc => {
+              doc.ref.delete()
+            })
+          })
+
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
           .delete()
       }
       return true
