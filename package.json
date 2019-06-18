@@ -19,6 +19,7 @@
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "^0.59.6",
+    "react-native-communications": "^2.2.1",
     "react-native-confirmation-code-input": "^1.0.4",
     "react-native-contacts": "^4.0.1",
     "react-native-elements": "^1.1.0",
