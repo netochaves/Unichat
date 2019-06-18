@@ -15,7 +15,7 @@ const chatHeader = props => {
         <Touchable
           background={Touchable.SelectableBackgroundBorderless()}
           style={styles.back}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("Conversas")}
         >
           <View style={styles.backButton}>
             <Icon name="md-arrow-back" color="#00aced" type="ionicon" />

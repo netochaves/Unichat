@@ -11,14 +11,15 @@ import {
   AppState,
   StatusBar
 } from "react-native"
+import { Icon } from "react-native-elements"
+import { Provider, FAB, Portal } from "react-native-paper"
 import Touchable from "react-native-platform-touchable"
 import Conversa from "~/Components/Conversa/conversa"
-import { Icon } from "react-native-elements"
-import LinearGradient from "react-native-linear-gradient"
 import firebase from "react-native-firebase"
 import AsyncStorage from "@react-native-community/async-storage"
 import NetInfo from "@react-native-community/netinfo"
 import SearchBar from "~/Components/SearchBar"
+import CreateGroup from "~/Screens/CreateGroup/CreateGroup"
 import { scale } from "~/Components/responsive"
 
 export default class Conversas extends Component {
@@ -30,7 +31,9 @@ export default class Conversas extends Component {
       arrayholder: [],
       myName: "",
       myPicture: null,
-      text: ""
+      text: "",
+      open: false,
+      isModalVisible: false
     }
 
     this.appState = AppState.currentState
@@ -99,7 +102,9 @@ export default class Conversas extends Component {
       this.setState(prevState => ({
         arrayholder: prevState.conversas,
         isSerchable: false,
-        text: ""
+        text: "",
+        open: false,
+        isModalVisible: false
       }))
     })
   }
@@ -113,7 +118,9 @@ export default class Conversas extends Component {
     this.setState(prevState => ({
       arrayholder: prevState.conversas,
       isSerchable: false,
-      text: ""
+      text: "",
+      open: false,
+      isModalVisible: false
     }))
   }
 
@@ -172,33 +179,48 @@ export default class Conversas extends Component {
               lastMessage,
               dateLastMessage,
               contactPhoto,
-              contactName
+              contactName,
+              isGroup
             } = doc.data()
-            contacts.forEach(contact => {
-              if (contact.key === doc.id) {
+            if (isGroup) {
+              const { groupName, groupImg } = doc.data()
+              conversas.push({
+                key: doc.id,
+                isGroup,
+                contactName: groupName,
+                contactPhoto: groupImg,
+                unreadMsgs: null,
+                numUnreadMsgs: null,
+                lastMessage: null,
+                dateLastMessage: null
+              })
+            } else {
+              contacts.forEach(contact => {
+                if (contact.key === doc.id) {
+                  conversas.push({
+                    contact,
+                    key: doc.id,
+                    contactPhoto,
+                    contactName: contact.contactName,
+                    unreadMsgs,
+                    numUnreadMsgs,
+                    lastMessage,
+                    dateLastMessage
+                  })
+                  find = true
+                }
+              })
+              if (find === false) {
                 conversas.push({
-                  contact,
                   key: doc.id,
                   contactPhoto,
-                  contactName: contact.contactName,
+                  contactName,
                   unreadMsgs,
                   numUnreadMsgs,
                   lastMessage,
                   dateLastMessage
                 })
-                find = true
               }
-            })
-            if (find === false) {
-              conversas.push({
-                key: doc.id,
-                contactPhoto,
-                contactName,
-                unreadMsgs,
-                numUnreadMsgs,
-                lastMessage,
-                dateLastMessage
-              })
             }
           })
           this.setState({ conversas, arrayholder: conversas })
@@ -244,6 +266,17 @@ export default class Conversas extends Component {
         this.ref
           .collection("conversas")
           .doc(item.key)
+          .collection("users")
+          .get()
+          .then(snapshot => {
+            snapshot.docs.forEach(doc => {
+              doc.ref.delete()
+            })
+          })
+
+        this.ref
+          .collection("conversas")
+          .doc(item.key)
           .delete()
       }
       return true
@@ -275,7 +308,16 @@ export default class Conversas extends Component {
   }
 
   render() {
-    const { myName, myPicture, isSerchable, text, arrayholder } = this.state
+    const {
+      myName,
+      myPicture,
+      isSerchable,
+      text,
+      arrayholder,
+      open,
+      isModalVisible
+    } = this.state
+    const { navigation } = this.props
     let toolbar
     if (isSerchable)
       toolbar = (
@@ -308,6 +350,12 @@ export default class Conversas extends Component {
       <View style={styles.container}>
         <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         {toolbar}
+        <CreateGroup
+          isVisible={isModalVisible}
+          onBackGroundPress={() => this.setState({ isModalVisible: false })}
+          onCancelPress={() => this.setState({ isModalVisible: false })}
+          navigation={navigation}
+        />
         <FlatList
           data={arrayholder}
           renderItem={({ item }) => {
@@ -315,7 +363,8 @@ export default class Conversas extends Component {
               <Conversa
                 item={item}
                 onPress={param => {
-                  this.goToChat(param)
+                  if (item.isGroup) navigation.navigate("GroupChat", { item })
+                  else this.goToChat(param)
                 }}
                 onLongPress={param => {
                   this.confirmDelete(param)
@@ -326,16 +375,32 @@ export default class Conversas extends Component {
           keyExtractor={i => i.key}
           keyboardShouldPersistTaps="always"
         />
-        <LinearGradient colors={["#547BF0", "#6AC3FB"]} style={styles.button}>
-          <Touchable
-            background={Touchable.Ripple("black", true)}
-            onPress={() => {
-              this.newConversa()
-            }}
-          >
-            <Icon name="plus" color="white" type="antdesign" />
-          </Touchable>
-        </LinearGradient>
+        <Provider>
+          <Portal>
+            <FAB.Group
+              open={open}
+              icon={open ? "close" : "add"}
+              actions={[
+                {
+                  icon: "chat",
+                  label: "Nova conversa",
+                  onPress: () => {
+                    this.newConversa()
+                  }
+                },
+                {
+                  icon: "group",
+                  label: "Novo grupo",
+                  onPress: () => this.setState({ isModalVisible: true })
+                }
+              ]}
+              onStateChange={() =>
+                this.setState(prevState => ({ open: !prevState.open }))
+              }
+              fabStyle={styles.fab}
+            />
+          </Portal>
+        </Provider>
       </View>
     )
   }
@@ -370,16 +435,8 @@ const styles = StyleSheet.create({
   searchIcon: {
     justifyContent: "center"
   },
-  button: {
-    elevation: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    position: "absolute",
-    bottom: 5,
-    right: 5
+  fab: {
+    backgroundColor: "#007AFF"
   },
   myPicture: {
     width: 40,
