@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Linking } from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome"
 import { Avatar } from "react-native-elements"
 import LinearGradient from "react-native-linear-gradient"
+import { scale } from "~/Components/responsive"
 
 const aboutCards = props => {
   const { name, desc, avatar, socialMedia } = props
@@ -61,12 +62,12 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   titleTextStyle: {
-    fontSize: 20,
+    fontSize: scale(14),
     fontFamily: "OpenSans",
     color: "#999295"
   },
   bodyTextStyle: {
-    fontSize: 14,
+    fontSize: scale(12),
     fontFamily: "OpenSans",
     color: "#999295"
   }

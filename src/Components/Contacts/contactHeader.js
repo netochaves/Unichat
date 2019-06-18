@@ -3,6 +3,7 @@ import React from "react"
 import { View, StyleSheet, Text, Dimensions } from "react-native"
 import { Icon } from "react-native-elements"
 import Touchable from "react-native-platform-touchable"
+import { scale } from "~/Components/responsive"
 
 const contactsHeader = props => {
   const { syncronize, onPressSearch } = props
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
   },
   contactsInfo: {
     flex: 1,
-    fontSize: 22,
+    fontSize: scale(20),
     textAlign: "center",
     backgroundColor: "#fff"
   },

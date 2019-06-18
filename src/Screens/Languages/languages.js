@@ -13,6 +13,7 @@ import LanguagesHeader from "~/Components/Languages/languagesHeader"
 import { CheckBox } from "react-native-elements"
 import firebase from "react-native-firebase"
 import data from "~/assets/languages/languages.json"
+import { scale } from "~/Components/responsive"
 
 export default class Languages extends Component {
   constructor() {
@@ -140,19 +141,19 @@ const styles = StyleSheet.create({
   },
   itemTextHeader: {
     backgroundColor: "#fff",
-    fontSize: 18,
+    fontSize: scale(16),
     paddingTop: 15,
     paddingLeft: 20,
     paddingBottom: 15
   },
   itemText: {
-    fontSize: 18
+    fontSize: scale(16)
   },
   headerTitle: {
     backgroundColor: "#F4F5F8"
   },
   headerText: {
-    fontSize: 24,
+    fontSize: scale(18),
     alignSelf: "flex-start",
     paddingTop: 10,
     paddingBottom: 10,

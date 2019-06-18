@@ -6,6 +6,7 @@ import getTime from "~/functions/getTime"
 import firebase from "react-native-firebase"
 import { Avatar } from "react-native-elements"
 import Touchable from "react-native-platform-touchable"
+import { scale } from "~/Components/responsive"
 
 const conversa = props => {
   const { item, onPress, onLongPress } = props
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     color: "#a9a9a9",
-    fontSize: 13
+    fontSize: scale(12)
   },
   cont: {
     width: 20,
@@ -96,11 +97,11 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   data: {
-    fontSize: 8
+    fontSize: scale(8)
   },
   unread: {
     fontWeight: "bold",
-    fontSize: 8,
+    fontSize: scale(8),
     alignSelf: "center",
     color: "white"
   },
