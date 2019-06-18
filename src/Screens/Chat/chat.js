@@ -32,8 +32,7 @@ export default class Conversas extends Component {
       destUser: navigation.getParam("item"),
       status: "",
       numMsgsRender: 20,
-      isRefreshing: false,
-      load: true
+      isRefreshing: false
     }
     const { user, destUser } = this.state
     this.ref = firebase
@@ -109,41 +108,39 @@ export default class Conversas extends Component {
     this.unsubscribe()
   }
 
-  handleLoadMore = () => {
-    const { numMsgsRender, load, messages } = this.state
-
+  loadMessages = () => {
+    const { numMsgsRender } = this.state
     this.ref
       .collection("messages")
+      .orderBy("date", "desc")
+      .limit(numMsgsRender + 30)
       .get()
       .then(doc => {
-        if (numMsgsRender >= doc.size) {
-          this.setState({ load: false })
-        } else {
-          this.setState({ load: true })
-        }
-      })
-    if (load) {
-      this.setState({ isRefreshing: true })
-      this.setState({ numMsgsRender: numMsgsRender + 30 })
-      this.ref
-        .collection("messages")
-        .orderBy("date", "desc")
-        .limit(numMsgsRender)
-        .get()
-        .then(doc => {
-          const messages = []
-          doc.forEach(msgs => {
-            const { content, contentTranslated, date, source } = msgs.data()
-            messages.push({
-              key: msgs.id,
-              content,
-              contentTranslated,
-              date: date.toDate(),
-              source
-            })
+        const messages = []
+        doc.forEach(msgs => {
+          const { content, contentTranslated, date, source } = msgs.data()
+          messages.push({
+            key: msgs.id,
+            content,
+            contentTranslated,
+            date: date.toDate(),
+            source
           })
-          this.setState({ isRefreshing: false, messages })
         })
+        this.setState({
+          isRefreshing: false,
+          messages,
+          numMsgsRender: numMsgsRender + 30
+        })
+      })
+  }
+
+  handleLoadMore = () => {
+    const { numMsgsRender, messages } = this.state
+
+    if (messages.length === numMsgsRender) {
+      this.setState({ isRefreshing: true })
+      this.loadMessages()
     }
   }
 
