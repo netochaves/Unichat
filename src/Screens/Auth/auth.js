@@ -288,17 +288,15 @@ const styles = StyleSheet.create({
   },
   textInputView: {
     flexDirection: "row"
-  },  icon: {
-    width: largura / 3 + 20,
-    height: largura / 3 + 20,
-    marginBottom: 30
+  },
+  icon: {
+    width: largura / 2.5,
+    height: largura / 2.5
   },
   logo: {
     alignItems: "center",
     justifyContent: "center",
-    height: (1 / 2) * largura,
-    top: 0,
-    marginBottom: 30
+    marginBottom: 20
   },
   countryTextInput: {
     fontSize: scale(16),
