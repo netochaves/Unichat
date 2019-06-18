@@ -14,6 +14,7 @@ import LinearGradient from "react-native-linear-gradient"
 import CodeInput from "react-native-confirmation-code-input"
 import firebase from "react-native-firebase"
 import unichatIcon from "../../assets/imgs/unichat-icon.png"
+import { scale } from "~/Components/responsive"
 
 export default class Verificacao extends Component {
   constructor() {
@@ -170,14 +171,15 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   text1: {
-    fontSize: 18,
+    fontSize: scale(18),
     color: "black",
     fontWeight: "bold"
   },
   containerText2: {
     marginTop: 10,
     alignSelf: "center",
-    flexDirection: "row"
+    flexDirection: "row",
+    fontSize: scale(8)
   },
   containerText3: {
     marginTop: 50,
@@ -203,12 +205,12 @@ const styles = StyleSheet.create({
   },
   text3: {
     alignSelf: "center",
-    fontSize: 25,
+    fontSize: scale(24),
     color: "white"
   },
   text4: {
     textAlign: "center",
-    fontSize: 12,
+    fontSize: scale(8),
     color: "gray"
   },
   touchable: {
