@@ -4,24 +4,33 @@ import {
   View,
   Text,
   StyleSheet,
-  Linking,
   TouchableOpacity,
-  BackHandler
+  BackHandler,
+  Alert,
+  Image,
+  Dimensions
 } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import CodeInput from "react-native-confirmation-code-input"
 import firebase from "react-native-firebase"
+import unichatIcon from "../../assets/imgs/unichat-icon.png"
+import { scale } from "~/Components/responsive"
 
 export default class Verificacao extends Component {
   constructor() {
     super()
     this.state = {
-      code: ""
+      code: "",
+      confirmResult: null,
+      disableResend: true
     }
   }
 
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress)
+    setTimeout(() => {
+      this.setState({ disableResend: false })
+    }, 60000)
   }
 
   componentWillUnmount() {
@@ -40,8 +49,11 @@ export default class Verificacao extends Component {
 
   confirmChoice = code => {
     const { navigation } = this.props
-    const confirmResult = navigation.getParam("confirmResultFirebase")
-
+    const { confirmResult } = this.state
+    const cR = navigation.getParam("confirmResultFirebase")
+    if (!confirmResult) {
+      this.setState({ confirmResult: cR })
+    }
     if (confirmResult && code.length) {
       confirmResult
         .confirm(code)
@@ -64,9 +76,31 @@ export default class Verificacao extends Component {
     }
   }
 
+  reenviarCodigo = () => {
+    const { navigation } = this.props
+    const phoneNumber = navigation.getParam("phoneNumber")
+    this.setState({ disableResend: true })
+    setTimeout(() => {
+      this.setState({ disableResend: false })
+    }, 60000)
+
+    firebase
+      .auth()
+      .signInWithPhoneNumber(phoneNumber)
+      .then(cR => {
+        this.setState({ confirmResult: cR })
+      })
+      .catch(erro => Alert.alert("Erro", erro))
+  }
+
   render() {
+    const { disableResend } = this.state
+
     return (
       <View style={styles.principal}>
+        <View style={styles.logo}>
+          <Image style={styles.icon} source={unichatIcon} />
+        </View>
         <View style={styles.containerText1}>
           <Text style={styles.text1}>Entre com seu número de verificação</Text>
         </View>
@@ -96,8 +130,26 @@ export default class Verificacao extends Component {
         </TouchableOpacity>
         <View style={styles.containerText2}>
           <Text>Não recebeu o código de verificação?</Text>
-          <Text style={styles.text2} onPress={() => Linking.openURL("#")}>
-            Reenviar código
+          <TouchableOpacity
+            disabled={disableResend}
+            onPress={this.reenviarCodigo}
+          >
+            {disableResend && (
+              <>
+                <Text style={styles.text2_inactive}>Reenviar código</Text>
+              </>
+            )}
+            {!disableResend && (
+              <>
+                <Text style={styles.text2_active}>Reenviar código</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+        <View style={styles.containerText3}>
+          <Text style={styles.text4}>
+            Caso o número seja do celular atual, o código será verificado
+            automaticamente
           </Text>
         </View>
       </View>
@@ -105,27 +157,37 @@ export default class Verificacao extends Component {
   }
 }
 
+const largura = Dimensions.get("window").width
+
 const styles = StyleSheet.create({
   principal: {
     flex: 1,
     fontFamily: "OpenSans",
-    justifyContent: "center"
   },
   containerText1: {
     marginBottom: 10,
     alignSelf: "center"
   },
   text1: {
-    fontSize: 18,
+    fontSize: scale(18),
     color: "black",
     fontWeight: "bold"
   },
   containerText2: {
     marginTop: 10,
     alignSelf: "center",
-    flexDirection: "row"
+    flexDirection: "row",
+    fontSize: scale(8)
   },
-  text2: {
+  containerText3: {
+    marginTop: 50,
+    alignSelf: "center"
+  },
+  text2_active: {
+    marginLeft: 1,
+    color: "#007AFF"
+  },
+  text2_inactive: {
     marginLeft: 1,
     color: "black",
     fontWeight: "bold"
@@ -141,11 +203,26 @@ const styles = StyleSheet.create({
   },
   text3: {
     alignSelf: "center",
-    fontSize: 25,
+    fontSize: scale(24),
     color: "white"
+  },
+  text4: {
+    textAlign: "center",
+    fontSize: scale(8),
+    color: "gray"
   },
   touchable: {
     marginLeft: 40,
     marginRight: 40
+  },
+  icon: {
+    width: largura / 3,
+    height: largura / 3
+  },
+  logo: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: (1/2)*largura,
+    top: 0
   }
 })

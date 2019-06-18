@@ -19,6 +19,7 @@ import shortid from "shortid"
 import AsyncStorage from "@react-native-community/async-storage"
 import Contacts from "react-native-contacts"
 import countryList from "../../assets/country_dials/dials"
+import { scale } from "~/Components/responsive"
 
 YellowBox.ignoreWarnings([
   "Warning: componentWillMount is deprecated",
@@ -222,7 +223,11 @@ export default class Auth extends Component {
           </View>
         </View>
         <View style={styles.textInputView}>
-          <TextInput style={styles.countryTextInput} value={countryCode} />
+          <TextInput
+            style={styles.countryTextInput}
+            value={countryCode}
+            editable={false}
+          />
           <TextInput
             keyboardType="phone-pad"
             style={styles.textInputStyle}
@@ -259,21 +264,21 @@ const styles = StyleSheet.create({
   },
   textBig: {
     alignSelf: "center",
-    fontSize: 24,
+    fontSize: scale(24),
     color: "black",
     fontWeight: "bold",
     marginTop: 10,
-    marginBottom: 30
+    marginBottom: 20
   },
   textSmall: {
     alignSelf: "center",
-    fontSize: 12,
+    fontSize: scale(12),
     color: "gray",
-    marginBottom: 10
+    marginBottom: 20
   },
   textEnd: {
     alignSelf: "center",
-    fontSize: 12,
+    fontSize: scale(12),
     color: "gray",
     marginTop: 50
   },
@@ -287,7 +292,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   countryTextInput: {
-    fontSize: 18,
+    fontSize: scale(16),
     width: 50,
     marginLeft: 40,
     marginTop: 10,
@@ -299,7 +304,7 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     flex: 1,
-    fontSize: 18,
+    fontSize: scale(16),
     marginLeft: 20,
     marginRight: 40,
     marginTop: 10,
@@ -311,7 +316,7 @@ const styles = StyleSheet.create({
   },
   textButton: {
     alignSelf: "center",
-    fontSize: 20,
+    fontSize: scale(20),
     color: "white"
   },
   button: {

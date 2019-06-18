@@ -3,6 +3,7 @@ import React from "react"
 import { View, StyleSheet, Text } from "react-native"
 import { Avatar } from "react-native-elements"
 import Touchable from "react-native-platform-touchable"
+import { scale } from "~/Components/responsive"
 
 const Contato = props => {
   const { item, onPress } = props
@@ -51,13 +52,14 @@ const styles = StyleSheet.create({
   },
   name: {
     position: "absolute",
-    top: 0
+    top: 0,
+    fontSize: scale(14)
   },
   phone: {
     position: "absolute",
     bottom: 0,
     color: "#a9a9a9",
-    fontSize: 13
+    fontSize: scale(10)
   }
 })
 
