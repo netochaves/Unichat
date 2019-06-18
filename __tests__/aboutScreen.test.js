@@ -1,7 +1,8 @@
 import React from "react"
-import { View, Text, TouchableOpacity, ScrollView } from "react-native"
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native"
 import { shallow } from "enzyme"
 import About from "~/Screens/About/about"
+import AboutHeader from "~/Components/About/aboutHeader"
 
 describe("rendering", () => {
   let wrapper
@@ -20,5 +21,11 @@ describe("rendering", () => {
   })
   it("should render 1 touchableopacity component", () => {
     expect(wrapper.find(TouchableOpacity)).toHaveLength(1)
+  })
+  it("should render 1 image component", () => {
+    expect(wrapper.find(Image)).toHaveLength(1)
+  })
+  it("should render AboutHeader component", () => {
+    expect(wrapper.find(AboutHeader)).toHaveLength(1)
   })
 })
