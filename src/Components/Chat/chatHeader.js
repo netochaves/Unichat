@@ -67,10 +67,10 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   userName: {
-    fontSize: scale(16)
+    fontSize: scale(14)
   },
   lastSeen: {
-    fontSize: scale(10)
+    fontSize: scale(8)
   },
   avatar: {
     marginLeft: 10
