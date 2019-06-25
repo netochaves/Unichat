@@ -93,6 +93,7 @@ export default class MyPopUpMenu extends PureComponent {
 const styles = StyleSheet.create({
   popUpMenu: {
     backgroundColor: "#fff",
+    justifyContent: "center",
     alignSelf: "flex-end"
   },
   menuItem: { fontSize: 18 }

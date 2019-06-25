@@ -3,6 +3,7 @@ package com.unichat;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
@@ -37,7 +38,8 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(new MainReactPackage(), new NetInfoPackage(), new AsyncStoragePackage(),
+      return Arrays.<ReactPackage>asList(new MainReactPackage(),
+            new ReactNativeConfigPackage(), new NetInfoPackage(), new AsyncStoragePackage(),
           new ReactNativeContacts(), new ImagePickerPackage(), new RNTextInputMaskPackage(),
           new LinearGradientPackage(), new VectorIconsPackage(), new RNFirebasePackage(), new RNFirebaseAuthPackage(),
           new RNFirebaseFirestorePackage(), new SvgPackage(), new RNGestureHandlerPackage(),

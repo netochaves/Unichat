@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import React, { Component } from "react"
 import { View, StyleSheet } from "react-native"
-
+import Config from "react-native-config"
 import ChatHeader from "~/Components/Chat/chatHeader"
 import ChatContainer from "~/Components/Chat/chatContainer"
 import ChatInput from "~/Components/Chat/chatInput"
@@ -32,7 +32,7 @@ export default class GroupChat extends Component {
 
     TranslatorConfiguration.setConfig(
       ProviderTypes.Google,
-      "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
+      Config.GOOGLE_KEY,
       "en"
     )
   }
@@ -148,7 +148,7 @@ export default class GroupChat extends Component {
               const { numUnreadMsgs } = docGroup.data()
               TranslatorConfiguration.setConfig(
                 ProviderTypes.Google,
-                "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
+                Config.GOOGLE_KEY,
                 language_code
               )
               const translator = TranslatorFactory.createTranslator()
