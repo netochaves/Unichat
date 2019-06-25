@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable camelcase */
 import React, { Component } from "react"
-
+import Config from "react-native-config"
 import { View, StyleSheet, BackHandler, ActivityIndicator } from "react-native"
 import {
   ProviderTypes,
@@ -63,10 +63,9 @@ export default class Conversas extends Component {
         const { phone, profile_img_url } = us.data()
         this.setState({ userData: { phone, profile_img_url } })
       })
-
     TranslatorConfiguration.setConfig(
       ProviderTypes.Google,
-      "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
+      Config.GOOGLE_KEY,
       "en"
     )
   }
@@ -211,7 +210,7 @@ export default class Conversas extends Component {
           const { language_code } = doc.data()
           TranslatorConfiguration.setConfig(
             ProviderTypes.Google,
-            "AIzaSyC0j0BsAskqVIvaX2fcdvjsaw4fqGP5ut8",
+            Config.GOOGLE_KEY,
             language_code
           )
           const translator = TranslatorFactory.createTranslator()
